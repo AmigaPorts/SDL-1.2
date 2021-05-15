@@ -19,7 +19,7 @@
 
 #include "SDL.h"
 
-#ifdef __MACOS__
+#if defined(__MACOS__) || defined(__AMIGAOS4__)
 #define HAVE_OPENGL
 #endif
 

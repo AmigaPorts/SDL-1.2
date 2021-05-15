@@ -82,6 +82,9 @@ static AudioBootStrap *bootstrap[] = {
 #if SDL_AUDIO_DRIVER_SNDMGR
 	&SNDMGR_bootstrap,
 #endif
+#if SDL_AUDIO_DRIVER_AHI
+	&AHI_bootstrap,
+#endif
 #if SDL_AUDIO_DRIVER_MINT
 	&MINTAUDIO_GSXB_bootstrap,
 	&MINTAUDIO_MCSN_bootstrap,
@@ -109,6 +112,9 @@ static AudioBootStrap *bootstrap[] = {
 #endif
 #if SDL_AUDIO_DRIVER_EPOCAUDIO
 	&EPOCAudio_bootstrap,
+#endif     
+#if SDL_AUDIO_DRIVER_AMIGAOS4
+	&AmigaOS4_bootstrap,
 #endif
 	NULL
 };

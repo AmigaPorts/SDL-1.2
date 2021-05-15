@@ -25,7 +25,7 @@
 
 #include "SDL_stdinc.h"
 
-#ifndef HAVE_MALLOC
+#if !defined HAVE_MALLOC && !defined AMIGA
 
 #define LACKS_SYS_TYPES_H
 #define LACKS_STDIO_H

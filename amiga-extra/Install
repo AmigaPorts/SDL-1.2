@@ -1,0 +1,28 @@
+failat 21
+
+echo Copying SDL-1.2 shared object ...
+copy SDK/local/newlib/lib/libSDL-1.2.so SObjs:
+copy SDK/local/newlib/lib/libSDL-1.2_debug.so SObjs:
+
+set option `RequestChoice "One more question..." "Would you like to install the SDK?" "Yes, please" "No, thanks"`
+
+If $option eq 1
+  echo Copying SDK files ...
+  copy SDK/#? SDK: all
+
+  protect SDK:local/newlib/bin/sdl-config +rweds
+
+  cd SDK:local/newlib/lib
+  makelink from=libSDL.so to=libSDL-1.2.so soft
+Else
+  echo Skipped SDK installation ...
+EndIf
+
+echo Setting up link ...
+
+cd SObjs:
+makelink >NIL: from=libSDL.so to=libSDL-1.2.so soft
+
+echo SDL-1.2 is installed :)
+
+Wait 5

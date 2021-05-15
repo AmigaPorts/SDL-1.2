@@ -1,0 +1,10 @@
+; autoinstall for libSDL
+; : libSDL AutoInstall 1.0 (14.05.2010)
+
+.bra {
+.ket }
+
+failat 21
+
+; Copy and store a backup of the exe
+CopyStore SDL-1.2.13-SVNr25/libSDL-1.2.so SOBJS:

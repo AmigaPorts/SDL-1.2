@@ -187,6 +187,20 @@ struct SDL_SysWMinfo {
 	int data;
 };
 
+#elif defined(SDL_VIDEO_DRIVER_AMIGAOS4)
+
+/* The AmigaOS4 custom event structure */
+struct SDL_SysWMmsg {
+	SDL_version version;
+	struct Window *window;	
+};
+
+/* The AmigaOS4 custom window manager information structure */
+struct SDL_SysWMinfo {
+	SDL_version version;
+	struct Window *window;	
+};
+
 #else
 
 /** The generic custom event structure */

@@ -182,7 +182,10 @@ int main(int argc, char *argv[])
 			SDL_JoystickClose(joystick);
 		}
 	}
+#ifndef __amigaos4__
 	SDL_QuitSubSystem(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK);
-
+#else
+	SDL_Quit();
+#endif
 	return(0);
 }

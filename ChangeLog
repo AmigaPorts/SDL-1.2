@@ -1,0 +1,4233 @@
+This changelog is out of date. For up to date change information, see the
+SVN log here:
+
+http://code.google.com/p/os4sdl/source/list
+
+
+
+2010-05-11 pgordon / apalmate
+
+	* Fixed windowed mode for OpenGL
+
+2010-03-16 10:40 apalmate
+
+	* Added support to load dinamically MiniGL functions
+	* Fixed SDL_GL_STENCIL_SIZE and SDL_GL_DEPTH_SIZE values
+
+2009-11-27 ??:?? pgordon
+
+	* Global library interfaces are now prefixed with "SDL_"
+
+2009-09-15 ??:?? pgordon
+
+	* Included an Amiga version string
+
+2009-09-11 ??:?? pgordon
+
+	* Disabled some debug
+	* Joystick code no longer assumes axis 0 is X and axis 1 is Y
+
+2009-07-10 ??:?? pgordon
+
+	* Removed redundant check for 8-bit mode
+
+2009-07-10 ??:?? pgordon
+
+	* Removed unnecessary CopyMem call
+	* Updated the readme file
+
+SDL-1.2.13-XU0.2 (xxxx-xx-xx)
+
+	* Merged the OS4 support into the 1.2.13 codebase
+	* Only requests a stencil buffer from MiniGL if required <Hans De Ruiter>
+	* Added support for CD-ROM
+
+
+SDL-1.2.11-XU0.1 (2009-03-09)
+
+	* Compiled with GCC 4.2.4 and the latest SDK
+	* Bad SDL programs that don't explicitly close all opened joysticks
+	  before calling SDL_Quit() no longer hang on exit (like Giddy3...
+	  oops :)
+
+2008-01-30 11:13  richardd
+
+	* src/audio/amigaos4/: SDL_os4audio.c, SDL_os4audio.h: Cleaned up
+	  audio layer. Also fixed the double wait at audio thread exit.
+	  This cures the fault at exit time when running on a debug kernel.
+	  Thanks to Peter Gordon and Thore Böckelmann for reporting this.
+
+2008-01-21 21:26  richardd
+
+	* README.AmigaOS4: Fixed typos in README.
+
+2008-01-15 21:50  richardd
+
+	* configure.in: Modified configure script so that -use-dynld gets
+	  added to sdl-config's CFLAGS when doing dynamic linking.
+
+2008-01-14 21:40  richardd
+
+	* acinclude.m4: Updated acinclude.m4 with libtool magic to enabled
+	  shared linking on OS4.0.
+
+2008-01-13 21:38  richardd
+
+	* README.AmigaOS4: Updated README.
+
+2008-01-13 21:24  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: A race condition existed in
+	  the off-screen 8-bit renderer, where Intuition could cause an SDL
+	  application to dead-lock. Fixed this long-standing bug by beefing
+	  up the locking in said renderer (somewhat at the expense of
+	  system-friendliness).
+
+2008-01-12 23:24  richardd
+
+	* build-scripts/ltmain.sh: [no log message]
+
+2008-01-12 23:22  richardd
+
+	* src/audio/: SDL_audio.c, SDL_audiocvt.c: Merged some core audio
+	  bug fixes from SDL1.2.12.
+
+2007-12-15 23:43  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: When creating a new thread,
+	  don't set the stack size. Rely on the OS to clone the stack size
+	  of the parent thread. This should fix issue with child threads
+	  running out of stack space.
+
+	  Thanks to Andrea Palmatè for the report.
+
+2007-12-15 23:16  richardd
+
+	* src/: main/amigaos4/SDL_os4timer.c,
+	  main/amigaos4/SDL_os4timer_c.h, timer/amigaos4/SDL_systimer.c:
+	  Adapted to the new TimeVal and TimeRequest structs in OS4.0 SDK.
+
+2007-01-08 04:13  richardd
+
+	* README.Watcom, src/audio/SDL_mixer_MMX.c,
+	  src/timer/macos/FastTimes.c, src/video/SDL_RLEaccel.c,
+	  src/video/default_cursor.h: Replaced some files that got
+	  UTF8-mangled in 1.2.11 merge.
+
+2007-01-08 04:03  richardd
+
+	* Makefile.in: Fix building of dist tarball when srcdir !=
+	  builddir.
+
+2007-01-08 03:46  richardd
+
+	* src/main/SDL_main.c: Removed redudant file.
+
+2007-01-08 03:26  richardd
+
+	* src/main/amigaos4/SDL_main.c: Removed now redundant file.
+
+2007-01-08 03:19  richardd
+
+	* configure.in: The configure option --disable-pthreads would cause
+	  no thread layer to be built. Fixed.
+
+2007-01-08 02:45  richardd
+
+	* Makefile.in: Fixed some problems introduced with SDL 1.2.11 build
+	  scripts when srcdir != builddir. Also bring back cleaning of CVS
+	  dirs from dist tarball, because unlike upstream we haven't
+	  switched to SVN yet.
+
+2007-01-08 00:37  richardd
+
+	* CWprojects.sea.bin, Makefile.dc, Makefile.in, README.OS2,
+	  README.Watcom, SDL.spec.in, VisualC.zip, Watcom-OS2.zip,
+	  Watcom-Win32.zip, Xcode.tar.gz, configure.in, docs.html,
+	  sdl-config.in, sdl.pc.in, build-scripts/strip_fPIC.sh,
+	  docs/html/sdlenvvars.html, include/SDL_config_win32.h,
+	  include/SDL_stdinc.h, include/SDL_thread.h,
+	  include/SDL_version.h, src/audio/alsa/SDL_alsa_audio.c,
+	  src/audio/windx5/SDL_dx5audio.c, src/audio/windx5/SDL_dx5audio.h,
+	  src/cpuinfo/SDL_cpuinfo.c, src/hermes/common.inc,
+	  src/hermes/mmx_main.asm, src/hermes/mmxp2_32.asm,
+	  src/hermes/x86_main.asm, src/hermes/x86p_16.asm,
+	  src/hermes/x86p_32.asm, src/joystick/amigaos4/SDL_sysjoystick.c,
+	  src/stdlib/SDL_iconv.c, src/stdlib/SDL_string.c,
+	  src/thread/dc/SDL_syssem.c, src/thread/pthread/SDL_syssem.c,
+	  src/thread/riscos/SDL_syssem.c, src/timer/os2/SDL_systimer.c,
+	  src/video/SDL_gamma.c, src/video/SDL_stretch.c,
+	  src/video/gem/SDL_gemevents.c, src/video/gem/SDL_gemmouse.c,
+	  src/video/gem/SDL_gemvideo.c, src/video/gem/SDL_gemvideo.h,
+	  src/video/ggi/SDL_ggievents.c,
+	  src/video/quartz/SDL_QuartzEvents.m,
+	  src/video/quartz/SDL_QuartzWM.m, src/video/wincommon/SDL_wingl.c,
+	  src/video/windib/SDL_dibevents.c,
+	  src/video/windib/SDL_dibvideo.c,
+	  src/video/windx5/SDL_dx5events.c,
+	  src/video/windx5/SDL_dx5video.c, src/video/x11/SDL_x11dyn.c,
+	  src/video/x11/SDL_x11gl.c, src/video/x11/SDL_x11modes.c,
+	  src/video/x11/SDL_x11video.c, src/video/x11/SDL_x11wm.c,
+	  test/Makefile.in, test/testcursor.c, test/testgl.c: Sync with SDL
+	  1.2.11.
+
+2006-06-02 02:30  richardd
+
+	* configure.in: Modified build scripts to build dummy audio, file
+	  audio and dummy video drivers on OS4.0.
+
+2006-06-02 02:29  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Removed some redundant code.
+
+2006-06-02 02:17  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4surface.c,
+	  SDL_os4video.c: Open required libraries manually in OS4 video
+	  driver rather than relying on libauto.
+
+2006-06-01 17:56  richardd
+
+	* configure.in: In the new build scripts, forgot to include generic
+	  condition variable code when building OS4.0 thread layer. Fixed.
+
+2006-05-27 02:30  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Fixes for the OS4.0 thread
+	  layer when building baserel.
+
+2006-05-25 17:47  richardd
+
+	* src/: audio/amigaos4/SDL_os4audio.c,
+	  main/amigaos4/SDL_os4timer.c, thread/amigaos4/SDL_sysmutex.c,
+	  thread/amigaos4/SDL_syssem.c: More sans-libc fixes.
+
+2006-05-22 04:29  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: That should have been
+	  SDL_snprintf not SDL_sprintf!
+
+2006-05-22 03:58  richardd
+
+	* src/: audio/amigaos4/SDL_os4audio.c,
+	  joystick/amigaos4/SDL_sysjoystick.c, stdlib/SDL_malloc.c,
+	  thread/amigaos4/SDL_systhread.c, video/amigaos4/SDL_os4surface.c,
+	  video/amigaos4/SDL_os4video.c, video/amigaos4/SDL_os4wm.c: Some
+	  modifications to the AmigaOS4-specific code to allow it to
+	  compile without libc. malloc() replacement still to do.
+
+2006-05-22 03:40  richardd
+
+	* src/video/amigaos4/: SDL_os4gl.c, SDL_os4video.c: Clean up for
+	  MiniGL support: simplified opening of MiniGL (no longer requires
+	  the libGL.a stub) and removed broken SDL_GL_LoadLibrary() and
+	  SDL_GL_GetProcAddress() implementations.
+
+2006-05-22 02:31  richardd
+
+	* src/video/SDL_blit_N.c: SDL_blit_N.c got broken in the 1.2.10
+	  merge. Fixed.
+
+2006-05-19 13:49  richardd
+
+	* CWprojects.sea.bin, Makefile.in, README.MacOSX, SDL.spec.in,
+	  Watcom-Win32.zip, autogen.sh, configure.in, docs.html,
+	  docs/index.html, include/SDL_config_macos.h,
+	  include/SDL_stdinc.h, src/SDL_error.c, src/SDL_error_c.h,
+	  src/cdrom/macosx/AudioFilePlayer.c,
+	  src/joystick/linux/SDL_sysjoystick.c,
+	  src/loadso/macosx/SDL_sysloadso.c,
+	  src/thread/pth/SDL_systhread.c, src/video/SDL_blit_A.c,
+	  src/video/SDL_blit_N.c, src/video/epoc/SDL_epocevents.cpp,
+	  src/video/epoc/SDL_epocevents_c.h,
+	  src/video/epoc/SDL_epocvideo.cpp, src/video/epoc/SDL_epocvideo.h,
+	  src/video/fbcon/SDL_fbvideo.c, src/video/ps2gs/SDL_gsyuv.c,
+	  src/video/riscos/SDL_riscosASM.S,
+	  src/video/riscos/SDL_riscosASM.s, src/video/x11/SDL_x11dyn.c,
+	  src/video/x11/SDL_x11gl.c, src/video/xbios/SDL_xbios.c: Sync with
+	  SDL-1.2.10
+
+2006-05-19 13:03  richardd
+
+	* test/: Makefile.am, Makefile.in, Makefile.wat, acinclude.m4,
+	  autogen.sh, config.guess, config.sub, configure.in, gcc-fat.sh,
+	  install-sh, loopwave.c, missing, mkinstalldirs, testalpha.c,
+	  testcpuinfo.c, testdyngl.c, testendian.c, testerror.c,
+	  testfile.c, testgl.c, testhread.c, testiconv.c, testlock.c,
+	  testpalette.c, testplatform.c, testsem.c, testtimer.c,
+	  testtypes.c, testwin.c, testwm.c, threadwin.c, torturethread.c,
+	  utf8.txt: Sync tests with SDL-1.2.10.
+
+2006-05-12 05:47  richardd
+
+	* BUGS, COPYING, CREDITS, CWprojects.sea.bin, MPWmake.sea.bin,
+	  Makefile.am, Makefile.dc, Makefile.in, Makefile.minimal,
+	  PBProjects.tar.gz, README, README.BeOS, README.CVS, README.DC,
+	  README.MacOSX, README.MiNT, README.OS2, README.Porting,
+	  README.RISCOS, README.SVN, README.Watcom, README.WinCE,
+	  SDL.qpg.in, SDL.spec.in, TODO, VisualC.zip, VisualCE.zip,
+	  Watcom-OS2.zip, Watcom-Win32.zip, Watcom.mif, WhatsNew,
+	  Xcode.tar.gz, Xcode21.tar.gz, acinclude.m4, autogen.sh,
+	  config.guess, config.sub, configure.in, depcomp, install-sh,
+	  ltconfig, ltmain.sh, missing, mkinstalldirs, sdl-config.in,
+	  sdl.m4, setvars.cmd, strip_fPIC.sh, build-scripts/config.guess,
+	  build-scripts/config.sub, build-scripts/fatbuild.sh,
+	  build-scripts/install-sh, build-scripts/ltmain.sh,
+	  build-scripts/makedep.sh, build-scripts/mkinstalldirs,
+	  build-scripts/strip_fPIC.sh, docs/Makefile.am,
+	  docs/html/Makefile.am, docs/html/guidevideoopengl.html,
+	  docs/html/sdlenvvars.html, docs/html/sdlpixelformat.html,
+	  docs/html/thread.html, docs/man3/Makefile.am,
+	  docs/man3/SDL_PixelFormat.3, include/Makefile.am, include/SDL.h,
+	  include/SDL_active.h, include/SDL_audio.h,
+	  include/SDL_byteorder.h, include/SDL_cdrom.h,
+	  include/SDL_config.h.default, include/SDL_config.h.in,
+	  include/SDL_config_amiga.h, include/SDL_config_dreamcast.h,
+	  include/SDL_config_macos.h, include/SDL_config_macosx.h,
+	  include/SDL_config_minimal.h, include/SDL_config_os2.h,
+	  include/SDL_config_win32.h, include/SDL_copying.h,
+	  include/SDL_cpuinfo.h, include/SDL_endian.h, include/SDL_error.h,
+	  include/SDL_events.h, include/SDL_getenv.h,
+	  include/SDL_joystick.h, include/SDL_keyboard.h,
+	  include/SDL_keysym.h, include/SDL_loadso.h, include/SDL_main.h,
+	  include/SDL_mouse.h, include/SDL_mutex.h, include/SDL_opengl.h,
+	  include/SDL_platform.h, include/SDL_quit.h, include/SDL_rwops.h,
+	  include/SDL_stdinc.h, include/SDL_syswm.h, include/SDL_thread.h,
+	  include/SDL_timer.h, include/SDL_types.h, include/SDL_version.h,
+	  include/SDL_video.h, include/begin_code.h, include/close_code.h,
+	  src/Makefile.am, src/Makefile.wat, src/SDL.c, src/SDL_error.c,
+	  src/SDL_error_c.h, src/SDL_fatal.c, src/SDL_fatal.h,
+	  src/SDL_getenv.c, src/SDL_loadso.c, src/audio/Makefile.am,
+	  src/audio/Makefile.wat, src/audio/SDL_audio.c,
+	  src/audio/SDL_audio_c.h, src/audio/SDL_audiocvt.c,
+	  src/audio/SDL_audiodev.c, src/audio/SDL_audiodev_c.h,
+	  src/audio/SDL_audiomem.c, src/audio/SDL_audiomem.h,
+	  src/audio/SDL_mixer.c, src/audio/SDL_mixer_MMX.c,
+	  src/audio/SDL_mixer_MMX.h, src/audio/SDL_mixer_MMX_VC.c,
+	  src/audio/SDL_mixer_MMX_VC.h, src/audio/SDL_mixer_m68k.c,
+	  src/audio/SDL_mixer_m68k.h, src/audio/SDL_sysaudio.h,
+	  src/audio/SDL_wave.c, src/audio/SDL_wave.h,
+	  src/audio/alsa/Makefile.am, src/audio/alsa/SDL_alsa_audio.c,
+	  src/audio/alsa/SDL_alsa_audio.h, src/audio/amigaos/Makefile.am,
+	  src/audio/amigaos/SDL_ahiaudio.c,
+	  src/audio/amigaos/SDL_ahiaudio.h, src/audio/amigaos4/Makefile.am,
+	  src/audio/amigaos4/SDL_os4audio.c, src/audio/arts/Makefile.am,
+	  src/audio/arts/SDL_artsaudio.c, src/audio/arts/SDL_artsaudio.h,
+	  src/audio/baudio/Makefile.am, src/audio/baudio/SDL_beaudio.cc,
+	  src/audio/baudio/SDL_beaudio.h, src/audio/bsd/SDL_bsdaudio.c,
+	  src/audio/bsd/SDL_bsdaudio.h, src/audio/dart/SDL_dart.c,
+	  src/audio/dart/SDL_dart.h, src/audio/dc/Makefile.am,
+	  src/audio/dc/SDL_dcaudio.c, src/audio/dc/SDL_dcaudio.h,
+	  src/audio/dc/aica.c, src/audio/dc/aica.h,
+	  src/audio/disk/Makefile.am, src/audio/disk/SDL_diskaudio.c,
+	  src/audio/disk/SDL_diskaudio.h, src/audio/dma/Makefile.am,
+	  src/audio/dma/SDL_dmaaudio.c, src/audio/dma/SDL_dmaaudio.h,
+	  src/audio/dmedia/Makefile.am, src/audio/dmedia/SDL_irixaudio.c,
+	  src/audio/dmedia/SDL_irixaudio.h, src/audio/dsp/Makefile.am,
+	  src/audio/dsp/SDL_dspaudio.c, src/audio/dsp/SDL_dspaudio.h,
+	  src/audio/dummy/SDL_dummyaudio.c,
+	  src/audio/dummy/SDL_dummyaudio.h, src/audio/esd/Makefile.am,
+	  src/audio/esd/SDL_esdaudio.c, src/audio/esd/SDL_esdaudio.h,
+	  src/audio/macosx/Makefile.am, src/audio/macosx/SDL_coreaudio.c,
+	  src/audio/macosx/SDL_coreaudio.h, src/audio/macrom/Makefile.am,
+	  src/audio/macrom/SDL_romaudio.c, src/audio/macrom/SDL_romaudio.h,
+	  src/audio/mint/Makefile.am, src/audio/mint/SDL_mintaudio.c,
+	  src/audio/mint/SDL_mintaudio.h,
+	  src/audio/mint/SDL_mintaudio_dma8.c,
+	  src/audio/mint/SDL_mintaudio_dma8.h,
+	  src/audio/mint/SDL_mintaudio_gsxb.c,
+	  src/audio/mint/SDL_mintaudio_gsxb.h,
+	  src/audio/mint/SDL_mintaudio_mcsn.c,
+	  src/audio/mint/SDL_mintaudio_mcsn.h,
+	  src/audio/mint/SDL_mintaudio_stfa.c,
+	  src/audio/mint/SDL_mintaudio_stfa.h,
+	  src/audio/mint/SDL_mintaudio_xbios.c, src/audio/mme/Makefile.am,
+	  src/audio/mme/SDL_mmeaudio.c, src/audio/mme/SDL_mmeaudio.h,
+	  src/audio/nas/Makefile.am, src/audio/nas/SDL_nasaudio.c,
+	  src/audio/nas/SDL_nasaudio.h, src/audio/nto/Makefile.am,
+	  src/audio/nto/SDL_nto_audio.c, src/audio/nto/SDL_nto_audio.h,
+	  src/audio/paudio/Makefile.am, src/audio/paudio/SDL_paudio.c,
+	  src/audio/paudio/SDL_paudio.h, src/audio/sun/Makefile.am,
+	  src/audio/sun/SDL_sunaudio.c, src/audio/sun/SDL_sunaudio.h,
+	  src/audio/ums/Makefile.am, src/audio/ums/SDL_umsaudio.c,
+	  src/audio/ums/SDL_umsaudio.h, src/audio/windib/Makefile.am,
+	  src/audio/windib/SDL_dibaudio.c, src/audio/windib/SDL_dibaudio.h,
+	  src/audio/windx5/Makefile.am, src/audio/windx5/SDL_dx5audio.c,
+	  src/audio/windx5/SDL_dx5audio.h, src/audio/windx5/directx.h,
+	  src/cdrom/Makefile.am, src/cdrom/Makefile.wat,
+	  src/cdrom/SDL_cdrom.c, src/cdrom/SDL_syscdrom.h,
+	  src/cdrom/aix/Makefile.am, src/cdrom/aix/SDL_syscdrom.c,
+	  src/cdrom/amigaos4/Makefile.am, src/cdrom/beos/Makefile.am,
+	  src/cdrom/beos/SDL_syscdrom.cc, src/cdrom/bsdi/Makefile.am,
+	  src/cdrom/bsdi/SDL_syscdrom.c, src/cdrom/dc/Makefile.am,
+	  src/cdrom/dc/SDL_syscdrom.c, src/cdrom/dummy/Makefile.am,
+	  src/cdrom/dummy/SDL_syscdrom.c, src/cdrom/freebsd/Makefile.am,
+	  src/cdrom/freebsd/SDL_syscdrom.c, src/cdrom/linux/Makefile.am,
+	  src/cdrom/linux/SDL_syscdrom.c, src/cdrom/macos/Makefile.am,
+	  src/cdrom/macos/SDL_syscdrom.c, src/cdrom/macos/SDL_syscdrom_c.h,
+	  src/cdrom/macosx/AudioFilePlayer.c,
+	  src/cdrom/macosx/AudioFilePlayer.h,
+	  src/cdrom/macosx/AudioFileReaderThread.c,
+	  src/cdrom/macosx/CAGuard.h, src/cdrom/macosx/CDPlayer.c,
+	  src/cdrom/macosx/CDPlayer.h, src/cdrom/macosx/Makefile.am,
+	  src/cdrom/macosx/SDLOSXCAGuard.c,
+	  src/cdrom/macosx/SDLOSXCAGuard.h,
+	  src/cdrom/macosx/SDL_syscdrom.c,
+	  src/cdrom/macosx/SDL_syscdrom_c.h, src/cdrom/mint/Makefile.am,
+	  src/cdrom/mint/SDL_syscdrom.c, src/cdrom/openbsd/Makefile.am,
+	  src/cdrom/openbsd/SDL_syscdrom.c, src/cdrom/os2/SDL_syscdrom.c,
+	  src/cdrom/osf/Makefile.am, src/cdrom/osf/SDL_syscdrom.c,
+	  src/cdrom/qnx/Makefile.am, src/cdrom/qnx/SDL_syscdrom.c,
+	  src/cdrom/win32/Makefile.am, src/cdrom/win32/SDL_syscdrom.c,
+	  src/cpuinfo/Makefile.am, src/cpuinfo/Makefile.wat,
+	  src/cpuinfo/SDL_cpuinfo.c, src/events/Makefile.am,
+	  src/events/Makefile.wat, src/events/SDL_active.c,
+	  src/events/SDL_events.c, src/events/SDL_events_c.h,
+	  src/events/SDL_expose.c, src/events/SDL_keyboard.c,
+	  src/events/SDL_mouse.c, src/events/SDL_quit.c,
+	  src/events/SDL_resize.c, src/events/SDL_sysevents.h,
+	  src/file/Makefile.am, src/file/Makefile.wat,
+	  src/file/SDL_rwops.c, src/hermes/HeadMMX.h,
+	  src/hermes/Makefile.am, src/hermes/mmx_main.asm,
+	  src/hermes/mmxp2_32.asm, src/hermes/x86_main.asm,
+	  src/hermes/x86p_16.asm, src/hermes/x86p_32.asm,
+	  src/joystick/Makefile.am, src/joystick/Makefile.wat,
+	  src/joystick/SDL_joystick.c, src/joystick/SDL_joystick_c.h,
+	  src/joystick/SDL_sysjoystick.h, src/joystick/amigaos/Makefile.am,
+	  src/joystick/amigaos/SDL_sysjoystick.c,
+	  src/joystick/amigaos4/Makefile.am,
+	  src/joystick/amigaos4/SDL_sysjoystick.c,
+	  src/joystick/beos/Makefile.am,
+	  src/joystick/beos/SDL_bejoystick.cc,
+	  src/joystick/bsd/Makefile.am, src/joystick/bsd/SDL_sysjoystick.c,
+	  src/joystick/darwin/Makefile.am,
+	  src/joystick/darwin/SDL_sysjoystick.c,
+	  src/joystick/dc/Makefile.am, src/joystick/dc/SDL_sysjoystick.c,
+	  src/joystick/dummy/Makefile.am,
+	  src/joystick/dummy/SDL_sysjoystick.c,
+	  src/joystick/linux/Makefile.am,
+	  src/joystick/linux/SDL_sysjoystick.c,
+	  src/joystick/macos/Makefile.am,
+	  src/joystick/macos/SDL_sysjoystick.c,
+	  src/joystick/mint/Makefile.am,
+	  src/joystick/mint/SDL_sysjoystick.c,
+	  src/joystick/os2/SDL_sysjoystick.c,
+	  src/joystick/riscos/Makefile.am,
+	  src/joystick/riscos/SDL_sysjoystick.c,
+	  src/joystick/win32/Makefile.am,
+	  src/joystick/win32/SDL_mmjoystick.c,
+	  src/loadso/beos/SDL_loadso.c, src/loadso/beos/SDL_sysloadso.c,
+	  src/loadso/dlopen/SDL_loadso.c,
+	  src/loadso/dlopen/SDL_sysloadso.c, src/loadso/dummy/SDL_loadso.c,
+	  src/loadso/dummy/SDL_sysloadso.c, src/loadso/macos/SDL_loadso.c,
+	  src/loadso/macos/SDL_sysloadso.c,
+	  src/loadso/macosx/SDL_dlcompat.c, src/loadso/macosx/SDL_loadso.c,
+	  src/loadso/macosx/SDL_sysloadso.c, src/loadso/mint/SDL_loadso.c,
+	  src/loadso/mint/SDL_sysloadso.c, src/loadso/os2/SDL_loadso.c,
+	  src/loadso/os2/SDL_sysloadso.c, src/loadso/win32/SDL_sysloadso.c,
+	  src/main/Makefile.am, src/main/arch.c,
+	  src/main/amigaos4/SDL_os4timer.c, src/main/beos/SDL_BeApp.cc,
+	  src/main/beos/SDL_BeApp.h, src/main/dummy/SDL_dummy_main.c,
+	  src/main/macos/Makefile.am, src/main/macos/SDL_main.c,
+	  src/main/macos/exports/Makefile, src/main/macos/exports/SDL.x,
+	  src/main/macos/exports/gendef.pl, src/main/macosx/.cvsignore,
+	  src/main/macosx/Makefile.am, src/main/macosx/SDLMain.m,
+	  src/main/win32/SDL_main.c, src/main/win32/SDL_win32_main.c,
+	  src/stdlib/SDL_getenv.c, src/stdlib/SDL_iconv.c,
+	  src/stdlib/SDL_malloc.c, src/stdlib/SDL_qsort.c,
+	  src/stdlib/SDL_stdlib.c, src/stdlib/SDL_string.c,
+	  src/thread/Makefile.am, src/thread/SDL_systhread.h,
+	  src/thread/SDL_thread.c, src/thread/SDL_thread_c.h,
+	  src/thread/amigaos/SDL_syssem.c,
+	  src/thread/amigaos/SDL_systhread.c,
+	  src/thread/amigaos/SDL_systhread_c.h,
+	  src/thread/amigaos/SDL_thread.c,
+	  src/thread/amigaos4/SDL_syssem.c,
+	  src/thread/amigaos4/SDL_systhread.c,
+	  src/thread/amigaos4/SDL_systhread_c.h,
+	  src/thread/beos/SDL_syssem.c, src/thread/beos/SDL_systhread.c,
+	  src/thread/beos/SDL_systhread_c.h, src/thread/dc/SDL_syscond.c,
+	  src/thread/dc/SDL_syscond_c.h, src/thread/dc/SDL_sysmutex.c,
+	  src/thread/dc/SDL_sysmutex_c.h, src/thread/dc/SDL_syssem.c,
+	  src/thread/dc/SDL_syssem_c.h, src/thread/dc/SDL_systhread.c,
+	  src/thread/dc/SDL_systhread_c.h,
+	  src/thread/epoc/SDL_sysmutex.cpp, src/thread/epoc/SDL_syssem.cpp,
+	  src/thread/epoc/SDL_systhread.cpp,
+	  src/thread/epoc/SDL_systhread_c.h,
+	  src/thread/generic/SDL_syscond.c,
+	  src/thread/generic/SDL_syscond_c.h,
+	  src/thread/generic/SDL_sysmutex.c,
+	  src/thread/generic/SDL_sysmutex_c.h,
+	  src/thread/generic/SDL_syssem.c,
+	  src/thread/generic/SDL_syssem_c.h,
+	  src/thread/generic/SDL_systhread.c,
+	  src/thread/generic/SDL_systhread_c.h,
+	  src/thread/irix/SDL_syssem.c, src/thread/irix/SDL_systhread.c,
+	  src/thread/irix/SDL_systhread_c.h, src/thread/os2/SDL_syscond.c,
+	  src/thread/os2/SDL_syscond_c.h, src/thread/os2/SDL_sysmutex.c,
+	  src/thread/os2/SDL_syssem.c, src/thread/os2/SDL_systhread.c,
+	  src/thread/os2/SDL_systhread_c.h, src/thread/pth/SDL_syscond.c,
+	  src/thread/pth/SDL_syscond_c.h, src/thread/pth/SDL_sysmutex.c,
+	  src/thread/pth/SDL_sysmutex_c.h, src/thread/pth/SDL_systhread.c,
+	  src/thread/pth/SDL_systhread_c.h,
+	  src/thread/pthread/SDL_syscond.c,
+	  src/thread/pthread/SDL_sysmutex.c,
+	  src/thread/pthread/SDL_sysmutex_c.h,
+	  src/thread/pthread/SDL_syssem.c,
+	  src/thread/pthread/SDL_systhread.c,
+	  src/thread/pthread/SDL_systhread_c.h,
+	  src/thread/riscos/SDL_syscond.c,
+	  src/thread/riscos/SDL_sysmutex.c,
+	  src/thread/riscos/SDL_sysmutex_c.h,
+	  src/thread/riscos/SDL_syssem.c,
+	  src/thread/riscos/SDL_systhread.c,
+	  src/thread/riscos/SDL_systhread_c.h,
+	  src/thread/win32/SDL_sysmutex.c, src/thread/win32/SDL_syssem.c,
+	  src/thread/win32/SDL_systhread.c,
+	  src/thread/win32/SDL_systhread_c.h,
+	  src/thread/win32/win_ce_semaphore.c, src/timer/Makefile.am,
+	  src/timer/Makefile.wat, src/timer/SDL_systimer.h,
+	  src/timer/SDL_timer.c, src/timer/SDL_timer_c.h,
+	  src/timer/amigaos/SDL_systimer.c,
+	  src/timer/amigaos4/SDL_systimer.c, src/timer/beos/SDL_systimer.c,
+	  src/timer/dc/SDL_systimer.c, src/timer/dummy/SDL_systimer.c,
+	  src/timer/epoc/SDL_systimer.cpp, src/timer/macos/FastTimes.c,
+	  src/timer/macos/FastTimes.h, src/timer/macos/SDL_MPWtimer.c,
+	  src/timer/macos/SDL_systimer.c, src/timer/mint/SDL_systimer.c,
+	  src/timer/mint/SDL_vbltimer.S, src/timer/mint/SDL_vbltimer_s.h,
+	  src/timer/os2/SDL_systimer.c, src/timer/riscos/SDL_systimer.c,
+	  src/timer/unix/SDL_systimer.c, src/timer/win32/SDL_systimer.c,
+	  src/timer/wince/SDL_systimer.c, src/video/Makefile.am,
+	  src/video/Makefile.wat, src/video/SDL_RLEaccel.c,
+	  src/video/SDL_RLEaccel_c.h, src/video/SDL_blit.c,
+	  src/video/SDL_blit.h, src/video/SDL_blit_0.c,
+	  src/video/SDL_blit_1.c, src/video/SDL_blit_A.c,
+	  src/video/SDL_blit_N.c, src/video/SDL_bmp.c,
+	  src/video/SDL_cursor.c, src/video/SDL_cursor_c.h,
+	  src/video/SDL_gamma.c, src/video/SDL_leaks.h,
+	  src/video/SDL_memops.h, src/video/SDL_pixels.c,
+	  src/video/SDL_pixels_c.h, src/video/SDL_stretch.c,
+	  src/video/SDL_stretch_c.h, src/video/SDL_surface.c,
+	  src/video/SDL_sysvideo.h, src/video/SDL_video.c,
+	  src/video/SDL_yuv.c, src/video/SDL_yuv_mmx.c,
+	  src/video/SDL_yuv_sw.c, src/video/SDL_yuv_sw_c.h,
+	  src/video/SDL_yuvfuncs.h, src/video/blank_cursor.h,
+	  src/video/default_cursor.h, src/video/e_log.h, src/video/e_pow.h,
+	  src/video/e_sqrt.h, src/video/math_private.h, src/video/mmx.h,
+	  src/video/Xext/README, src/video/Xext/XME/xme.c,
+	  src/video/Xext/Xinerama/Xinerama.c, src/video/Xext/Xv/Xv.c,
+	  src/video/Xext/Xv/Xvlibint.h, src/video/Xext/Xxf86dga/XF86DGA.c,
+	  src/video/Xext/Xxf86dga/XF86DGA2.c,
+	  src/video/Xext/Xxf86vm/XF86VMode.c,
+	  src/video/Xext/extensions/Xext.h,
+	  src/video/Xext/extensions/Xinerama.h,
+	  src/video/Xext/extensions/Xv.h,
+	  src/video/Xext/extensions/Xvlib.h,
+	  src/video/Xext/extensions/Xvproto.h,
+	  src/video/Xext/extensions/extutil.h,
+	  src/video/Xext/extensions/panoramiXext.h,
+	  src/video/Xext/extensions/panoramiXproto.h,
+	  src/video/Xext/extensions/xf86dga.h,
+	  src/video/Xext/extensions/xf86dga1.h,
+	  src/video/Xext/extensions/xf86dga1str.h,
+	  src/video/Xext/extensions/xf86dgastr.h,
+	  src/video/Xext/extensions/xf86vmode.h,
+	  src/video/Xext/extensions/xf86vmstr.h,
+	  src/video/Xext/extensions/xme.h, src/video/aalib/Makefile.am,
+	  src/video/aalib/SDL_aaevents.c, src/video/aalib/SDL_aaevents_c.h,
+	  src/video/aalib/SDL_aamouse.c, src/video/aalib/SDL_aamouse_c.h,
+	  src/video/aalib/SDL_aavideo.c, src/video/aalib/SDL_aavideo.h,
+	  src/video/amigaos4/Makefile.am, src/video/amigaos4/SDL_os4blit.c,
+	  src/video/amigaos4/SDL_os4events.c,
+	  src/video/amigaos4/SDL_os4gl.c,
+	  src/video/amigaos4/SDL_os4surface.c,
+	  src/video/amigaos4/SDL_os4utils.c,
+	  src/video/amigaos4/SDL_os4utils.h,
+	  src/video/amigaos4/SDL_os4video.c,
+	  src/video/amigaos4/SDL_os4video.h,
+	  src/video/amigaos4/SDL_os4wm.c,
+	  src/video/ataricommon/Makefile.am,
+	  src/video/ataricommon/SDL_ataric2p.S,
+	  src/video/ataricommon/SDL_ataric2p_s.h,
+	  src/video/ataricommon/SDL_ataridevmouse.c,
+	  src/video/ataricommon/SDL_ataridevmouse_c.h,
+	  src/video/ataricommon/SDL_atarieddi.S,
+	  src/video/ataricommon/SDL_atarieddi_s.h,
+	  src/video/ataricommon/SDL_atarievents.c,
+	  src/video/ataricommon/SDL_atarievents_c.h,
+	  src/video/ataricommon/SDL_atarigl.c,
+	  src/video/ataricommon/SDL_atarigl_c.h,
+	  src/video/ataricommon/SDL_atarikeys.h,
+	  src/video/ataricommon/SDL_atarimxalloc.c,
+	  src/video/ataricommon/SDL_atarimxalloc_c.h,
+	  src/video/ataricommon/SDL_biosevents.c,
+	  src/video/ataricommon/SDL_biosevents_c.h,
+	  src/video/ataricommon/SDL_gemdosevents.c,
+	  src/video/ataricommon/SDL_gemdosevents_c.h,
+	  src/video/ataricommon/SDL_ikbdevents.c,
+	  src/video/ataricommon/SDL_ikbdevents_c.h,
+	  src/video/ataricommon/SDL_ikbdinterrupt.S,
+	  src/video/ataricommon/SDL_ikbdinterrupt_s.h,
+	  src/video/ataricommon/SDL_xbiosevents.c,
+	  src/video/ataricommon/SDL_xbiosevents_c.h,
+	  src/video/ataricommon/SDL_xbiosinterrupt.S,
+	  src/video/ataricommon/SDL_xbiosinterrupt_s.h,
+	  src/video/bwindow/Makefile.am, src/video/bwindow/SDL_BView.h,
+	  src/video/bwindow/SDL_BWin.h, src/video/bwindow/SDL_lowvideo.h,
+	  src/video/bwindow/SDL_sysevents.cc,
+	  src/video/bwindow/SDL_sysevents_c.h,
+	  src/video/bwindow/SDL_sysmouse.cc,
+	  src/video/bwindow/SDL_sysmouse_c.h,
+	  src/video/bwindow/SDL_sysvideo.cc,
+	  src/video/bwindow/SDL_syswm.cc, src/video/bwindow/SDL_syswm_c.h,
+	  src/video/bwindow/SDL_sysyuv.cc, src/video/bwindow/SDL_sysyuv.h,
+	  src/video/cybergfx/Makefile.am,
+	  src/video/cybergfx/SDL_amigaevents.c,
+	  src/video/cybergfx/SDL_amigaevents_c.h,
+	  src/video/cybergfx/SDL_amigamouse.c,
+	  src/video/cybergfx/SDL_amigamouse_c.h,
+	  src/video/cybergfx/SDL_cgxaccel.c,
+	  src/video/cybergfx/SDL_cgxgl.c, src/video/cybergfx/SDL_cgxgl_c.h,
+	  src/video/cybergfx/SDL_cgximage.c,
+	  src/video/cybergfx/SDL_cgximage_c.h,
+	  src/video/cybergfx/SDL_cgxmodes.c,
+	  src/video/cybergfx/SDL_cgxmodes_c.h,
+	  src/video/cybergfx/SDL_cgxvideo.c,
+	  src/video/cybergfx/SDL_cgxvideo.h,
+	  src/video/cybergfx/SDL_cgxwm.c, src/video/cybergfx/SDL_cgxwm_c.h,
+	  src/video/cybergfx/SDL_cgxyuv.c,
+	  src/video/cybergfx/SDL_cgxyuv_c.h, src/video/dc/Makefile.am,
+	  src/video/dc/SDL_dcevents.c, src/video/dc/SDL_dcevents_c.h,
+	  src/video/dc/SDL_dcmouse.c, src/video/dc/SDL_dcmouse_c.h,
+	  src/video/dc/SDL_dcvideo.c, src/video/dc/SDL_dcvideo.h,
+	  src/video/dga/Makefile.am, src/video/dga/SDL_dgaevents.c,
+	  src/video/dga/SDL_dgaevents_c.h, src/video/dga/SDL_dgamouse.c,
+	  src/video/dga/SDL_dgamouse_c.h, src/video/dga/SDL_dgavideo.c,
+	  src/video/dga/SDL_dgavideo.h, src/video/directfb/Makefile.am,
+	  src/video/directfb/SDL_DirectFB_events.c,
+	  src/video/directfb/SDL_DirectFB_events.h,
+	  src/video/directfb/SDL_DirectFB_video.c,
+	  src/video/directfb/SDL_DirectFB_video.h,
+	  src/video/directfb/SDL_DirectFB_yuv.c,
+	  src/video/directfb/SDL_DirectFB_yuv.h,
+	  src/video/dummy/Makefile.am, src/video/dummy/SDL_nullevents.c,
+	  src/video/dummy/SDL_nullevents_c.h,
+	  src/video/dummy/SDL_nullmouse.c,
+	  src/video/dummy/SDL_nullmouse_c.h,
+	  src/video/dummy/SDL_nullvideo.c, src/video/dummy/SDL_nullvideo.h,
+	  src/video/epoc/Makefile.am, src/video/fbcon/3dfx_mmio.h,
+	  src/video/fbcon/3dfx_regs.h, src/video/fbcon/Makefile.am,
+	  src/video/fbcon/SDL_fb3dfx.c, src/video/fbcon/SDL_fb3dfx.h,
+	  src/video/fbcon/SDL_fbelo.c, src/video/fbcon/SDL_fbelo.h,
+	  src/video/fbcon/SDL_fbevents.c, src/video/fbcon/SDL_fbevents_c.h,
+	  src/video/fbcon/SDL_fbmatrox.c, src/video/fbcon/SDL_fbmatrox.h,
+	  src/video/fbcon/SDL_fbmouse.c, src/video/fbcon/SDL_fbmouse_c.h,
+	  src/video/fbcon/SDL_fbriva.c, src/video/fbcon/SDL_fbriva.h,
+	  src/video/fbcon/SDL_fbvideo.c, src/video/fbcon/SDL_fbvideo.h,
+	  src/video/fbcon/matrox_mmio.h, src/video/fbcon/riva_regs.h,
+	  src/video/gapi/SDL_gapivideo.c, src/video/gapi/SDL_gapivideo.h,
+	  src/video/gem/Makefile.am, src/video/gem/SDL_gemevents.c,
+	  src/video/gem/SDL_gemevents_c.h, src/video/gem/SDL_gemmouse.c,
+	  src/video/gem/SDL_gemmouse_c.h, src/video/gem/SDL_gemvideo.c,
+	  src/video/gem/SDL_gemvideo.h, src/video/gem/SDL_gemwm.c,
+	  src/video/gem/SDL_gemwm_c.h, src/video/ggi/Makefile.am,
+	  src/video/ggi/SDL_ggievents.c, src/video/ggi/SDL_ggievents_c.h,
+	  src/video/ggi/SDL_ggimouse.c, src/video/ggi/SDL_ggimouse_c.h,
+	  src/video/ggi/SDL_ggivideo.c, src/video/ggi/SDL_ggivideo.h,
+	  src/video/ipod/Makefile.am, src/video/ipod/SDL_ipodvideo.c,
+	  src/video/ipod/SDL_ipodvideo.h, src/video/maccommon/Makefile.am,
+	  src/video/maccommon/SDL_lowvideo.h,
+	  src/video/maccommon/SDL_macevents.c,
+	  src/video/maccommon/SDL_macevents_c.h,
+	  src/video/maccommon/SDL_macgl.c,
+	  src/video/maccommon/SDL_macgl_c.h,
+	  src/video/maccommon/SDL_mackeys.h,
+	  src/video/maccommon/SDL_macmouse.c,
+	  src/video/maccommon/SDL_macmouse_c.h,
+	  src/video/maccommon/SDL_macwm.c,
+	  src/video/maccommon/SDL_macwm_c.h, src/video/macdsp/Makefile.am,
+	  src/video/macdsp/SDL_dspvideo.c, src/video/macdsp/SDL_dspvideo.h,
+	  src/video/macrom/Makefile.am, src/video/macrom/SDL_romvideo.c,
+	  src/video/macrom/SDL_romvideo.h, src/video/nanox/Makefile.am,
+	  src/video/nanox/SDL_nxevents.c, src/video/nanox/SDL_nxevents_c.h,
+	  src/video/nanox/SDL_nximage.c, src/video/nanox/SDL_nximage_c.h,
+	  src/video/nanox/SDL_nxmodes.c, src/video/nanox/SDL_nxmodes_c.h,
+	  src/video/nanox/SDL_nxmouse.c, src/video/nanox/SDL_nxmouse_c.h,
+	  src/video/nanox/SDL_nxvideo.c, src/video/nanox/SDL_nxvideo.h,
+	  src/video/nanox/SDL_nxwm.c, src/video/nanox/SDL_nxwm_c.h,
+	  src/video/os2fslib/SDL_os2fslib.c,
+	  src/video/os2fslib/SDL_os2fslib.h,
+	  src/video/os2fslib/SDL_vkeys.h, src/video/photon/Makefile.am,
+	  src/video/photon/SDL_ph_events.c,
+	  src/video/photon/SDL_ph_events_c.h, src/video/photon/SDL_ph_gl.c,
+	  src/video/photon/SDL_ph_gl.h, src/video/photon/SDL_ph_image.c,
+	  src/video/photon/SDL_ph_image_c.h,
+	  src/video/photon/SDL_ph_modes.c,
+	  src/video/photon/SDL_ph_modes_c.h,
+	  src/video/photon/SDL_ph_mouse.c,
+	  src/video/photon/SDL_ph_mouse_c.h,
+	  src/video/photon/SDL_ph_video.c, src/video/photon/SDL_ph_video.h,
+	  src/video/photon/SDL_ph_wm.c, src/video/photon/SDL_ph_wm_c.h,
+	  src/video/photon/SDL_phyuv.c, src/video/photon/SDL_phyuv_c.h,
+	  src/video/picogui/Makefile.am, src/video/picogui/SDL_pgevents.c,
+	  src/video/picogui/SDL_pgevents_c.h,
+	  src/video/picogui/SDL_pgvideo.c, src/video/picogui/SDL_pgvideo.h,
+	  src/video/ps2gs/Makefile.am, src/video/ps2gs/SDL_gsevents.c,
+	  src/video/ps2gs/SDL_gsevents_c.h, src/video/ps2gs/SDL_gsmouse.c,
+	  src/video/ps2gs/SDL_gsmouse_c.h, src/video/ps2gs/SDL_gsvideo.c,
+	  src/video/ps2gs/SDL_gsvideo.h, src/video/ps2gs/SDL_gsyuv.c,
+	  src/video/ps2gs/SDL_gsyuv_c.h, src/video/qtopia/Makefile.am,
+	  src/video/qtopia/SDL_QPEApp.cc, src/video/qtopia/SDL_QPEApp.h,
+	  src/video/qtopia/SDL_QWin.cc, src/video/qtopia/SDL_QWin.h,
+	  src/video/qtopia/SDL_lowvideo.h,
+	  src/video/qtopia/SDL_sysevents.cc,
+	  src/video/qtopia/SDL_sysevents_c.h,
+	  src/video/qtopia/SDL_sysmouse.cc,
+	  src/video/qtopia/SDL_sysmouse_c.h,
+	  src/video/qtopia/SDL_sysvideo.cc, src/video/qtopia/SDL_syswm.cc,
+	  src/video/qtopia/SDL_syswm_c.h, src/video/quartz/CGS.h,
+	  src/video/quartz/Makefile.am,
+	  src/video/quartz/SDL_QuartzEvents.m,
+	  src/video/quartz/SDL_QuartzGL.m,
+	  src/video/quartz/SDL_QuartzKeys.h,
+	  src/video/quartz/SDL_QuartzVideo.h,
+	  src/video/quartz/SDL_QuartzVideo.m,
+	  src/video/quartz/SDL_QuartzWM.m,
+	  src/video/quartz/SDL_QuartzWindow.h,
+	  src/video/quartz/SDL_QuartzWindow.m,
+	  src/video/quartz/SDL_QuartzYUV.m, src/video/riscos/Makefile.am,
+	  src/video/riscos/SDL_riscosFullScreenVideo.c,
+	  src/video/riscos/SDL_riscosevents.c,
+	  src/video/riscos/SDL_riscosevents_c.h,
+	  src/video/riscos/SDL_riscosmouse.c,
+	  src/video/riscos/SDL_riscosmouse_c.h,
+	  src/video/riscos/SDL_riscossprite.c,
+	  src/video/riscos/SDL_riscostask.c,
+	  src/video/riscos/SDL_riscostask.h,
+	  src/video/riscos/SDL_riscosvideo.c,
+	  src/video/riscos/SDL_riscosvideo.h,
+	  src/video/riscos/SDL_wimppoll.c,
+	  src/video/riscos/SDL_wimpvideo.c, src/video/svga/Makefile.am,
+	  src/video/svga/SDL_svgaevents.c,
+	  src/video/svga/SDL_svgaevents_c.h,
+	  src/video/svga/SDL_svgamouse.c, src/video/svga/SDL_svgamouse_c.h,
+	  src/video/svga/SDL_svgavideo.c, src/video/svga/SDL_svgavideo.h,
+	  src/video/vgl/Makefile.am, src/video/vgl/SDL_vglevents.c,
+	  src/video/vgl/SDL_vglevents_c.h, src/video/vgl/SDL_vglmouse.c,
+	  src/video/vgl/SDL_vglmouse_c.h, src/video/vgl/SDL_vglvideo.c,
+	  src/video/vgl/SDL_vglvideo.h, src/video/wincommon/Makefile.am,
+	  src/video/wincommon/SDL_lowvideo.h,
+	  src/video/wincommon/SDL_sysevents.c,
+	  src/video/wincommon/SDL_sysmouse.c,
+	  src/video/wincommon/SDL_sysmouse_c.h,
+	  src/video/wincommon/SDL_syswm.c,
+	  src/video/wincommon/SDL_syswm_c.h,
+	  src/video/wincommon/SDL_wingl.c,
+	  src/video/wincommon/SDL_wingl_c.h, src/video/windib/Makefile.am,
+	  src/video/windib/SDL_dibevents.c,
+	  src/video/windib/SDL_dibevents_c.h,
+	  src/video/windib/SDL_dibvideo.c, src/video/windib/SDL_dibvideo.h,
+	  src/video/windib/SDL_vkeys.h, src/video/windx5/Makefile.am,
+	  src/video/windx5/SDL_dx5events.c,
+	  src/video/windx5/SDL_dx5events_c.h,
+	  src/video/windx5/SDL_dx5video.c, src/video/windx5/SDL_dx5video.h,
+	  src/video/windx5/SDL_dx5yuv.c, src/video/windx5/SDL_dx5yuv_c.h,
+	  src/video/windx5/directx.h, src/video/wscons/Makefile.am,
+	  src/video/wscons/SDL_wsconsevents.c,
+	  src/video/wscons/SDL_wsconsevents_c.h,
+	  src/video/wscons/SDL_wsconsmouse.c,
+	  src/video/wscons/SDL_wsconsmouse_c.h,
+	  src/video/wscons/SDL_wsconsvideo.c,
+	  src/video/wscons/SDL_wsconsvideo.h, src/video/x11/Makefile.am,
+	  src/video/x11/SDL_x11dga.c, src/video/x11/SDL_x11dga_c.h,
+	  src/video/x11/SDL_x11dyn.c, src/video/x11/SDL_x11dyn.h,
+	  src/video/x11/SDL_x11events.c, src/video/x11/SDL_x11events_c.h,
+	  src/video/x11/SDL_x11gamma.c, src/video/x11/SDL_x11gamma_c.h,
+	  src/video/x11/SDL_x11gl.c, src/video/x11/SDL_x11gl_c.h,
+	  src/video/x11/SDL_x11image.c, src/video/x11/SDL_x11image_c.h,
+	  src/video/x11/SDL_x11modes.c, src/video/x11/SDL_x11modes_c.h,
+	  src/video/x11/SDL_x11mouse.c, src/video/x11/SDL_x11mouse_c.h,
+	  src/video/x11/SDL_x11sym.h, src/video/x11/SDL_x11video.c,
+	  src/video/x11/SDL_x11video.h, src/video/x11/SDL_x11wm.c,
+	  src/video/x11/SDL_x11wm_c.h, src/video/x11/SDL_x11yuv.c,
+	  src/video/x11/SDL_x11yuv_c.h, src/video/xbios/Makefile.am,
+	  src/video/xbios/SDL_xbios.c, src/video/xbios/SDL_xbios.h,
+	  src/video/xbios/SDL_xbios_blowup.c,
+	  src/video/xbios/SDL_xbios_blowup.h,
+	  src/video/xbios/SDL_xbios_centscreen.c,
+	  src/video/xbios/SDL_xbios_centscreen.h,
+	  src/video/xbios/SDL_xbios_sb3.c, src/video/xbios/SDL_xbios_sb3.h,
+	  test/.cvsignore, test/Makefile.am, test/Makefile.wat,
+	  test/autogen.sh, test/checkkeys.c, test/configure.in,
+	  test/loopwave.c, test/testalpha.c, test/testblitspeed.c,
+	  test/testcdrom.c, test/testcpuinfo.c, test/testdyngl.c,
+	  test/testendian.c, test/testgl.c, test/testoverlay.c,
+	  test/testoverlay2.c, test/testpalette.c, test/testsem.c,
+	  test/testsprite.c, test/testtimer.c, test/testtypes.c,
+	  test/testvidinfo.c, test/testwm.c, test/torturethread.c: Merge
+	  with current SDL SVN and fix up breakage.
+
+2006-03-02 03:18  tag SDK_51_22
+
+2006-03-02 03:18  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Removed hack to make
+	  double-buffering by page-flipping look like double-buffering by
+	  blitting. This was done for compatibility, but since the X11 DGA
+	  driver at least does page-flipping (I've checked) then software
+	  that can't handle page-flipping really is broken and not worth
+	  kludging for (but perhaps you should blame the brain-damaged SDL
+	  double-buffering API).
+
+2006-03-02 03:03  richardd
+
+	* src/video/SDL_blit_N.c: Disabled the assert() in the AltiVec
+	  blitting code.
+
+2006-03-02 03:02  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Removed some superfluous error
+	  output.
+
+2006-03-02 03:01  richardd
+
+	* src/: SDL_error.c, SDL_fatal.c, events/SDL_quit.c: Some
+	  preparations for shared-library-ness: disabled signal handling in
+	  SDL (including the parachute) and unnecessary STDIO.
+
+2006-02-10 03:10  richardd
+
+	* README.AmigaOS4: Updated README.
+
+2006-02-10 02:44  richardd
+
+	* src/main/amigaos4/SDL_os4debug.h: Forgot to check in this file.
+
+2006-02-10 02:22  richardd
+
+	* src/thread/amigaos4/SDL_syssem.c: Some tweaks for the new
+	  semaphore code.
+
+2006-02-09 02:32  richardd
+
+	* src/joystick/amigaos4/SDL_sysjoystick.c: Fixed support for hats
+	  in AmigaInput joystick driver.
+
+2006-02-09 01:32  richardd
+
+	* src/video/SDL_blit_N.c: Final Altivec fix: don't use Altivec when
+	  doing a normal blit to a hardware surface.
+
+2006-02-09 00:55  richardd
+
+	* src/thread/amigaos4/SDL_syssem.c: Added new semaphore
+	  implementation. This is more robust and Forbid-free!
+
+2006-02-08 21:30  richardd
+
+	* src/video/amigaos4/debug.h: Removed obsolete file.
+
+2006-02-07 23:07  richardd
+
+	* src/: audio/amigaos4/SDL_os4audio.c,
+	  joystick/amigaos4/SDL_sysjoystick.c, main/Makefile.am,
+	  main/amigaos4/SDL_os4timer.c, thread/amigaos4/SDL_syssem.c,
+	  thread/amigaos4/SDL_systhread.c, timer/amigaos4/SDL_systimer.c,
+	  video/amigaos4/Makefile.am, video/amigaos4/SDL_os4blit.c,
+	  video/amigaos4/SDL_os4events.c, video/amigaos4/SDL_os4gl.c,
+	  video/amigaos4/SDL_os4surface.c, video/amigaos4/SDL_os4utils.c,
+	  video/amigaos4/SDL_os4video.c, video/amigaos4/SDL_os4wm.c:
+	  Factored out common debug routines to
+	  src/main/amigaos4/SDL_os4debug.h.
+
+2006-02-07 22:12  richardd
+
+	* src/: main/Makefile.am, thread/amigaos4/SDL_systhread.c,
+	  main/amigaos4/SDL_os4timer.c, main/amigaos4/SDL_os4timer_c.h,
+	  thread/amigaos4/SDL_systhread_c.h, timer/amigaos4/SDL_systimer.c:
+	  Cleaned up timer support. Factor out timer.device support
+	  routines into src/main/amigaos4 since it is used by by the timer
+	  and thread layers.
+
+2006-02-06 04:48  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Made use of some new DOS
+	  features to simplify thread layer and make thread clean-up more
+	  robust.
+
+2006-02-06 03:14  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Assert NP_Child when
+	  creating a thread. This also ensures that the CLib context is
+	  passed to the child thread, so we don't need to hack that
+	  manually anymore.
+
+2006-02-06 03:10  richardd
+
+	* src/thread/amigaos4/: SDL_syssem.c, SDL_systhread.c,
+	  SDL_systhread_c.h: Started cleaning up the OS4 thread layer.
+	  Removed broken and dangerous support for killing threads. Let's
+	  face it, we can't safely kill arbitrary threads in AmigaOS. The
+	  SDL_KillThread() call will now just send a BREAK_C to the thread
+	  and hope for the best.
+
+2006-01-08 20:28  richardd
+
+	* src/video/SDL_blit_N.c: Don't use Altivec when doing a color-key
+	  blit to a hardware surface.
+
+2006-01-08 13:03  richardd
+
+	* src/video/SDL_blit_N.c: Merged optimized C 32-bit RGB<->RGBA
+	  alpha masking blitter from SDL CVS.
+
+2006-01-08 01:33  richardd
+
+	* src/video/amigaos4/SDL_os4gl.c: If setting up a MiniGL context
+	  failed, no error message would be reported to SDL. Fixed.
+
+2006-01-07 12:49  richardd
+
+	* src/video/SDL_blit_A.c: Some fixes for the altivec-accelerated
+	  alpha-blitting in the SDL core.
+
+	  1) The check for the presence of Altivec was omitted in the
+	  16-bit->32-bit case. Fixed.  2) Don't use Altivec if the
+	  destination surface is a hardware surface (Altivec doesn't work
+	  on caching-inhibited memory).
+
+	  I have submitted this patch upstream also.
+
+2006-01-06 00:36  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: If an SDL application quit
+	  while iconified, the app icon would not be removed. Fixed.
+
+2006-01-05 14:04  richardd
+
+	* src/video/amigaos4/SDL_os4wm.c: When a windowed display surface
+	  is minimized, send SDL an APPACTIVE lost event; similarly, when
+	  the window is restored, send an APPACTIVE gained event. It
+	  doesn't make much sense to do this for a full-screen surface at
+	  the moment, since a full-screen surface is not yet properly
+	  hidden when SDL_WM_IconifyWidow is called - it's just moved
+	  behind the Workbench screen - and so is essentially still active.
+
+2006-01-05 12:48  richardd
+
+	* src/video/amigaos4/SDL_os4wm.c: ShowWMCursor would unnecessarily
+	  set an SDL error if no display surface was open. Fixed. Note this
+	  cures the bogus 'No display' error that you could see after
+	  successfuly opening a display surface.
+
+2006-01-05 11:27  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: When a GL surface was
+	  destroyed, the GL context was not being deleted (due to the call
+	  being conditional on the wrong macro). Fixed.
+
+2006-01-05 02:14  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Don't report a GL surface as a
+	  hardware, double-buffered surface. We do this during set-up to
+	  make initialization of the surface simpler, but we cannot report
+	  these flags back to SDL. The surface initialization code needs to
+	  be clean up to fix this.
+
+	  This change finally allows OPENGLBLIT surfaces to work (subject
+	  to the deficiences of MiniGL and the underlying Warp3D driver).
+
+2006-01-05 01:56  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Adapted routine to flip
+	  buffers of a double-buffered screen to use the static copy of
+	  display hw record rather than relying on the SDL display surface
+	  itself having a hw record attached. Another step closer to
+	  getting OPENGLBLIT surfaces to work.
+
+2006-01-05 01:45  richardd
+
+	* src/video/amigaos4/: SDL_os4gl.c, SDL_os4video.c, SDL_os4video.h:
+	  Don't dynamically allocate a HW record for display surfaces.
+	  Instead have a static HW record in the private device record. The
+	  reason for this is to (eventually) make OPENGLBLIT surfaces work.
+	  When SDL creates an OPENGLBLIT surface, it creates an additional
+	  display surface over the GL surface. If we rely on a link between
+	  the display surface and our private HW record, then OPENGLBLIT
+	  surfaces cannot work (since they don't have a HW record attached
+	  to them).
+
+2006-01-05 01:14  richardd
+
+	* src/video/amigaos4/: SDL_os4gl.c, SDL_os4video.c, SDL_os4video.h,
+	  SDL_os4wm.c: Removed private copy of pointer to display surface.
+	  It's redundant.
+
+2006-01-05 00:58  richardd
+
+	* src/video/amigaos4/SDL_os4gl.c: Stripped trailing whitespace.
+
+2006-01-03 22:12  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Debug code for logging surface
+	  flags would erroneously print SDL_OPENGLBLIT when only SDL_OPENGL
+	  was enabled. Fixed.
+
+2006-01-03 21:38  richardd
+
+	* src/joystick/amigaos4/SDL_sysjoystick.c: Increased the maximum
+	  number of buttons supported by the AmigaInput joystick driver
+	  from 8 to 16.
+
+2006-01-03 21:33  richardd
+
+	* src/joystick/amigaos4/SDL_sysjoystick.c: When enumerating
+	  joysticks in the AmigaInput joystick drivers, do some sanity
+	  checks to try to determine if each device passed to us by AI
+	  represent a physically present stick. Current versions of
+	  AmigaInput seem to report all devices it has drivers for and pays
+	  no heed to reality.
+
+2006-01-03 21:22  richardd
+
+	* src/joystick/amigaos4/SDL_sysjoystick.c: Fixed some
+	  signed/unsigned comparisons in AmigaInput joystick driver.
+
+2006-01-03 21:17  richardd
+
+	* src/joystick/amigaos4/SDL_sysjoystick.c: Fixed a typo in the
+	  AmigaInput joystick driver which would screw up button events
+	  when using a stick with hats.
+
+2006-01-02 12:16  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Don't redefine the macro MIN
+	  if it already exists.
+
+2006-01-02 12:12  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c,
+	  SDL_os4utils.c: Fixed some integer comparisons in the OS4.0 video
+	  driver that can cause problems when building with GCC4.0.
+
+2006-01-02 11:57  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Optimized surface locking
+	  and unlocking a little by removing redundant checks.
+
+2005-12-12 10:35  richardd
+
+	* configure.in: The new altivec check code in the configure script
+	  synced from upstream fails on OS4 (and probably elsewhere). Added
+	  an ugly work-around. Better solution needed.
+
+2005-12-12 09:55  richardd
+
+	* BUGS, README.OS2, README.wscons, Watcom.mif, configure.in,
+	  setvars.cmd, include/SDL.h, include/SDL_byteorder.h,
+	  include/SDL_thread.h, include/SDL_types.h, src/Makefile.wat,
+	  src/SDL.c, src/SDL_error.c, src/SDL_loadso.c,
+	  src/audio/Makefile.wat, src/audio/SDL_audio.c,
+	  src/audio/SDL_audiodev.c, src/audio/SDL_mixer_MMX_VC.c,
+	  src/audio/SDL_sysaudio.h, src/audio/dart/SDL_dart.c,
+	  src/audio/dart/SDL_dart.h, src/audio/sun/SDL_sunaudio.c,
+	  src/cdrom/Makefile.wat, src/cdrom/os2/SDL_syscdrom.c,
+	  src/cpuinfo/Makefile.wat, src/cpuinfo/SDL_cpuinfo.c,
+	  src/events/Makefile.wat, src/events/SDL_events.c,
+	  src/events/SDL_resize.c, src/events/SDL_sysevents.h,
+	  src/file/Makefile.wat, src/hermes/HeadMMX.h,
+	  src/hermes/HeadX86.h, src/hermes/mmx_main.asm,
+	  src/hermes/mmxp2_32.asm, src/hermes/x86_main.asm,
+	  src/hermes/x86p_16.asm, src/hermes/x86p_32.asm,
+	  src/joystick/Makefile.wat, src/joystick/bsd/SDL_sysjoystick.c,
+	  src/joystick/os2/SDL_sysjoystick.c, src/joystick/os2/joyos2.h,
+	  src/loadso/beos/SDL_loadso.c, src/loadso/dlopen/SDL_loadso.c,
+	  src/loadso/dummy/SDL_loadso.c, src/loadso/macos/SDL_loadso.c,
+	  src/loadso/macosx/SDL_loadso.c, src/loadso/mint/SDL_loadso.c,
+	  src/loadso/os2/SDL_loadso.c, src/thread/os2/SDL_syscond.c,
+	  src/thread/os2/SDL_syscond_c.h, src/thread/os2/SDL_sysmutex.c,
+	  src/thread/os2/SDL_syssem.c, src/thread/os2/SDL_systhread.c,
+	  src/thread/os2/SDL_systhread_c.h, src/timer/Makefile.wat,
+	  src/timer/SDL_timer.c, src/timer/os2/SDL_systimer.c,
+	  src/timer/win32/SDL_systimer.c, src/timer/wince/SDL_systimer.c,
+	  src/video/Makefile.am, src/video/Makefile.wat,
+	  src/video/SDL_blit.c, src/video/SDL_blit_A.c,
+	  src/video/SDL_blit_N.c, src/video/SDL_cursor.c,
+	  src/video/SDL_stretch.c, src/video/SDL_sysvideo.h,
+	  src/video/SDL_video.c, src/video/dga/SDL_dgaevents.c,
+	  src/video/dga/SDL_dgavideo.c,
+	  src/video/directfb/SDL_DirectFB_video.c,
+	  src/video/os2fslib/SDL_os2fslib.c,
+	  src/video/os2fslib/SDL_os2fslib.h,
+	  src/video/os2fslib/SDL_vkeys.h, src/video/wscons/Makefile.am,
+	  src/video/wscons/SDL_wsconsevents.c,
+	  src/video/wscons/SDL_wsconsevents_c.h,
+	  src/video/wscons/SDL_wsconsmouse.c,
+	  src/video/wscons/SDL_wsconsmouse_c.h,
+	  src/video/wscons/SDL_wsconsvideo.c,
+	  src/video/wscons/SDL_wsconsvideo.h, src/video/x11/Makefile.am,
+	  src/video/x11/SDL_x11dyn.c, src/video/x11/SDL_x11dyn.h,
+	  src/video/x11/SDL_x11events.c, src/video/x11/SDL_x11events_c.h,
+	  src/video/x11/SDL_x11gamma.c, src/video/x11/SDL_x11gl.c,
+	  src/video/x11/SDL_x11gl_c.h, src/video/x11/SDL_x11image.c,
+	  src/video/x11/SDL_x11modes.c, src/video/x11/SDL_x11mouse.c,
+	  src/video/x11/SDL_x11sym.h, src/video/x11/SDL_x11video.c,
+	  src/video/x11/SDL_x11video.h, src/video/x11/SDL_x11yuv.c,
+	  test/Makefile.wat: Sync with upstream CVS.
+
+2005-12-12 09:50  richardd
+
+	* src/main/macosx/Makefile.in: src/main/macosx/Makefile.in is a
+	  generated file and shouldn't be in CVS.
+
+2005-12-12 09:46  richardd
+
+	* aclocal.m4: aclocal.m4 is a generated file and shouldn't be in
+	  CVS.
+
+2005-12-10 01:22  richardd
+
+	* src/thread/amigaos4/: SDL_sysmutex.c, SDL_syssem.c: Clean up for
+	  native thread layer. Removed dummy code, since the configure
+	  script now handle disable threads case.
+
+2005-12-09 14:03  richardd
+
+	* configure.in: Fix for build scripts to build against native
+	  thread layer.
+
+2005-12-09 14:03  richardd
+
+	* src/thread/amigaos4/: SDL_sysmutex.c, SDL_syssem.c,
+	  SDL_systhread.c, SDL_systhread_c.h: Restore old (buggy, but
+	  soon-to-be-fixed) native thread code.
+
+2005-12-09 13:12  richardd
+
+	* configure.in, src/thread/amigaos4/SDL_syscond.c,
+	  src/thread/amigaos4/SDL_sysmutex_c.h: Modified build scripts and
+	  generic pthreads code so that it will build on OS4. Thus it's no
+	  longer necessary to duplicate the generic pthreads code.
+
+2005-12-09 11:21  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: SetVideoMode() would
+	  erroneously open GL context and set OPENGL surface flag when
+	  OPENGL surface not requested. Fixed.
+
+2005-12-09 11:16  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: GrabInput() would fault if
+	  called when SDL's intuition window was not open.  Fixed.
+
+2005-11-26 00:55  henningl
+
+	* src/video/amigaos4/SDL_os4gl.c: changed Windows newline
+	  characters to Unix style
+
+2005-11-01 02:17  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: ToggleFullScreen() returned an
+	  incorrect failure value when using a hardware display surface.
+	  Fixed.
+
+2005-11-01 01:16  richardd
+
+	* configure.in, src/video/amigaos4/SDL_os4video.c: Fixed building
+	  against shared MiniGL 1.1.
+
+2005-11-01 00:37  richardd
+
+	* src/: audio/amigaos4/Makefile.am, main/Makefile.am,
+	  video/amigaos4/Makefile.am: Fixed typo in last change, and, while
+	  we're at it, fixed distribution of headers in src/video/amigaos4
+	  and distribution of src/main/amigaos4. This thing might actually
+	  compile from the dist tarball now!
+
+2005-11-01 00:00  richardd
+
+	* src/audio/amigaos4/Makefile.am: src/audio/amigaos4/SDL_os4audio.h
+	  was not being included in dist tarball.  Fixed.
+
+2005-10-28 13:50  richardd
+
+	* configure.in: Enabled support for building with Altivec-optimized
+	  blitting.
+
+2005-10-28 11:06  richardd
+
+	* CWprojects.sea.bin, MPWmake.sea.bin, Makefile.am,
+	  PBProjects.tar.gz, README.AmigaOS, README.MiNT, README.RISCOS,
+	  SDL.spec.in, VisualC.html, VisualC.zip, VisualC7.zip,
+	  VisualCE.zip, Xcode21.tar.gz, aclocal.m4, autogen.sh,
+	  config.guess, config.sub, configure.in, docs.html, sdl.m4,
+	  docs/html/sdlexposeevent.html, docs/images/rainbow.gif,
+	  docs/man3/SDL_ExposeEvent.3, include/SDL_byteorder.h,
+	  include/SDL_cdrom.h, include/SDL_endian.h, include/SDL_main.h,
+	  include/SDL_mouse.h, include/SDL_syswm.h, include/SDL_timer.h,
+	  include/SDL_version.h, include/SDL_video.h, include/begin_code.h,
+	  src/SDL_fatal.c, src/SDL_loadso.c, src/audio/Makefile.am,
+	  src/audio/SDL_audiodev.c, src/audio/SDL_mixer_MMX.c,
+	  src/audio/SDL_mixer_MMX.h, src/audio/SDL_mixer_MMX_VC.c,
+	  src/audio/alsa/SDL_alsa_audio.c, src/audio/amigaos/Makefile.am,
+	  src/audio/amigaos/SDL_ahiaudio.c,
+	  src/audio/amigaos/SDL_ahiaudio.h, src/audio/arts/SDL_artsaudio.c,
+	  src/audio/dsp/SDL_dspaudio.c, src/audio/macrom/SDL_romaudio.c,
+	  src/audio/mint/SDL_mintaudio.c, src/audio/mint/SDL_mintaudio.h,
+	  src/audio/mint/SDL_mintaudio_dma8.c,
+	  src/audio/mint/SDL_mintaudio_gsxb.c,
+	  src/audio/mint/SDL_mintaudio_it.S,
+	  src/audio/mint/SDL_mintaudio_mcsn.c,
+	  src/audio/mint/SDL_mintaudio_stfa.c,
+	  src/audio/mint/SDL_mintaudio_xbios.c,
+	  src/cdrom/linux/SDL_syscdrom.c,
+	  src/cdrom/macosx/AudioFilePlayer.c,
+	  src/cdrom/macosx/AudioFilePlayer.cpp,
+	  src/cdrom/macosx/AudioFilePlayer.h,
+	  src/cdrom/macosx/AudioFileReaderThread.c,
+	  src/cdrom/macosx/AudioFileReaderThread.cpp,
+	  src/cdrom/macosx/CAGuard.cpp, src/cdrom/macosx/CAGuard.h,
+	  src/cdrom/macosx/CDPlayer.c, src/cdrom/macosx/CDPlayer.cpp,
+	  src/cdrom/macosx/Makefile.am, src/cdrom/macosx/SDLOSXCAGuard.c,
+	  src/cdrom/macosx/SDLOSXCAGuard.h,
+	  src/cdrom/macosx/SDL_syscdrom.c,
+	  src/cdrom/openbsd/SDL_syscdrom.c, src/cdrom/osf/SDL_syscdrom.c,
+	  src/cpuinfo/SDL_cpuinfo.c, src/events/SDL_active.c,
+	  src/events/SDL_events.c, src/events/SDL_events_c.h,
+	  src/events/SDL_keyboard.c, src/events/SDL_mouse.c,
+	  src/events/SDL_quit.c, src/events/SDL_sysevents.h,
+	  src/file/SDL_rwops.c, src/joystick/darwin/SDL_sysjoystick.c,
+	  src/joystick/dummy/SDL_sysjoystick.c,
+	  src/joystick/macos/SDL_sysjoystick.c,
+	  src/joystick/mint/SDL_sysjoystick.c,
+	  src/joystick/riscos/SDL_sysjoystick.c,
+	  src/joystick/win32/SDL_mmjoystick.c, src/main/Makefile.am,
+	  src/main/macos/Makefile.am, src/main/macos/SDL_main.c,
+	  src/main/macosx/Makefile.in, src/main/macosx/SDLMain.m,
+	  src/thread/beos/SDL_syssem.c, src/thread/riscos/SDL_syscond.c,
+	  src/thread/riscos/SDL_sysmutex.c,
+	  src/thread/riscos/SDL_sysmutex_c.h,
+	  src/thread/riscos/SDL_syssem.c,
+	  src/thread/riscos/SDL_systhread.c,
+	  src/thread/riscos/SDL_systhread_c.h, src/timer/SDL_timer.c,
+	  src/timer/mint/SDL_systimer.c, src/timer/riscos/SDL_systimer.c,
+	  src/video/SDL_RLEaccel.c, src/video/SDL_blit.c,
+	  src/video/SDL_blit.h, src/video/SDL_blit_0.c,
+	  src/video/SDL_blit_A.c, src/video/SDL_blit_N.c,
+	  src/video/SDL_cursor.c, src/video/SDL_pixels.c,
+	  src/video/SDL_surface.c, src/video/SDL_sysvideo.h,
+	  src/video/SDL_video.c, src/video/SDL_yuv_mmx.c,
+	  src/video/ataricommon/SDL_ataric2p.S,
+	  src/video/ataricommon/SDL_ataric2p_s.h,
+	  src/video/ataricommon/SDL_atarievents.c,
+	  src/video/ataricommon/SDL_ikbdevents.c,
+	  src/video/ataricommon/SDL_ikbdinterrupt.S,
+	  src/video/ataricommon/SDL_xbiosinterrupt.S,
+	  src/video/directfb/SDL_DirectFB_keys.h,
+	  src/video/directfb/SDL_DirectFB_video.c,
+	  src/video/fbcon/SDL_fbvideo.c, src/video/gem/SDL_gemevents.c,
+	  src/video/gem/SDL_gemvideo.c, src/video/gem/SDL_gemvideo.h,
+	  src/video/gem/SDL_gemwm.c, src/video/gem/SDL_gemwm_c.h,
+	  src/video/ipod/Makefile.am, src/video/ipod/SDL_ipodvideo.c,
+	  src/video/ipod/SDL_ipodvideo.h,
+	  src/video/maccommon/SDL_lowvideo.h,
+	  src/video/maccommon/SDL_macevents.c,
+	  src/video/maccommon/SDL_macmouse.c,
+	  src/video/maccommon/SDL_macwm.c, src/video/macdsp/Makefile.am,
+	  src/video/macdsp/SDL_dspvideo.c, src/video/macrom/SDL_romvideo.c,
+	  src/video/qtopia/SDL_QPEApp.cc, src/video/qtopia/SDL_QPEApp.h,
+	  src/video/quartz/SDL_QuartzEvents.m,
+	  src/video/quartz/SDL_QuartzVideo.m, src/video/riscos/Makefile.am,
+	  src/video/riscos/SDL_riscosASM.s,
+	  src/video/riscos/SDL_riscosFullScreenVideo.c,
+	  src/video/riscos/SDL_riscosevents.c,
+	  src/video/riscos/SDL_riscosmouse.c,
+	  src/video/riscos/SDL_riscossprite.c,
+	  src/video/riscos/SDL_riscostask.c,
+	  src/video/riscos/SDL_riscostask.h,
+	  src/video/riscos/SDL_riscosvideo.c,
+	  src/video/riscos/SDL_wimppoll.c,
+	  src/video/riscos/SDL_wimpvideo.c,
+	  src/video/wincommon/SDL_sysevents.c,
+	  src/video/wincommon/SDL_syswm.c,
+	  src/video/wincommon/SDL_syswm_c.h,
+	  src/video/wincommon/SDL_wingl.c,
+	  src/video/windib/SDL_dibevents.c,
+	  src/video/windib/SDL_dibvideo.c,
+	  src/video/windx5/SDL_dx5events.c,
+	  src/video/windx5/SDL_dx5video.c, src/video/x11/SDL_x11events.c,
+	  src/video/x11/SDL_x11gl.c, src/video/xbios/Makefile.am,
+	  src/video/xbios/SDL_xbios.c, src/video/xbios/SDL_xbios.h,
+	  src/video/xbios/SDL_xbios_blowup.c,
+	  src/video/xbios/SDL_xbios_blowup.h,
+	  src/video/xbios/SDL_xbios_centscreen.c,
+	  src/video/xbios/SDL_xbios_centscreen.h,
+	  src/video/xbios/SDL_xbios_sb3.c, src/video/xbios/SDL_xbios_sb3.h,
+	  test/Makefile.am, test/README, test/checkkeys.c, test/loopwave.c,
+	  test/testalpha.c, test/testbitmap.c, test/testblitspeed.c,
+	  test/testcdrom.c, test/testdyngl.c, test/testerror.c,
+	  test/testgamma.c, test/testhread.c, test/testkeys.c,
+	  test/testlock.c, test/testoverlay.c, test/testoverlay2.c,
+	  test/testpalette.c, test/testsem.c, test/testsprite.c,
+	  test/testtimer.c, test/testtypes.c, test/testver.c,
+	  test/testwin.c, test/testwm.c, test/threadwin.c,
+	  test/torturethread.c: Sync with main SDL CVS.
+
+2005-08-04 09:55  tfrieden
+
+	* src/thread/amigaos4/: SDL_syscond.c, SDL_sysmutex_c.h: [no log
+	  message]
+
+2005-08-04 08:51  tfrieden
+
+	* src/video/amigaos4/SDL_os4gl.c: Changed to shared minigl.library
+
+2005-08-04 08:50  tfrieden
+
+	* src/thread/amigaos4/: SDL_sysmutex.c, SDL_syssem.c,
+	  SDL_systhread.c, SDL_systhread_c.h: changed to pthreads
+
+2005-08-04 08:49  tfrieden
+
+	* configure.in: Added pthreads and GL libs
+
+2005-07-31 01:48  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Fixed typo in mouse wheel
+	  code.
+
+2005-07-31 01:43  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c: Added mouse
+	  wheel support.
+
+2005-07-21 13:34  richardd
+
+	* src/joystick/SDL_joystick.c: Fixed a problem with the core SDL
+	  joystick code, so that any joysticks that are still open when
+	  SDL_JoystickQuit() is called will be closed. I don't like
+	  modifying the core SDL code, but this is the obvious place for
+	  this fix. It's necessary because nasty things will happen if you
+	  the AI joystick context gets closed while joysticks are still
+	  open.
+
+2005-07-16 13:02  richardd
+
+	* src/joystick/amigaos4/SDL_sysjoystick.c: Completed AI joystick
+	  support. It now properly queries for the number of axes, buttons
+	  and hats that a device has (and will currently support up to a
+	  maximum of 8 of each per device). Hat support is untested and may
+	  be broken, since I don't have a device to test and I don't know
+	  how to map the sint16 hat values that AI supposedly returns to
+	  the uint8 values that SDL expects.
+
+	  Added a work-around for a bug in the AI USB driver which can
+	  cause it to return values which overflow 16 bits. For now, clamp
+	  the axis data to 16 bits.
+
+2005-05-25 00:36  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Fix for building without
+	  OpenGL.
+
+2005-05-03 10:34  tfrieden
+
+	* src/video/amigaos4/SDL_os4gl.c: New file
+
+2005-05-03 10:32  tfrieden
+
+	* src/video/amigaos4/Makefile.am: Added SDL_os4gl.c
+
+2005-05-03 10:31  tfrieden
+
+	* src/video/: SDL_video.c, amigaos4/SDL_os4video.c,
+	  amigaos4/SDL_os4video.h: Added OpenGL support for AmigaOS
+
+2005-05-03 10:31  tfrieden
+
+	* src/video/SDL_glfuncs.h: Commented out some unused functions
+
+2005-05-03 10:30  tfrieden
+
+	* include/SDL_opengl.h: Added MiniGL include
+
+2005-05-03 10:29  tfrieden
+
+	* configure.in: Added OpenGL check
+
+2005-04-14 01:15  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Another fix for backing out
+	  the opaque-sizing hacks.
+
+2005-04-14 01:03  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c,
+	  SDL_os4video.h: Back out my smart-arse hacks for trying to cope
+	  with opaque window resizing.	They don't work, alas. Fall back on
+	  asserting IDCMP_SIZEVERIFY so that the SDL window cannot be
+	  opaquely resized.
+
+2005-04-14 00:35  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Fixed handling of CapsLock
+	  key.
+
+2005-04-13 23:38  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Don't pass on key-repeat
+	  events to SDL - only key down/up events.
+
+2005-04-13 22:10  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: For temporary compatability
+	  to pre-dos.lib 51.32, replaced call to IDOS->DupFileHandle with
+	  code to do the same job.
+
+2005-04-13 21:46  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Really fix numpad plus key.
+	  Also fixed mapping for pause key and added print screen.
+
+2005-04-13 08:49  richardd
+
+	* src/video/amigaos4/Makefile.am: Added headers to makefile
+	  template (so that, for example, they are not left out when doing
+	  a 'make dist').
+
+2005-04-13 08:47  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Fixed mapping of numpad plus
+	  key (and hence also F4 key which it was conflicting with).
+
+2005-04-08 01:49  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.h,
+	  SDL_os4wm.c: Removed mouseVisible field from our private video
+	  state: it's redundant because this information is contained in
+	  the global SDL_cursorstate.
+
+2005-04-08 01:40  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c,
+	  SDL_os4video.h, SDL_os4wm.c: Implemented CheckMouseMode call to
+	  decide whether absolute or relative mouse movement should be
+	  reported, and thus simplified handling of mouse movement events
+	  ever so slightly. WarpMouse now - once again - doesn't move the
+	  Workbench pointer when in relative mode.
+
+	  Also tidied up inconsistent whitespace in SDL_os4wm.c.
+
+2005-04-06 15:59  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c,
+	  SDL_os4video.h: Now that ToggleFullScreen no longer re-allocates
+	  the off-screen buffer, we can finally remove the requirement that
+	  software display surfaces need to be locked. Hurrah!
+
+2005-04-06 12:25  richardd
+
+	* src/video/amigaos4/: SDL_os4blit.c, SDL_os4blit.h,
+	  SDL_os4video.c: Added a paramter to CreateDisplay and
+	  DeleteCurrentDisplay to specify whether the existing off-screen
+	  buffer should be kept. This allows us to open a new screen/window
+	  without delete the current off-screen buffer, and hence do a
+	  ToggleFullscreen without having to create a new off-screen
+	  buffer.
+
+	  Also delete the save/restore screen contents stuff because we
+	  don't need it now.
+
+2005-04-06 11:43  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Some cosmetic tweaks. Notably,
+	  we now use a backfill hook to clear the window to black on deeper
+	  than 8-bit screens in windowed mode. Much nicer for resizable
+	  windows!
+
+2005-04-06 04:26  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Some fixes for the thread
+	  layer
+
+	  - Don't pass arguments to a child thread with NP_Arugments;
+	  instead create   the thread node first, stuff the data the child
+	  needs in there, and pass   that as NP_UserData.
+
+	  - Clone the Input/Output/ErrOuput streams before passing them to
+	  the child   and get the child to close them itself.
+
+	  Together these stop a launching shell complaining that an SDL mem
+	  app quit with unfreed memory and stop it barfing on the arguments
+	  sent to a child thread (which I don't how the shell was getting
+	  anyway).
+
+2005-04-06 02:54  richardd
+
+	* src/: thread/amigaos4/SDL_systhread.c,
+	  timer/amigaos4/SDL_systimer.c: Implemented non-busy-waiting timer
+	  support for SDL_Delay (when building with the internal AmigaOS4
+	  thread layer).
+
+2005-04-06 02:51  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: When opening a screen of a
+	  size without a matching fundamental screenmode size (we only get
+	  such a request for full-screen software surfaces) no longer
+	  report the screen's fundamental size as the surface size and
+	  depend on SDL to centre it. Instead, we open a screen of the
+	  requested size and centre it horizontally within the fundamental
+	  width of the screenmode by calculating a suitable left-edge for
+	  the screen. We cannot currently centre horizontally this way (P96
+	  ignores the top-edge screen property) but we'll fix that later.
+
+	  This solves the problem of the screen not being centred at all
+	  when toggling from a windowed surface to a full-screen surface
+	  (at the expense, currently, of no vertical centring for
+	  full-screen software surfaces).
+
+2005-04-01 12:38  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: I introduced a bug in
+	  SetVideoMode with the support for resizable surfaces.  If you
+	  requested a new full-screen mode which differed only in size from
+	  an existing full-screen mode, then no action was taken. This is
+	  now fixed. It will now once again correctly close the old screen
+	  and open a new one.
+
+2005-04-01 09:08  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: A fix for the updated
+	  surface locking code. For off-screen display surfaces, we were
+	  trying to get away with not locking the off-screen P96 bitmap.
+	  This won't work if somebody else has the bitmap locked. If this
+	  is the case (querying the bitmap's pixels returns NULL), we fall
+	  back on locking the surface the old way.
+
+2005-04-01 00:57  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c: Added the
+	  final pieces of the puzzle to be able fully support resizable
+	  windows. Opaque resing works now, so the IDCMP_REQSIZE flag can
+	  be removed too.
+
+	  When SetVideoMode is called (e.g. as the result of a window
+	  resize event) we now check whether the request is only for a
+	  change of size. If it is and the user is not currently resizing
+	  the window (see, we can do that now ;-), we modify the window
+	  size accordingly. Also, we resize the off-screen buffer.
+
+	  Also added some code to our event handler to hopefully stop the
+	  application being swamped with resize events when opaque sizing
+	  is enabled.
+
+	  Yay! It works!
+
+2005-04-01 00:39  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c,
+	  SDL_os4video.h: Added support from getting gadget up/down events
+	  from the window resize gadget (when using an SDL_RESIZABLE
+	  surface). We need this to be able to detect when the user is
+	  resizing the window in opaque resizing mode (because we don't
+	  want to try and set the window size ourselves when the user is
+	  twiddling with it).
+
+2005-04-01 00:16  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Separate out some more of the
+	  window initialization code out from CreateDisplaySurface.
+
+2005-03-31 23:58  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c,
+	  SDL_os4video.h: Factor out code to manage the off-screen buffer
+	  for software surfaces from the display surface
+	  creation/destruction routines.
+
+2005-03-31 23:22  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c,
+	  SDL_os4video.h: Start of a series of modifications aimed at
+	  eventually fully supporting resizable displays surfaces and
+	  improving the dreaded ToggleFullScreen thing.
+
+	  First, factor out the double-buffering management code from
+	  display surface creation.
+
+2005-03-31 22:50  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Re-worked surface locking.
+	  Software display surfaces no longer require that the offscreen
+	  bitmap be locked since the bitmap is private and in main memory
+	  not video memory. (Soon the requirement that software display
+	  surfaces require locking at all in this port of SDL will vanish.)
+
+2005-03-31 11:42  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Clean-up for off-screen
+	  blitting routines. Also, lock the window layer while blitting and
+	  contrain blitting to the current bounds of the inner window.
+	  This stops any rendering over the window's frame while the window
+	  is being resized.
+
+2005-03-31 09:26  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: When listing supported modes,
+	  only reported physical screenmodes if
+	  SDL_HWSURFACE|SDL_FULLSCREEN is requested; otherwise, claim we
+	  support any size. This offers better compatability with SDL on
+	  other platforms.
+
+2005-03-31 09:23  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c: Try that
+	  last fix a different way. Don't reset the surface offset when
+	  unlocking and instead keep this value valid. Reset the offset to
+	  0 when creating the display surface. This works better with
+	  misbehaving apps.
+
+2005-03-31 08:59  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: When locking a surface, only
+	  set an offset if the surface is the display and it's in
+	  full-screen mode. When unlocking such a surface, reset the offset
+	  to 0 again.
+
+2005-03-30 16:07  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: When spawning a new thread,
+	  pass the parent's pr_CLibData pointer to the child. This is
+	  required when linking against newlib to be able to call clib
+	  functions from the child.
+
+	  Also tidied up whitespace.
+
+2005-03-30 10:47  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Some fixes for using resizable
+	  windows:
+
+	  - If SDL_RESIZABLE is requested, then reset the window size
+	  limits so the   user is actually able to resize the window.
+
+	  - When SDL_RESIZABLE is requested, then make sure we echo that
+	  flag on the	newly created display surface.
+
+	  - Set IDCMP_SIZEVERIFY as a temporary hack so that a window
+	  cannot be   opaquely resized. We can't handle that properly at
+	  the moment, since our   response to a resize event at the moment
+	  is to shutdown the window and open   a new one with the new size,
+	  and so we'd only actually ever get the first	 resize event in
+	  the stream of events caused by an opaque resize. This will   get
+	  fixed.
+
+2005-03-30 10:33  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Fixed a typo that broke the
+	  last check-in.
+
+2005-03-30 10:29  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Some fixes for mouse-movement
+	  event handling:
+
+	  - Only send SDL delta movements, if in full-screen mode or input
+	  is grabbed.
+
+	  - Don't send null delta movements.
+
+	  - When a window activation event is received, get SDL to make the
+	  window   active first before telling SDL the mouse position at
+	  which it was	 activated; otherwise SDL simply ignores the new
+	  mouse position.
+
+2005-03-30 08:59  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: When opening a resizable
+	  window, put the size gadget in the bottom border not the right
+	  border.
+
+2005-03-28 13:32  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c: When we
+	  receive a window activated event, only reset mouse pointer
+	  colours if the pointer is within the inner window bounds. This
+	  means that the window's title bar can be clicked on to drag the
+	  window without messing up the colours of the standard Workbench
+	  pointer.
+
+2005-03-25 02:38  richardd
+
+	* src/video/amigaos4/: SDL_os4utils.c, SDL_os4utils.h,
+	  SDL_os4video.c: ListModes was still broken. Apparently, SDL
+	  expects a list of modes sorted in reverse order by size, and we
+	  were just handing it a list of whatever came out of graphic.lib's
+	  display database. This was causing a bunch of problems. So:
+
+	  Rewrote and simplified a bunch of the ListModes stuff, and it now
+	  creates a properly sorted list.
+
+	  When you now try to open a screen size that doesn't exactly match
+	  an AmigaOS screen mode, things work a whole lot better.
+
+2005-03-23 02:43  richardd
+
+	* src/video/amigaos4/SDL_os4utils.c: Turned off debug output in
+	  os4utils by default.
+
+2005-03-23 02:41  richardd
+
+	* src/video/amigaos4/: SDL_os4utils.c, SDL_os4utils.h,
+	  SDL_os4video.c: Rewrote FindMode() because P96's BestModeID is
+	  totally brain-dead (it'll even give you screen's that are smaller
+	  than what you ask for!). Also cleaned up whitespace in os4utils
+	  because I was bored of tiptoeing around that mess while editing.
+
+2005-03-22 10:27  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Don't allowed windowed
+	  surfaces on an 8-bit screen. Because we don't have exclusive
+	  access to the palette, the results and all possible work-arounds
+	  are ugly. Instead, force the surface to be opened full-screen.
+
+2005-03-22 10:25  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: When locking a hardware
+	  surface, set the surface offset. The value SDL calculates for the
+	  surface is wrong, because the surface pitch isn't known until it
+	  is locked.
+
+2005-03-22 09:28  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: After flipping buffers in
+	  double-buffered mode, synchronize the buffers by blitting the
+	  on-screen buffer to the off-screen buffer. This allows apps to
+	  transparently work in double-buffered mode, without caring they
+	  are in double-buffered mode.
+
+2005-03-21 23:31  richardd
+
+	* src/main/win32/SDL_win32_main.c: Added file missing from the
+	  SDL-1.2.8 merge.
+
+2005-03-21 23:28  richardd
+
+	* Xcode.tar.gz: Added file missed in SDL-1.28 merge.
+
+2005-03-21 23:06  richardd
+
+	* README.AmigaOS4: Added AmigaOS4-specific README (and I got
+	  Juergen's name right this time).
+
+2005-03-19 05:29  richardd
+
+	* src/video/amigaos4/SDL_os4utils.h: Added missing prototype.
+
+2005-03-19 05:27  richardd
+
+	* src/video/amigaos4/: SDL_os4utils.c, SDL_os4utils.h,
+	  SDL_os4video.c: Fixed support for 15-bit display surfaces.
+
+2005-03-18 23:17  richardd
+
+	* src/joystick/amigaos4/SDL_sysjoystick.c: Added initial
+	  implementation of AmigaInput-based joystick support. For now this
+	  is hard-coded to report that devices have 2 axes and 2 buttons
+	  and no hats. I'll complete this later.
+
+2005-03-18 21:43  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Tell P96 to clear the
+	  off-screen buffer when allocating it.
+
+2005-03-16 16:49  richardd
+
+	* src/video/amigaos4/SDL_os4wm.c: Another go at the WarpMouse thing
+	  for JON. Do move the workbench pointer when it's hidden. The only
+	  time we don't need to move it is when the window is inactive or
+	  the pointer is outside of the SDL window. This does make more
+	  sense because we either don't get or are not interested in mouse
+	  movement events in those cases. I'm fairly sure I've got that
+	  right now. ;-)
+
+2005-03-16 16:10  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c,
+	  SDL_os4video.h: Implemented support for SDL_WM_GrabInput().
+
+2005-03-16 14:07  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Try to be more clever when
+	  positioning the SDL window when using a windowed main surface.
+	  The window will no be centred on the visible area of the screen
+	  when opened if it fits; otherwise it will be placed at the
+	  top-left corner of the visible screen.
+
+2005-03-16 11:30  richardd
+
+	* src/video/amigaos4/: SDL_os4blit.c, SDL_os4blit.h,
+	  SDL_os4surface.c: Implemented (at last), for those perverse souls
+	  that insist on using packed 24-bit screens, support for blitting
+	  an 8-bit off-screen surface to the screen. I didn't bother to do
+	  this in assembly this time: it's probably not worth the effort.
+	  Also did some spring-cleaning of the rest of the off-screen
+	  blitting code.
+
+2005-03-16 10:24  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Refactor code to open window.
+	  Also, when opening the Intuition window, set WA_AutoAdjust to
+	  FALSE so that Intuition doesn't resize our window when it won't
+	  fit on screen, and don't provide a window title since this will
+	  make a title bar appear on frame-less windows (the title is set
+	  later anyway with a call to SetWindowTitles() and that won't
+	  affect the Window frame).
+
+2005-03-14 02:57  richardd
+
+	* src/timer/Makefile.am: Fixed typo in path to amigaos sub-folder
+	  in src/timer makefile template.
+
+2005-03-14 01:59  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.h,
+	  SDL_os4wm.c: Made WarpMouse support more robust. Lock event
+	  thread while in WarpMouse code, and only warp the Workbench
+	  pointer if the pointer is visible, the pointer is inside the SDL
+	  window bounds, and the SDL window is active.
+
+2005-03-14 01:04  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Disable debug output in the
+	  thread layer by default.
+
+2005-03-13 07:00  tfrieden
+
+	* src/audio/amigaos4/SDL_os4audio.h: SDL source files shouldn't
+	  include global headers
+
+2005-03-08 04:39  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Cleaned up code to handle
+	  blitting of an 8-bit off-screen to the screen.  This no longer
+	  locks the off-screen surface (since this is now always a private
+	  bitmap it's no longer necessary) and hence is more stable
+	  (holding two p96 locks simultaneously is a recipe for deadlock).
+
+2005-03-07 22:08  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c,
+	  SDL_os4video.h: Implemented vblank-synchronized dubble-buffering.
+
+2005-01-21 09:15  richardd
+
+	* include/SDL_cpuinfo.h: Missed include/SDL_cpuinfo.h with
+	  SDL-1.2.8 merge. Fixed.
+
+2005-01-21 09:08  richardd
+
+	* src/cdrom/mint/: Makefile.am, SDL_syscdrom.c: Missed contents of
+	  src/cdrom/mint when syncing with SDL-1.2.8. Added.
+
+2005-01-19 23:00  richardd
+
+	* src/cpuinfo/SDL_cpuinfo.c: Implemented SDL_HasAltiVec() function
+	  for OS4.0.
+
+2005-01-19 22:19  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Always allocate the off-screen
+	  buffer for a software surface in system memory not video memory.
+
+2005-01-19 17:38  richardd
+
+	* acinclude.m4: Sync with SDL-1.2.8.
+
+2005-01-19 17:01  richardd
+
+	* test/: .cvsignore, Makefile.am, README, autogen.sh, configure.in,
+	  graywin.c, loopwave.c, mkinstalldirs, testalpha.c, testcpuinfo.c,
+	  testdyngl.c, testendian.c, testgl.c, testoverlay2.c,
+	  testsprite.c, testtimer.c, testver.c, testvidinfo.c, testwm.c:
+	  Sync with SDL-1.2.8.
+
+2005-01-19 16:56  richardd
+
+	* src/video/: vgl/SDL_vglevents_c.h, vgl/SDL_vglmouse.c,
+	  vgl/SDL_vglmouse_c.h, vgl/SDL_vglvideo.c, vgl/SDL_vglvideo.h,
+	  wincommon/SDL_lowvideo.h, wincommon/SDL_sysevents.c,
+	  wincommon/SDL_sysmouse.c, wincommon/SDL_sysmouse_c.h,
+	  wincommon/SDL_syswm.c, wincommon/SDL_syswm_c.h,
+	  wincommon/SDL_wingl.c, wincommon/SDL_wingl_c.h,
+	  windib/SDL_dibevents.c, windib/SDL_dibevents_c.h,
+	  windib/SDL_dibvideo.c, windib/SDL_dibvideo.h, windib/SDL_vkeys.h,
+	  windx5/SDL_dx5events.c, windx5/SDL_dx5events_c.h,
+	  windx5/SDL_dx5video.c, windx5/SDL_dx5video.h,
+	  windx5/SDL_dx5yuv.c, windx5/SDL_dx5yuv_c.h, x11/SDL_x11dga.c,
+	  x11/SDL_x11dga_c.h, x11/SDL_x11events.c, x11/SDL_x11events_c.h,
+	  x11/SDL_x11gamma.c, x11/SDL_x11gamma_c.h, x11/SDL_x11gl.c,
+	  x11/SDL_x11gl_c.h, x11/SDL_x11image.c, x11/SDL_x11image_c.h,
+	  x11/SDL_x11modes.c, x11/SDL_x11modes_c.h, x11/SDL_x11mouse.c,
+	  x11/SDL_x11mouse_c.h, x11/SDL_x11video.c, x11/SDL_x11video.h,
+	  x11/SDL_x11wm.c, x11/SDL_x11wm_c.h, x11/SDL_x11yuv.c,
+	  x11/SDL_x11yuv_c.h, xbios/SDL_xbios.c, xbios/SDL_xbios.h: Sync
+	  with SDL-1.2.8.
+
+2005-01-19 16:51  richardd
+
+	* src/video/: dummy/SDL_nullvideo.c, dummy/SDL_nullvideo.h,
+	  epoc/SDL_epocevents_c.h, epoc/SDL_epocvideo.h, fbcon/3dfx_mmio.h,
+	  fbcon/3dfx_regs.h, fbcon/SDL_fb3dfx.c, fbcon/SDL_fb3dfx.h,
+	  fbcon/SDL_fbelo.c, fbcon/SDL_fbelo.h, fbcon/SDL_fbevents.c,
+	  fbcon/SDL_fbevents_c.h, fbcon/SDL_fbmatrox.c,
+	  fbcon/SDL_fbmatrox.h, fbcon/SDL_fbmouse.c, fbcon/SDL_fbmouse_c.h,
+	  fbcon/SDL_fbriva.c, fbcon/SDL_fbriva.h, fbcon/SDL_fbvideo.c,
+	  fbcon/SDL_fbvideo.h, fbcon/matrox_mmio.h, fbcon/riva_regs.h,
+	  gem/SDL_gemevents.c, gem/SDL_gemevents_c.h, gem/SDL_gemmouse.c,
+	  gem/SDL_gemmouse_c.h, gem/SDL_gemvideo.c, gem/SDL_gemvideo.h,
+	  gem/SDL_gemwm.c, gem/SDL_gemwm_c.h, ggi/SDL_ggievents.c,
+	  ggi/SDL_ggievents_c.h, ggi/SDL_ggimouse.c, ggi/SDL_ggimouse_c.h,
+	  ggi/SDL_ggivideo.c, ggi/SDL_ggivideo.h, maccommon/SDL_lowvideo.h,
+	  maccommon/SDL_macevents.c, maccommon/SDL_macevents_c.h,
+	  maccommon/SDL_macgl.c, maccommon/SDL_macgl_c.h,
+	  maccommon/SDL_mackeys.h, maccommon/SDL_macmouse.c,
+	  maccommon/SDL_macmouse_c.h, maccommon/SDL_macwm.c,
+	  maccommon/SDL_macwm_c.h, macdsp/SDL_dspvideo.c,
+	  macdsp/SDL_dspvideo.h, macrom/SDL_romvideo.c,
+	  macrom/SDL_romvideo.h, nanox/SDL_nxevents.c,
+	  nanox/SDL_nxevents_c.h, nanox/SDL_nximage.c,
+	  nanox/SDL_nximage_c.h, nanox/SDL_nxmodes.c,
+	  nanox/SDL_nxmodes_c.h, nanox/SDL_nxmouse.c, nanox/SDL_nxvideo.c,
+	  nanox/SDL_nxvideo.h, nanox/SDL_nxwm.c, nanox/SDL_nxwm_c.h,
+	  photon/Makefile.am, photon/SDL_ph_events.c,
+	  photon/SDL_ph_events_c.h, photon/SDL_ph_gl.c, photon/SDL_ph_gl.h,
+	  photon/SDL_ph_image.c, photon/SDL_ph_image_c.h,
+	  photon/SDL_ph_modes.c, photon/SDL_ph_modes_c.h,
+	  photon/SDL_ph_mouse.c, photon/SDL_ph_mouse_c.h,
+	  photon/SDL_ph_video.c, photon/SDL_ph_video.h, photon/SDL_ph_wm.c,
+	  photon/SDL_ph_wm_c.h, photon/SDL_phyuv.c, photon/SDL_phyuv_c.h,
+	  picogui/SDL_pgevents.c, picogui/SDL_pgevents_c.h,
+	  picogui/SDL_pgvideo.c, picogui/SDL_pgvideo.h,
+	  ps2gs/SDL_gsevents.c, ps2gs/SDL_gsevents_c.h,
+	  ps2gs/SDL_gsmouse.c, ps2gs/SDL_gsmouse_c.h, ps2gs/SDL_gsvideo.c,
+	  ps2gs/SDL_gsvideo.h, ps2gs/SDL_gsyuv.c, ps2gs/SDL_gsyuv_c.h,
+	  qtopia/SDL_QWin.cc, qtopia/SDL_QWin.h, qtopia/SDL_lowvideo.h,
+	  qtopia/SDL_sysevents.cc, qtopia/SDL_sysevents_c.h,
+	  qtopia/SDL_sysmouse.cc, qtopia/SDL_sysmouse_c.h,
+	  qtopia/SDL_sysvideo.cc, qtopia/SDL_syswm.cc,
+	  qtopia/SDL_syswm_c.h, quartz/CGS.h, quartz/Makefile.am,
+	  quartz/SDL_QuartzEvents.m, quartz/SDL_QuartzGL.m,
+	  quartz/SDL_QuartzKeys.h, quartz/SDL_QuartzVideo.h,
+	  quartz/SDL_QuartzVideo.m, quartz/SDL_QuartzWM.m,
+	  quartz/SDL_QuartzWindow.h, quartz/SDL_QuartzWindow.m,
+	  quartz/SDL_QuartzYUV.m, riscos/SDL_riscosFullScreenVideo.c,
+	  riscos/SDL_riscosevents.c, riscos/SDL_riscosevents_c.h,
+	  riscos/SDL_riscosmouse.c, riscos/SDL_riscosmouse_c.h,
+	  riscos/SDL_riscossprite.c, riscos/SDL_riscostask.c,
+	  riscos/SDL_riscostask.h, riscos/SDL_riscosvideo.c,
+	  riscos/SDL_riscosvideo.h, riscos/SDL_wimppoll.c,
+	  riscos/SDL_wimpvideo.c, svga/SDL_svgaevents.c,
+	  svga/SDL_svgaevents_c.h, svga/SDL_svgamouse.c,
+	  svga/SDL_svgamouse_c.h, svga/SDL_svgavideo.c,
+	  svga/SDL_svgavideo.h, vgl/SDL_vglevents.c: Sync with SDL-1.2.8.
+
+2005-01-19 16:39  richardd
+
+	* src/: audio/macosx/Makefile.am, audio/macosx/SDL_coreaudio.c,
+	  audio/macosx/SDL_coreaudio.h, events/SDL_events_c.h,
+	  events/SDL_expose.c, events/SDL_keyboard.c, events/SDL_mouse.c,
+	  events/SDL_quit.c, events/SDL_resize.c, events/SDL_sysevents.h,
+	  file/SDL_rwops.c, hermes/Makefile.am, joystick/SDL_joystick.c,
+	  joystick/SDL_joystick_c.h, joystick/SDL_sysjoystick.h,
+	  joystick/amigaos/SDL_sysjoystick.c,
+	  joystick/beos/SDL_bejoystick.cc, joystick/bsd/SDL_sysjoystick.c,
+	  joystick/darwin/SDL_sysjoystick.c, joystick/dc/SDL_sysjoystick.c,
+	  joystick/dummy/SDL_sysjoystick.c,
+	  joystick/linux/SDL_sysjoystick.c,
+	  joystick/macos/SDL_sysjoystick.c,
+	  joystick/mint/SDL_sysjoystick.c,
+	  joystick/riscos/SDL_sysjoystick.c,
+	  joystick/win32/SDL_mmjoystick.c, main/Makefile.am,
+	  main/SDL_main.c, main/arch.c, main/dummy.c,
+	  main/beos/SDL_BeApp.cc, main/beos/SDL_BeApp.h,
+	  main/dummy/SDL_dummy_main.c, main/macos/SDL_main.c,
+	  main/macos/exports/Makefile, main/macos/exports/SDL.x,
+	  main/macos/exports/gendef.pl, main/macosx/Makefile.in,
+	  main/macosx/SDLMain.m, main/qtopia/SDL_qtopia_main.cc,
+	  thread/Makefile.am, thread/SDL_systhread.h, thread/SDL_thread.c,
+	  thread/SDL_thread_c.h, thread/amigaos/SDL_syssem.c,
+	  thread/amigaos/SDL_systhread.c, thread/amigaos/SDL_systhread_c.h,
+	  thread/amigaos/SDL_thread.c, thread/beos/SDL_syssem.c,
+	  thread/beos/SDL_systhread.c, thread/beos/SDL_systhread_c.h,
+	  thread/dc/SDL_syscond.c, thread/dc/SDL_syscond_c.h,
+	  thread/dc/SDL_sysmutex.c, thread/dc/SDL_sysmutex_c.h,
+	  thread/dc/SDL_syssem.c, thread/dc/SDL_syssem_c.h,
+	  thread/dc/SDL_systhread.c, thread/dc/SDL_systhread_c.h,
+	  thread/epoc/SDL_sysmutex.cpp, thread/epoc/SDL_syssem.cpp,
+	  thread/epoc/SDL_systhread_c.h, thread/generic/SDL_syscond.c,
+	  thread/generic/SDL_syscond_c.h, thread/generic/SDL_sysmutex.c,
+	  thread/generic/SDL_sysmutex_c.h, thread/generic/SDL_syssem.c,
+	  thread/generic/SDL_syssem_c.h, thread/generic/SDL_systhread.c,
+	  thread/generic/SDL_systhread_c.h, thread/irix/SDL_systhread.c,
+	  thread/irix/SDL_systhread_c.h, thread/pth/SDL_systhread.c,
+	  thread/pth/SDL_systhread_c.h, thread/win32/SDL_sysmutex.c,
+	  thread/win32/SDL_syssem.c, thread/win32/SDL_systhread.c,
+	  thread/win32/SDL_systhread_c.h, timer/Makefile.am,
+	  timer/SDL_systimer.h, timer/SDL_timer.c, timer/SDL_timer_c.h,
+	  timer/amigaos/SDL_systimer.c, timer/beos/SDL_systimer.c,
+	  timer/dc/SDL_systimer.c, timer/macos/SDL_MPWtimer.c,
+	  timer/macos/SDL_systimer.c, timer/mint/SDL_systimer.c,
+	  timer/mint/SDL_vbltimer.S, timer/mint/SDL_vbltimer_s.h,
+	  timer/riscos/SDL_systimer.c, timer/win32/SDL_systimer.c,
+	  video/SDL_RLEaccel.c, video/SDL_RLEaccel_c.h, video/SDL_blit.c,
+	  video/SDL_blit.h, video/SDL_blit_0.c, video/SDL_blit_1.c,
+	  video/SDL_blit_A.c, video/SDL_blit_N.c, video/SDL_bmp.c,
+	  video/SDL_cursor.c, video/SDL_cursor_c.h, video/SDL_gamma.c,
+	  video/SDL_leaks.h, video/SDL_memops.h, video/SDL_pixels.c,
+	  video/SDL_pixels_c.h, video/SDL_stretch.c, video/SDL_stretch_c.h,
+	  video/SDL_surface.c, video/SDL_sysvideo.h, video/SDL_video.c,
+	  video/SDL_yuv.c, video/SDL_yuv_mmx.c, video/SDL_yuv_sw.c,
+	  video/SDL_yuv_sw_c.h, video/SDL_yuvfuncs.h, video/blank_cursor.h,
+	  video/default_cursor.h, video/mmx.h, video/aalib/SDL_aaevents.c,
+	  video/aalib/SDL_aaevents_c.h, video/aalib/SDL_aamouse.c,
+	  video/aalib/SDL_aamouse_c.h, video/aalib/SDL_aavideo.c,
+	  video/aalib/SDL_aavideo.h, video/amigaos4/SDL_os4blit.c,
+	  video/amigaos4/SDL_os4utils.c, video/ataricommon/Makefile.am,
+	  video/ataricommon/SDL_ataric2p.S,
+	  video/ataricommon/SDL_ataric2p060.c,
+	  video/ataricommon/SDL_ataric2p060_c.h,
+	  video/ataricommon/SDL_ataric2p_s.h,
+	  video/ataricommon/SDL_atarieddi.S,
+	  video/ataricommon/SDL_atarieddi_s.h,
+	  video/ataricommon/SDL_atarievents.c,
+	  video/ataricommon/SDL_atarievents_c.h,
+	  video/ataricommon/SDL_atarigl.c,
+	  video/ataricommon/SDL_atarigl_c.h,
+	  video/ataricommon/SDL_atarikeys.h,
+	  video/ataricommon/SDL_atarimxalloc.c,
+	  video/ataricommon/SDL_atarimxalloc_c.h,
+	  video/ataricommon/SDL_biosevents.c,
+	  video/ataricommon/SDL_biosevents_c.h,
+	  video/ataricommon/SDL_gemdosevents.c,
+	  video/ataricommon/SDL_gemdosevents_c.h,
+	  video/ataricommon/SDL_ikbdevents.c,
+	  video/ataricommon/SDL_ikbdevents_c.h,
+	  video/ataricommon/SDL_ikbdinterrupt.S,
+	  video/ataricommon/SDL_ikbdinterrupt_s.h,
+	  video/ataricommon/SDL_xbiosevents.c,
+	  video/ataricommon/SDL_xbiosevents_c.h,
+	  video/ataricommon/SDL_xbiosinterrupt.S,
+	  video/ataricommon/SDL_xbiosinterrupt_s.h,
+	  video/bwindow/Makefile.am, video/bwindow/SDL_BView.h,
+	  video/bwindow/SDL_BWin.h, video/bwindow/SDL_lowvideo.h,
+	  video/bwindow/SDL_sysevents.cc, video/bwindow/SDL_sysevents_c.h,
+	  video/bwindow/SDL_sysmouse.cc, video/bwindow/SDL_sysmouse_c.h,
+	  video/bwindow/SDL_sysvideo.cc, video/bwindow/SDL_syswm.cc,
+	  video/bwindow/SDL_syswm_c.h, video/bwindow/SDL_sysyuv.cc,
+	  video/bwindow/SDL_sysyuv.h, video/cybergfx/SDL_amigaevents.c,
+	  video/cybergfx/SDL_amigaevents_c.h,
+	  video/cybergfx/SDL_amigamouse.c,
+	  video/cybergfx/SDL_amigamouse_c.h, video/cybergfx/SDL_cgxaccel.c,
+	  video/cybergfx/SDL_cgxgl.c, video/cybergfx/SDL_cgxgl_c.h,
+	  video/cybergfx/SDL_cgximage.c, video/cybergfx/SDL_cgximage_c.h,
+	  video/cybergfx/SDL_cgxmodes.c, video/cybergfx/SDL_cgxmodes_c.h,
+	  video/cybergfx/SDL_cgxvideo.c, video/cybergfx/SDL_cgxvideo.h,
+	  video/cybergfx/SDL_cgxwm.c, video/cybergfx/SDL_cgxwm_c.h,
+	  video/cybergfx/SDL_cgxyuv.c, video/cybergfx/SDL_cgxyuv_c.h,
+	  video/dc/SDL_dcevents.c, video/dc/SDL_dcevents_c.h,
+	  video/dc/SDL_dcmouse.c, video/dc/SDL_dcmouse_c.h,
+	  video/dc/SDL_dcvideo.c, video/dc/SDL_dcvideo.h,
+	  video/dga/SDL_dgaevents.c, video/dga/SDL_dgaevents_c.h,
+	  video/dga/SDL_dgamouse.c, video/dga/SDL_dgamouse_c.h,
+	  video/dga/SDL_dgavideo.c, video/dga/SDL_dgavideo.h,
+	  video/directfb/SDL_DirectFB_events.c,
+	  video/directfb/SDL_DirectFB_events.h,
+	  video/directfb/SDL_DirectFB_video.c,
+	  video/directfb/SDL_DirectFB_video.h,
+	  video/directfb/SDL_DirectFB_yuv.c,
+	  video/directfb/SDL_DirectFB_yuv.h, video/dummy/SDL_nullevents.c,
+	  video/dummy/SDL_nullevents_c.h, video/dummy/SDL_nullmouse.c,
+	  video/dummy/SDL_nullmouse_c.h: Sync with SDL-1.2.8.
+
+2005-01-19 11:41  richardd
+
+	* BUGS, CREDITS, INSTALL, Makefile.am, README.CVS, README.MacOSX,
+	  README.MiNT, README.QNX, SDL.qpg.in, SDL.spec.in, WhatsNew,
+	  configure.in, depcomp, docs.html, ltmain.sh, sdl-config.in,
+	  sdl.m4, docs/html/Makefile.am, docs/html/audio.html,
+	  docs/html/cdrom.html, docs/html/event.html,
+	  docs/html/eventfunctions.html, docs/html/eventstructures.html,
+	  docs/html/general.html, docs/html/guide.html,
+	  docs/html/guideaboutsdldoc.html,
+	  docs/html/guideaudioexamples.html,
+	  docs/html/guidebasicsinit.html,
+	  docs/html/guidecdromexamples.html, docs/html/guidecredits.html,
+	  docs/html/guideeventexamples.html, docs/html/guideexamples.html,
+	  docs/html/guideinput.html, docs/html/guideinputkeyboard.html,
+	  docs/html/guidepreface.html, docs/html/guidethebasics.html,
+	  docs/html/guidetimeexamples.html, docs/html/guidevideo.html,
+	  docs/html/guidevideoexamples.html,
+	  docs/html/guidevideoopengl.html, docs/html/index.html,
+	  docs/html/joystick.html, docs/html/reference.html,
+	  docs/html/sdlactiveevent.html, docs/html/sdladdtimer.html,
+	  docs/html/sdlaudiocvt.html, docs/html/sdlaudiospec.html,
+	  docs/html/sdlblitsurface.html, docs/html/sdlbuildaudiocvt.html,
+	  docs/html/sdlcd.html, docs/html/sdlcdclose.html,
+	  docs/html/sdlcdeject.html, docs/html/sdlcdname.html,
+	  docs/html/sdlcdnumdrives.html, docs/html/sdlcdopen.html,
+	  docs/html/sdlcdpause.html, docs/html/sdlcdplay.html,
+	  docs/html/sdlcdplaytracks.html, docs/html/sdlcdresume.html,
+	  docs/html/sdlcdstatus.html, docs/html/sdlcdstop.html,
+	  docs/html/sdlcdtrack.html, docs/html/sdlcloseaudio.html,
+	  docs/html/sdlcolor.html, docs/html/sdlcondbroadcast.html,
+	  docs/html/sdlcondsignal.html, docs/html/sdlcondwait.html,
+	  docs/html/sdlcondwaittimeout.html,
+	  docs/html/sdlconvertaudio.html, docs/html/sdlconvertsurface.html,
+	  docs/html/sdlcreatecond.html, docs/html/sdlcreatecursor.html,
+	  docs/html/sdlcreatemutex.html,
+	  docs/html/sdlcreatergbsurface.html,
+	  docs/html/sdlcreatergbsurfacefrom.html,
+	  docs/html/sdlcreatesemaphore.html,
+	  docs/html/sdlcreatethread.html,
+	  docs/html/sdlcreateyuvoverlay.html, docs/html/sdldelay.html,
+	  docs/html/sdldestroycond.html, docs/html/sdldestroymutex.html,
+	  docs/html/sdldestroysemaphore.html,
+	  docs/html/sdldisplayformat.html,
+	  docs/html/sdldisplayformatalpha.html,
+	  docs/html/sdldisplayyuvoverlay.html,
+	  docs/html/sdlenablekeyrepeat.html,
+	  docs/html/sdlenableunicode.html, docs/html/sdlenvvars.html,
+	  docs/html/sdlevent.html, docs/html/sdleventstate.html,
+	  docs/html/sdlexposeevent.html, docs/html/sdlfillrect.html,
+	  docs/html/sdlflip.html, docs/html/sdlfreecursor.html,
+	  docs/html/sdlfreesurface.html, docs/html/sdlfreewav.html,
+	  docs/html/sdlfreeyuvoverlay.html, docs/html/sdlgetappstate.html,
+	  docs/html/sdlgetaudiostatus.html, docs/html/sdlgetcliprect.html,
+	  docs/html/sdlgetcursor.html, docs/html/sdlgeterror.html,
+	  docs/html/sdlgeteventfilter.html, docs/html/sdlgetgammaramp.html,
+	  docs/html/sdlgetkeyname.html, docs/html/sdlgetkeystate.html,
+	  docs/html/sdlgetmodstate.html, docs/html/sdlgetmousestate.html,
+	  docs/html/sdlgetrelativemousestate.html,
+	  docs/html/sdlgetrgb.html, docs/html/sdlgetrgba.html,
+	  docs/html/sdlgetthreadid.html, docs/html/sdlgetticks.html,
+	  docs/html/sdlgetvideoinfo.html,
+	  docs/html/sdlgetvideosurface.html, docs/html/sdlglattr.html,
+	  docs/html/sdlglgetattribute.html,
+	  docs/html/sdlglgetprocaddress.html,
+	  docs/html/sdlglloadlibrary.html,
+	  docs/html/sdlglsetattribute.html,
+	  docs/html/sdlglswapbuffers.html, docs/html/sdlinit.html,
+	  docs/html/sdlinitsubsystem.html, docs/html/sdljoyaxisevent.html,
+	  docs/html/sdljoyballevent.html, docs/html/sdljoybuttonevent.html,
+	  docs/html/sdljoyhatevent.html, docs/html/sdljoystickclose.html,
+	  docs/html/sdljoystickeventstate.html,
+	  docs/html/sdljoystickgetaxis.html,
+	  docs/html/sdljoystickgetball.html,
+	  docs/html/sdljoystickgetbutton.html,
+	  docs/html/sdljoystickgethat.html,
+	  docs/html/sdljoystickindex.html, docs/html/sdljoystickname.html,
+	  docs/html/sdljoysticknumaxes.html,
+	  docs/html/sdljoysticknumballs.html,
+	  docs/html/sdljoysticknumbuttons.html,
+	  docs/html/sdljoysticknumhats.html,
+	  docs/html/sdljoystickopen.html, docs/html/sdljoystickopened.html,
+	  docs/html/sdljoystickupdate.html, docs/html/sdlkey.html,
+	  docs/html/sdlkeyboardevent.html, docs/html/sdlkeysym.html,
+	  docs/html/sdlkillthread.html, docs/html/sdllistmodes.html,
+	  docs/html/sdlloadbmp.html, docs/html/sdlloadwav.html,
+	  docs/html/sdllockaudio.html, docs/html/sdllocksurface.html,
+	  docs/html/sdllockyuvoverlay.html, docs/html/sdlmaprgb.html,
+	  docs/html/sdlmaprgba.html, docs/html/sdlmixaudio.html,
+	  docs/html/sdlmousebuttonevent.html,
+	  docs/html/sdlmousemotionevent.html, docs/html/sdlmutexp.html,
+	  docs/html/sdlmutexv.html, docs/html/sdlnumjoysticks.html,
+	  docs/html/sdlopenaudio.html, docs/html/sdloverlay.html,
+	  docs/html/sdlpalette.html, docs/html/sdlpauseaudio.html,
+	  docs/html/sdlpeepevents.html, docs/html/sdlpixelformat.html,
+	  docs/html/sdlpollevent.html, docs/html/sdlpumpevents.html,
+	  docs/html/sdlpushevent.html, docs/html/sdlquit.html,
+	  docs/html/sdlquitevent.html, docs/html/sdlquitsubsystem.html,
+	  docs/html/sdlrect.html, docs/html/sdlremovetimer.html,
+	  docs/html/sdlresizeevent.html, docs/html/sdlsavebmp.html,
+	  docs/html/sdlsempost.html, docs/html/sdlsemtrywait.html,
+	  docs/html/sdlsemvalue.html, docs/html/sdlsemwait.html,
+	  docs/html/sdlsemwaittimeout.html, docs/html/sdlsetalpha.html,
+	  docs/html/sdlsetcliprect.html, docs/html/sdlsetcolorkey.html,
+	  docs/html/sdlsetcolors.html, docs/html/sdlsetcursor.html,
+	  docs/html/sdlseteventfilter.html, docs/html/sdlsetgamma.html,
+	  docs/html/sdlsetgammaramp.html, docs/html/sdlsetmodstate.html,
+	  docs/html/sdlsetpalette.html, docs/html/sdlsettimer.html,
+	  docs/html/sdlsetvideomode.html, docs/html/sdlshowcursor.html,
+	  docs/html/sdlsurface.html, docs/html/sdlsyswmevent.html,
+	  docs/html/sdlthreadid.html, docs/html/sdlunlockaudio.html,
+	  docs/html/sdlunlocksurface.html,
+	  docs/html/sdlunlockyuvoverlay.html, docs/html/sdlupdaterect.html,
+	  docs/html/sdlupdaterects.html, docs/html/sdluserevent.html,
+	  docs/html/sdlvideodrivername.html, docs/html/sdlvideoinfo.html,
+	  docs/html/sdlvideomodeok.html, docs/html/sdlwaitevent.html,
+	  docs/html/sdlwaitthread.html, docs/html/sdlwarpmouse.html,
+	  docs/html/sdlwasinit.html, docs/html/sdlwmgetcaption.html,
+	  docs/html/sdlwmgrabinput.html, docs/html/sdlwmiconifywindow.html,
+	  docs/html/sdlwmsetcaption.html, docs/html/sdlwmseticon.html,
+	  docs/html/sdlwmtogglefullscreen.html, docs/html/thread.html,
+	  docs/html/time.html, docs/html/video.html, docs/html/wm.html,
+	  docs/man3/SDL_ResizeEvent.3, include/Makefile.am, include/SDL.h,
+	  include/SDL_active.h, include/SDL_audio.h,
+	  include/SDL_byteorder.h, include/SDL_cdrom.h,
+	  include/SDL_copying.h, include/SDL_endian.h, include/SDL_error.h,
+	  include/SDL_events.h, include/SDL_joystick.h,
+	  include/SDL_keyboard.h, include/SDL_keysym.h,
+	  include/SDL_loadso.h, include/SDL_main.h, include/SDL_mouse.h,
+	  include/SDL_mutex.h, include/SDL_opengl.h, include/SDL_quit.h,
+	  include/SDL_rwops.h, include/SDL_syswm.h, include/SDL_thread.h,
+	  include/SDL_timer.h, include/SDL_types.h, include/SDL_version.h,
+	  include/SDL_video.h, include/begin_code.h, include/close_code.h,
+	  src/Makefile.am, src/SDL.c, src/SDL_error.c, src/SDL_error_c.h,
+	  src/SDL_fatal.c, src/SDL_fatal.h, src/SDL_getenv.c,
+	  src/SDL_loadso.c, src/audio/Makefile.am, src/audio/SDL_audio.c,
+	  src/audio/SDL_audio_c.h, src/audio/SDL_audiocvt.c,
+	  src/audio/SDL_audiodev.c, src/audio/SDL_audiodev_c.h,
+	  src/audio/SDL_audiomem.c, src/audio/SDL_audiomem.h,
+	  src/audio/SDL_mixer.c, src/audio/SDL_mixer_MMX.c,
+	  src/audio/SDL_mixer_MMX_VC.c, src/audio/SDL_mixer_MMX_VC.h,
+	  src/audio/SDL_mixer_m68k.c, src/audio/SDL_mixer_m68k.h,
+	  src/audio/SDL_sysaudio.h, src/audio/SDL_wave.c,
+	  src/audio/SDL_wave.h, src/audio/alsa/Makefile.am,
+	  src/audio/alsa/SDL_alsa_audio.c, src/audio/alsa/SDL_alsa_audio.h,
+	  src/audio/arts/SDL_artsaudio.c, src/audio/arts/SDL_artsaudio.h,
+	  src/audio/baudio/SDL_beaudio.cc, src/audio/baudio/SDL_beaudio.h,
+	  src/audio/dc/SDL_dcaudio.c, src/audio/dc/SDL_dcaudio.h,
+	  src/audio/disk/SDL_diskaudio.c, src/audio/disk/SDL_diskaudio.h,
+	  src/audio/dma/SDL_dmaaudio.c, src/audio/dma/SDL_dmaaudio.h,
+	  src/audio/dmedia/SDL_irixaudio.c,
+	  src/audio/dmedia/SDL_irixaudio.h, src/audio/dsp/SDL_dspaudio.c,
+	  src/audio/dsp/SDL_dspaudio.h, src/audio/esd/SDL_esdaudio.c,
+	  src/audio/esd/SDL_esdaudio.h, src/audio/macrom/SDL_romaudio.c,
+	  src/audio/macrom/SDL_romaudio.h, src/audio/mint/SDL_mintaudio.c,
+	  src/audio/mint/SDL_mintaudio.h,
+	  src/audio/mint/SDL_mintaudio_dma8.c,
+	  src/audio/mint/SDL_mintaudio_dma8.h,
+	  src/audio/mint/SDL_mintaudio_gsxb.c,
+	  src/audio/mint/SDL_mintaudio_it.S,
+	  src/audio/mint/SDL_mintaudio_mcsn.c,
+	  src/audio/mint/SDL_mintaudio_mcsn.h,
+	  src/audio/mint/SDL_mintaudio_stfa.c,
+	  src/audio/mint/SDL_mintaudio_stfa.h,
+	  src/audio/mint/SDL_mintaudio_xbios.c,
+	  src/audio/mme/SDL_mmeaudio.c, src/audio/mme/SDL_mmeaudio.h,
+	  src/audio/nas/SDL_nasaudio.c, src/audio/nas/SDL_nasaudio.h,
+	  src/audio/nto/SDL_nto_audio.c, src/audio/nto/SDL_nto_audio.h,
+	  src/audio/paudio/SDL_paudio.c, src/audio/paudio/SDL_paudio.h,
+	  src/audio/sun/SDL_sunaudio.c, src/audio/sun/SDL_sunaudio.h,
+	  src/audio/ums/SDL_umsaudio.c, src/audio/ums/SDL_umsaudio.h,
+	  src/audio/windib/SDL_dibaudio.c, src/audio/windib/SDL_dibaudio.h,
+	  src/audio/windx5/SDL_dx5audio.c, src/audio/windx5/SDL_dx5audio.h,
+	  src/cdrom/Makefile.am, src/cdrom/SDL_cdrom.c,
+	  src/cdrom/SDL_syscdrom.h, src/cdrom/aix/SDL_syscdrom.c,
+	  src/cdrom/beos/SDL_syscdrom.cc, src/cdrom/bsdi/SDL_syscdrom.c,
+	  src/cdrom/dc/SDL_syscdrom.c, src/cdrom/dummy/SDL_syscdrom.c,
+	  src/cdrom/freebsd/SDL_syscdrom.c, src/cdrom/linux/SDL_syscdrom.c,
+	  src/cdrom/macos/SDL_syscdrom.c, src/cdrom/macos/SDL_syscdrom_c.h,
+	  src/cdrom/macosx/AudioFilePlayer.cpp,
+	  src/cdrom/macosx/AudioFilePlayer.h,
+	  src/cdrom/macosx/AudioFileReaderThread.cpp,
+	  src/cdrom/macosx/CAGuard.cpp, src/cdrom/macosx/CAGuard.h,
+	  src/cdrom/macosx/CDPlayer.cpp, src/cdrom/macosx/CDPlayer.h,
+	  src/cdrom/macosx/Makefile.am, src/cdrom/macosx/SDL_syscdrom.c,
+	  src/cdrom/macosx/SDL_syscdrom_c.h,
+	  src/cdrom/openbsd/SDL_syscdrom.c, src/cdrom/osf/SDL_syscdrom.c,
+	  src/cdrom/qnx/SDL_syscdrom.c, src/cdrom/win32/SDL_syscdrom.c,
+	  src/cpuinfo/Makefile.am, src/cpuinfo/SDL_cpuinfo.c,
+	  src/events/SDL_active.c, src/events/SDL_events.c: Sync with
+	  SDL-1.2.8
+
+2005-01-19 11:11  richardd
+
+	* docs/html/Makefile.in, docs/Makefile.in, docs/man3/Makefile.in,
+	  include/Makefile.in, src/audio/alsa/Makefile.in,
+	  src/audio/amigaos4/Makefile.in, src/audio/arts/Makefile.in,
+	  src/audio/baudio/Makefile.in, src/audio/dc/Makefile.in,
+	  src/audio/disk/Makefile.in, src/audio/dma/Makefile.in,
+	  src/audio/dmedia/Makefile.in, src/audio/dsp/Makefile.in,
+	  src/audio/esd/Makefile.in, src/audio/macrom/Makefile.in,
+	  src/audio/mint/Makefile.in, src/audio/mme/Makefile.in,
+	  src/audio/nas/Makefile.in, src/audio/nto/Makefile.in,
+	  src/audio/paudio/Makefile.in, src/audio/Makefile.in,
+	  src/audio/sun/Makefile.in, src/audio/ums/Makefile.in,
+	  src/audio/windib/Makefile.in, src/audio/windx5/Makefile.in,
+	  src/cdrom/aix/Makefile.in, src/cdrom/beos/Makefile.in,
+	  src/cdrom/bsdi/Makefile.in, src/cdrom/dc/Makefile.in,
+	  src/cdrom/dummy/Makefile.in, src/cdrom/freebsd/Makefile.in,
+	  src/cdrom/linux/Makefile.in, src/cdrom/macos/Makefile.in,
+	  src/cdrom/Makefile.in, src/cdrom/macosx/Makefile.in,
+	  src/cdrom/openbsd/Makefile.in, src/cdrom/osf/Makefile.in,
+	  src/cdrom/qnx/Makefile.in, src/cdrom/win32/Makefile.in,
+	  src/events/Makefile.in, src/file/Makefile.in,
+	  src/hermes/Makefile.in, src/joystick/amigaos/Makefile.in,
+	  src/joystick/beos/Makefile.in, src/joystick/bsd/Makefile.in,
+	  src/joystick/darwin/Makefile.in, src/joystick/dc/Makefile.in,
+	  src/joystick/dummy/Makefile.in, src/joystick/linux/Makefile.in,
+	  src/joystick/macos/Makefile.in, src/joystick/mint/Makefile.in,
+	  src/joystick/riscos/Makefile.in, src/joystick/win32/Makefile.in,
+	  src/joystick/Makefile.in, src/main/Makefile.in,
+	  src/thread/Makefile.in, src/timer/Makefile.in,
+	  src/video/aalib/Makefile.in, src/video/amigaos4/Makefile.in,
+	  src/video/ataricommon/Makefile.in, src/video/bwindow/Makefile.in,
+	  src/video/cybergfx/Makefile.in, src/video/dc/Makefile.in,
+	  src/video/dga/Makefile.in, src/video/directfb/Makefile.in,
+	  src/video/dummy/Makefile.in, src/video/epoc/Makefile.in,
+	  src/video/fbcon/Makefile.in, src/video/gem/Makefile.in,
+	  src/video/ggi/Makefile.in, src/video/maccommon/Makefile.in,
+	  src/video/macdsp/Makefile.in, src/video/macrom/Makefile.in,
+	  src/video/nanox/Makefile.in, src/video/photon/Makefile.in,
+	  src/video/picogui/Makefile.in, src/video/ps2gs/Makefile.in,
+	  src/video/qtopia/Makefile.in, src/video/quartz/Makefile.in,
+	  src/video/riscos/Makefile.in, src/video/svga/Makefile.in,
+	  src/video/vgl/Makefile.in, src/video/wincommon/Makefile.in,
+	  src/video/windib/Makefile.in, src/video/windx5/Makefile.in,
+	  src/video/x11/Makefile.in, src/video/xbios/Makefile.in,
+	  src/video/Makefile.in, configure, src/Makefile.in, Makefile.in:
+	  Removed makefile.in templates and configure script from CVS.
+
+2005-01-19 03:21  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Fixed creation of windowed
+	  surfaces. Windowed surfaces once again and correctly always claim
+	  to be softwawre surfaces. Consequently, the toggle fullscreen
+	  function will now always fail if you are using a hardware display
+	  surface.
+
+2005-01-19 01:02  richardd
+
+	* src/: cdrom/Makefile.am, joystick/Makefile.am: Fix for build
+	  scripts. Add src/joystick/amigaos4 as a dist subdir of
+	  src/joystick and src/cdrom/amigaos4 as a subdir of src/cdrom.
+
+2005-01-15 14:10  tfrieden
+
+	* README.AmigaOS: Test
+
+2005-01-15 14:06  tfrieden
+
+	* README.AmigaOS: Yet another test
+
+2005-01-15 05:51  tfrieden
+
+	* README.AmigaOS: Test checkin
+
+2005-01-15 04:41  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Fixed mapping of comma,
+	  period and Right Alt keys.
+
+2004-09-26 20:03  hfrieden
+
+	* src/video/amigaos4/: SDL_os4utils.c, SDL_os4video.c: Added better
+	  fullscreen support
+
+2004-09-24 20:19  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Don't report a pointer
+	  position when passing SDL a mouse-button event. Mouse pointer
+	  could 'jump' when a button was pressed. This fixes that problem.
+
+2004-09-24 20:15  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Reset cursor after opening
+	  display. Fixes problem of cursor sometimes not being hidden when
+	  running full-screen.
+
+2004-09-24 16:59  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Changes to mouse movement code
+	  broke mouse movement in full-screen mode.  Trivial fix.
+
+2004-09-24 16:46  richardd
+
+	* src/video/amigaos4/SDL_os4events.c: Bugger! New mouse motion code
+	  didn't work well with, e.g., ScummVM. When the host pointer left
+	  the window, the real pointer position and SDL's idea of the
+	  pointer position would become out of sync. Not a problem if your
+	  app only cares about mouse movements, but problematic otherwise.
+
+	  Solution: in windowed mode, only report mouse movements when the
+	  pointer is in the window. When pointer re-enters the window, tell
+	  SDL the pointer the position at which it re-entered. This keeps
+	  everything in sync. But it takes us back to square one for apps
+	  that want relative mouse movements, because the movements will
+	  stop coming when the (invisible) host pointer leaves the window.
+	  I'll just having to get pointer-grabbing working.
+
+	  While we're at it: correctly report loss/gain of mouse focus
+	  events when pointer leaves/enters window. Report loss/gain of
+	  input events when the window is deactivated/activated.
+
+2004-09-24 01:20  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Trivial fix for building with
+	  GCC 2.95 (as if anybody would want to, Ross ;-).
+
+2004-09-24 01:14  richardd
+
+	* src/video/amigaos4/: SDL_os4blit.c, SDL_os4surface.c,
+	  SDL_os4video.c: Recent hardware-acceleration changes broke 8-bit
+	  windowed surfaces: blitting of the off-screen surface to the
+	  screen would use the display's palette not the surface's palette.
+	  Now fixed (by blitting and doing the colour-lookup manually in
+	  this case rather using P96).
+
+2004-09-18 17:59  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: If a windowed display surface
+	  has been requested, check whether there is a P96 display mode
+	  which would match that request. If not, then there's no point in
+	  flagging the surface as a hardware surface, since it cannot be
+	  toggled into a full-screen hardware surface. This avoids the
+	  extra overhead of SDL allocating a shadow surface on top and so
+	  speeds things up a little.  Otherwise, we still claim a windowed
+	  surface is a hardware surface.
+
+2004-09-18 16:01  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Ooops. I accidentally
+	  deleted LayersBase/ILayers globals in last patch. Now restored.
+
+2004-09-18 15:55  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Installed a Forbid/Permit
+	  pair in SYS_KillThread to ward off an unlikely but potential race
+	  condition.
+
+2004-09-18 15:48  richardd
+
+	* src/thread/amigaos4/SDL_syssem.c: Some fixes for the OS4
+	  semaphore implementation: 1) TryWait was returning garbage when
+	  successful. Fixed.  2) A work-around for using the private Exec
+	  function Reschedule without the    private headers.  3)
+	  Stengthened atomicity in UnblockOne() function to cure potential
+	  race	  condition.
+
+2004-09-18 15:39  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Improved debugging output.
+
+2004-09-18 15:38  richardd
+
+	* src/video/amigaos4/SDL_os4utils.c: Don't report an alpha mask
+	  when converting a 32-bit P96 pixel format to an SDL pixel format
+	  since P96 doesn't usually support an alpha channel. This will
+	  stop SDL automatically setting the SRCALPHA flag - which we
+	  cannot support in hardware - when creating a hardware surface
+	  with these pixels formats.
+
+2004-09-18 14:55  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c,
+	  SDL_os4video.h, SDL_os4wm.c: Improvements to mouse pointer
+	  behaviour: the mouse pointer image will now be dynamically reset
+	  to the default WB pointer and colours if the pointer leaves the
+	  bounds of the SDL inner window or enters a window obscuring the
+	  SDL window (and will be reset to the SDL pointer image and
+	  colours when it re-enters the SDL window). This makes using SDL
+	  apps which hide the mouse pointer (install a blank pointer image)
+	  less disorientating to use.
+
+2004-09-16 13:06  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c,
+	  SDL_os4wm.c: Another go at the reporting of mouse movements which
+	  should be closer to what we actually want. This time, report
+	  pointer positions to SDL if the mouse pointer is visible; report
+	  relative mouse movements if the pointer is hidden. Reasoning: if
+	  an app hides the mouse pointer it must be interested in mouse
+	  movements, not the actual pointer position; if it doesn't hide
+	  the pointer, then it probably really is interested in the pointer
+	  position not mouse movements. Clear? ;-)
+
+2004-09-16 12:25  richardd
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c: Changed SDL
+	  window to receive IDCMP_DELTAMOVE messages. This allows us to
+	  report relative mouse movements to SDL and not absolute pointer
+	  positions.  With DELTAMOVE, Intuition still sends mouse movements
+	  when the pointer hits the edges of the screen - unlike with
+	  vanilla IDCMP_MOUSEMOVE messages.  Simplified event handling
+	  code.
+
+2004-09-14 12:21  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Some cosmetic tweaks:
+
+	  Pass SA_ShowTitle as FALSE when opening the SDL screen. This
+	  solves the problem of the screen's title bar appearing above a
+	  backdrop widow (so we can now make the window a backdrop window
+	  again).
+
+	  Open the SDL window as hidden, clear it to black, then show it.
+
+	  When closing the screen, send it to the back before closing it.
+
+2004-09-13 04:57  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c:
+	  Implemented hardware-accelerated plain blits.
+
+2004-09-13 04:42  richardd
+
+	* src/video/amigaos4/: SDL_os4blit.c, SDL_os4surface.c: Replace the
+	  UpdateRects hook for updating windowed surfaces with a plain
+	  blit. When the off-screen buffer is a friend of the display, this
+	  enables accelerated blitting. When the CPU has to be used, the
+	  performance of native P96 is comparable to our CPU blitting code
+	  (probably worth doing some proper benchmark of this, though).
+
+2004-09-13 04:20  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c,
+	  SDL_os4video.h: Time for some big changes...
+
+	  Implemented the off-screen buffer for windowed surfaces as a real
+	  bitmap.  This allows us to render into it with p96/gfx functions,
+	  and to make it live in video memory when possible to accelerate
+	  such stuff.
+
+	  Always keep a pointer to a surface's bitmap in the surface's
+	  hardware record. This allows us to simplfy a lot of code and is
+	  necessary for when hardware blitting is added.
+
+	  Cleaned up and simplified CreateDisplay.
+
+	  Cleaned up and simplified AllocateHWSurface/FreeHWSurface. Use
+	  the off-screen buffer and the friend bitmap when main surface is
+	  in windowed mode.
+
+	  Cleaned up and simplified Locking of HW surfaces.
+
+	  Cleaned up and simplified FillHWRect.
+
+	  FillHWRect should fill to the offscreen bitmap in windowed mode,
+	  not the display. Fixed.
+
+	  FillHWRect was filling by one pixel too much in width and height.
+	  Fixed.
+
+2004-09-12 12:44  richardd
+
+	* src/video/amigaos4/: SDL_os4surface.c, SDL_os4video.c: Added
+	  initial implementation of hardware-accelerated FillRect(). Some
+	  work still to do here, most notably that it doesn't yet render to
+	  the off-screen buffer of windowed surfaces.
+
+2004-09-12 12:41  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Don't make the display window
+	  a BACKDROP window in full-screen mode. For some reason, this was
+	  causing rendering with P96 functions to be clipped to a
+	  non-existent screen title-bar. Needs further investigation.
+
+2004-09-12 12:31  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Fixed a bug in the unlocking
+	  of windowed surfaces introduced with the new locking code.
+
+2004-09-12 00:47  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Implemented allocation of
+	  surfaces in hardware memory and locking of such surfaces. Tidied
+	  up surface locking code of other surface types.
+
+2004-09-10 08:54  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Made windowed surfaces claim
+	  to be hardware surfaces again - even though they're not. This
+	  seems to be the only simple way to make ToggleFullScreen work
+	  reliably.
+
+2004-09-10 08:34  richardd
+
+	* src/video/amigaos4/SDL_os4surface.c: Fixed some stupid mistakes.
+	  That's bytes per pixel - not bits! ;-)
+
+2004-09-10 08:18  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Simplified SetVideoMode,
+	  improved debug output and fixed a bug whereby a SetVideoMode call
+	  would fail if a surface which matched the size, depth and
+	  attributes of the current surface was requested.
+
+2004-09-10 07:48  richardd
+
+	* src/video/amigaos4/: SDL_os4blit.c, SDL_os4blit.h,
+	  SDL_os4surface.c: Implemented blitting from 32-bit offscreen
+	  surface to 16-bit window and from 16-bit offscreen surface to
+	  32-bit window.
+
+2004-08-31 09:53  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Don't claim to have a hardware
+	  palette in high/true-colour modes (this fixes crashes with gamma
+	  correction functions).
+
+2004-08-31 04:29  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Don't allow a double-buffered
+	  SWSURFACE to be opened.
+
+2004-08-31 04:26  richardd
+
+	* src/video/amigaos4/SDL_os4wm.c: In the SetCaption function,
+	  handle the case when the icon caption parameter is null.
+
+2004-08-27 17:48  tfrieden
+
+	* src/thread/amigaos4/SDL_systhread.c: It's RETURN_OK, not ERROR_OK
+
+2004-08-27 17:46  tfrieden
+
+	* src/thread/amigaos4/SDL_systhread.c: Added a return value to
+	  RunThread
+
+2004-07-10 23:16  richardd
+
+	* src/audio/amigaos4/SDL_os4audio.c: Fixes and tidying up for OS4.0
+	  AHI driver. In WaitAudio() it's not enough to just CheckIO(), we
+	  need to do a WaitIO() to properly finish a request. Also added a
+	  work-around for the audio thread receiving a spurious break
+	  signal which was causing the thread to die before cleaning up
+	  properly. (A proper solution for this problem would be better).
+
+2004-07-10 22:14  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Don't report a surface in
+	  windowed mode as a HWSURFACE, because it's not.
+
+2004-05-16 07:19  hfrieden
+
+	* src/audio/amigaos4/SDL_os4audio.c: Fixed audio output.
+	  SDL_WaitAudio was waiting for the wrong buffer.
+
+2004-04-27 01:13  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: ToggleFullScreen() should
+	  return 0 when toggle fails. Fixed.
+
+2004-04-26 23:01  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: In windowed mode, redraw the
+	  screen after updating the palette so that the palette change
+	  takes effect on the whole screen.
+
+2004-04-26 17:39  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: When creating a display, tell
+	  SDL about the new pixel format.
+
+2004-04-26 16:12  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Handle the case when ListModes
+	  is called with a pixel format with no colour masks.
+
+2004-04-26 15:16  richardd
+
+	* src/video/amigaos4/SDL_os4utils.c: When searching for a suitable
+	  p96 mode, match on p96 depth attribute rather than bitsperpixel.
+	  Fixes mismatches between 24-bit and 32-but modes
+
+2004-04-26 01:33  richardd
+
+	* src/video/amigaos4/SDL_os4utils.c: Ignore alpha mask when mapping
+	  32-bit SDL pixel formats to a Picasso pixel format. Partially
+	  fixes 'mode not found' problem when requesting 32-bit modes
+
+2004-04-26 01:17  richardd
+
+	* src/video/amigaos4/: SDL_os4blit.c, SDL_os4surface.c: Implemented
+	  8-to-32-bit off-screen blitting
+
+2004-04-24 17:36  richardd
+
+	* src/video/amigaos4/SDL_os4video.c: Pass WA_Title as NULL when
+	  opening window in full-screen mode. Fixes offset pointer bug.
+
+2004-04-22 23:11  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: The thread exception handler
+	  should return a value (the signals to continue handling). Made it
+	  return 0, so that it's a one-shot handler
+
+2004-04-22 20:54  richardd
+
+	* src/timer/amigaos4/SDL_systimer.c: Defined __USE_BASETYPE__
+	  before including protos/exec.h to make ExecBase accessible
+
+2004-04-22 20:48  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Replaced the call to the
+	  private DOS dl_Suicide hook with code to do the same job.
+
+2004-04-22 20:36  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Cleaned up compiler warning
+	  in plistIsListEmpty. It should return an int not a pointer.
+
+2004-04-22 20:32  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Cleaned up compiler warnings
+	  hen generating and scanning thread argstr by using %p type for
+	  arguments.
+
+2004-04-22 20:21  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Added work-around for using
+	  private ETask internals. Warning: this may break if the ETask
+	  structure changes in the future.
+
+2004-04-22 20:08  richardd
+
+	* src/thread/amigaos4/SDL_systhread.c: Defined __USE_BASETYPE__
+	  before including protos/exec.h to make ExecBase accessible
+
+2004-04-22 19:38  richardd
+
+	* src/video/amigaos4/SDL_os4wm.c: Hot spot in AmigaOS mouse pointer
+	  has opposite sign to SDL
+
+2004-03-17 13:10  tfrieden
+
+	* src/cdrom/amigaos4/: Makefile.am, SDL_syscdrom.c: [no log
+	  message]
+
+2004-03-17 13:03  tfrieden
+
+	* src/joystick/amigaos4/: Makefile.am, SDL_sysjoystick.c: [no log
+	  message]
+
+2004-03-17 12:39  tfrieden
+
+	* src/main/macosx/Makefile.in: [no log message]
+
+2004-03-17 11:58  tfrieden
+
+	* src/audio/Makefile.in: Added os4 directory
+
+2004-03-17 11:57  tfrieden
+
+	* configure.in: [no log message]
+
+2004-02-14 06:23  tfrieden
+
+	* test/loopwave.c: Added check_abort to allow for breaking here
+
+2004-02-14 06:22  tfrieden
+
+	* src/video/amigaos4/: SDL_os4blit.c, Makefile.in, SDL_os4blit.h,
+	  SDL_os4events.c, SDL_os4surface.c, SDL_os4video.c,
+	  SDL_os4video.h, SDL_os4wm.c: Added lots of stuff: Iconify, icon
+	  management, fullscreen toggle
+
+2004-02-14 06:22  tfrieden
+
+	* src/thread/amigaos4/SDL_systhread.c: Added DOS suicide Hook to
+	  prevent breaking up inside DOS packets
+
+2004-02-14 06:21  tfrieden
+
+	* src/audio/amigaos4/: Makefile.in, SDL_os4audio.c, SDL_os4audio.h:
+	  Fixed some minor bugs and added double-buffering
+
+2004-02-14 06:20  tfrieden
+
+	* src/audio/SDL_sysaudio.h: Added OS4
+
+2004-02-14 06:20  tfrieden
+
+	* src/audio/SDL_audio.c: Re-inserted the old AHI code so the old
+	  port will not break
+
+2004-02-03 04:28  juergens
+
+	* src/audio/amigaos4/: Makefile.am, Makefile.in, SDL_os4audio.c,
+	  SDL_os4audio.h: AmigaOS4 auido Driver. Initial Release
+
+2004-02-03 04:26  juergens
+
+	* src/audio/: Makefile.am, SDL_audio.c, SDL_sysaudio.h: Added
+	  subdirectory amigaos4/ Changed SDL_audio.c to support OS4 audio
+	  Removed previous AHI hooks in SDL_audio.c (check OS4 driver for
+	  HOW-TO) Added OS4 support in SDL_sysaudio.h
+
+2004-02-03 04:19  juergens
+
+	* configure.in: Added Target for AmigaOS4 Audio.
+
+2004-01-28 18:17  tfrieden
+
+	* src/video/amigaos4/SDL_os4video.h: Added new fields to video
+	  context
+
+2004-01-28 18:17  tfrieden
+
+	* src/video/amigaos4/SDL_os4video.c: Added code to reset mouse
+	  colors after closing display Added several new functions dealing
+	  with window manager functionality Added a semaphore to protect
+	  the memory pool against use in multiple threads
+
+2004-01-28 18:15  tfrieden
+
+	* src/video/amigaos4/: SDL_os4utils.c, SDL_os4utils.h: Added
+	  functions for semaphore protect pool allocation
+
+2004-01-28 18:15  tfrieden
+
+	* src/video/amigaos4/SDL_os4events.c: Added code to cope with mouse
+	  positions and window borders Added special handling for Window
+	  activation and deactivation to set mouse pointer colors
+
+2004-01-28 18:13  tfrieden
+
+	* src/video/amigaos4/Makefile.am: Added SDL_os4wm.c
+
+2004-01-28 18:13  tfrieden
+
+	* src/video/amigaos4/SDL_os4wm.c: New file
+
+2004-01-14 08:44  tfrieden
+
+	* src/video/amigaos4/SDL_os4video.c: Fixed a typo in debug output
+
+2004-01-13 21:06  stevenf
+
+	* src/video/amigaos4/SDL_os4surface.c: set pixels to NULL in
+	  os4video_FreeHWSurface so that SDL doesn't call free with an
+	  invalid address.
+
+2004-01-13 14:51  tfrieden
+
+	* src/video/amigaos4/: SDL_os4video.c, SDL_os4video.h: Added
+	  support for paletted offscreen buffers
+
+2004-01-13 14:49  tfrieden
+
+	* src/video/amigaos4/: SDL_os4blit.c, SDL_os4blit.h,
+	  SDL_os4surface.c: Added 8 to 16 blitting
+
+2004-01-11 12:46  hfrieden
+
+	* src/video/amigaos4/SDL_os4events.c: Fixed keyboard
+
+2004-01-10 09:01  tfrieden
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4video.c,
+	  SDL_os4video.h: Made fullscreen 8 bit mode work
+
+2004-01-09 08:48  tfrieden
+
+	* src/thread/amigaos4/SDL_systhread.c: Changed parameter passing to
+	  thread
+
+2004-01-09 08:47  tfrieden
+
+	* src/thread/amigaos4/SDL_syssem.c: Removed debug
+
+2004-01-05 06:42  stevenf
+
+	* src/video/amigaos4/SDL_os4events.c: Fixed keyboard events
+
+2004-01-04 16:38  tfrieden
+
+	* src/video/amigaos4/SDL_os4surface.c: New file
+
+2004-01-04 15:34  tfrieden
+
+	* src/video/amigaos4/: Makefile.am, Makefile.in, SDL_os4blit.c,
+	  SDL_os4blit.h, SDL_os4events.c, SDL_os4utils.c, SDL_os4utils.h,
+	  SDL_os4video.c, SDL_os4video.h: Made display actually work
+
+2004-01-02 14:34  hfrieden
+
+	* src/video/amigaos4/SDL_os4video.c: Added Keymap init
+
+2004-01-02 14:30  tfrieden
+
+	* src/video/amigaos4/SDL_os4video.c: [no log message]
+
+2004-01-02 14:11  hfrieden
+
+	* src/video/amigaos4/: SDL_os4video.c, SDL_os4video.h: [no log
+	  message]
+
+2004-01-02 14:11  hfrieden
+
+	* src/video/amigaos4/SDL_os4events.c: Added Event handling
+
+2004-01-02 12:38  tfrieden
+
+	* src/video/amigaos4/SDL_os4video.h: Added additional fields
+
+2004-01-01 12:22  tfrieden
+
+	* src/video/amigaos4/: SDL_os4utils.c, SDL_os4video.c: Fixed bug in
+	  video mode detection
+
+2004-01-01 12:21  tfrieden
+
+	* src/thread/amigaos4/SDL_systhread.c: Finalized thread kill (for
+	  now)
+
+2004-01-01 11:14  hfrieden
+
+	* src/video/amigaos4/: Makefile.am, SDL_os4video.c: [no log
+	  message]
+
+2004-01-01 11:13  hfrieden
+
+	* src/video/amigaos4/: SDL_os4events.c, SDL_os4utils.c,
+	  SDL_os4utils.h, SDL_os4video.h: initial checkin
+
+2003-12-29 09:14  tfrieden
+
+	* src/timer/amigaos4/SDL_systimer.c: Added debug
+
+2003-12-29 09:12  tfrieden
+
+	* src/main/amigaos4/SDL_main.c: Removed stack stuff
+
+2003-12-29 09:10  tfrieden
+
+	* src/thread/amigaos4/SDL_sysmutex.c,
+	  src/thread/amigaos4/SDL_syssem.c,
+	  src/thread/amigaos4/SDL_systhread.c,
+	  src/thread/amigaos4/SDL_systhread_c.h, configure, configure.in:
+	  [no log message]
+
+2003-12-26 08:09  tfrieden
+
+	* configure.in: Removed AmigaOS4Timer
+
+2003-12-26 08:02  tag start
+
+2003-12-26 08:02  tfrieden
+
+	* BUGS, Borland.html, CWprojects.sea.bin, PBProjects.tar.gz,
+	  README, README.AmigaOS, README.DC, README.PicoGUI, SDL.qpg.in,
+	  SDL.spec.in, TODO, VisualC.html, VisualC7.zip, VisualCE.zip,
+	  WhatsNew, aclocal.m4, configure, configure.in, depcomp,
+	  docs.html, ltmain.sh, sdl-config.in, Borland.zip, COPYING,
+	  CREDITS, EpocBuildFiles.zip, INSTALL, MPWmake.sea.bin,
+	  Makefile.am, Makefile.dc, Makefile.in, README-SDL.txt,
+	  README.CVS, README.Epoc, README.MacOS, README.MacOSX,
+	  README.MiNT, README.NanoX, README.QNX, README.Qtopia,
+	  README.WinCE, VisualC.zip, acinclude.m4, autogen.sh,
+	  config.guess, config.sub, install-sh, ltconfig, missing,
+	  mkinstalldirs, sdl.m4, strip_fPIC.sh, src/Makefile.am,
+	  src/Makefile.in, src/SDL.c, src/SDL_error.c, src/SDL_error_c.h,
+	  src/SDL_fatal.c, src/SDL_fatal.h, src/SDL_getenv.c,
+	  src/SDL_loadso.c, src/audio/Makefile.am, src/audio/Makefile.in,
+	  src/audio/SDL_audio.c, src/audio/SDL_audio_c.h,
+	  src/audio/SDL_audiocvt.c, src/audio/SDL_audiodev.c,
+	  src/audio/SDL_audiodev_c.h, src/audio/SDL_audiomem.c,
+	  src/audio/SDL_audiomem.h, src/audio/SDL_mixer.c,
+	  src/audio/SDL_mixer_MMX.c, src/audio/SDL_mixer_MMX.h,
+	  src/audio/SDL_mixer_MMX_VC.c, src/audio/SDL_mixer_MMX_VC.h,
+	  src/audio/SDL_mixer_m68k.c, src/audio/SDL_mixer_m68k.h,
+	  src/audio/SDL_sysaudio.h, src/audio/SDL_wave.c,
+	  src/audio/SDL_wave.h, src/audio/dc/Makefile.am,
+	  src/audio/dc/Makefile.in, src/audio/dc/SDL_dcaudio.c,
+	  src/audio/dc/SDL_dcaudio.h, src/audio/dc/aica.c,
+	  src/audio/dc/aica.h, src/audio/dma/Makefile.am,
+	  src/audio/dma/Makefile.in, src/audio/dma/SDL_dmaaudio.c,
+	  src/audio/dma/SDL_dmaaudio.h, src/audio/dsp/Makefile.am,
+	  src/audio/dsp/Makefile.in, src/audio/dsp/SDL_dspaudio.c,
+	  src/audio/dsp/SDL_dspaudio.h, src/audio/esd/Makefile.am,
+	  src/audio/esd/Makefile.in, src/audio/esd/SDL_esdaudio.c,
+	  src/audio/esd/SDL_esdaudio.h, src/audio/mme/Makefile.am,
+	  src/audio/mme/Makefile.in, src/audio/mme/SDL_mmeaudio.c,
+	  src/audio/mme/SDL_mmeaudio.h, src/audio/nas/Makefile.am,
+	  src/audio/nas/Makefile.in, src/audio/nas/SDL_nasaudio.c,
+	  src/audio/nas/SDL_nasaudio.h, src/audio/nto/Makefile.am,
+	  src/audio/nto/Makefile.in, src/audio/nto/SDL_nto_audio.c,
+	  src/audio/nto/SDL_nto_audio.h, src/audio/sun/Makefile.am,
+	  src/audio/sun/Makefile.in, src/audio/sun/SDL_sunaudio.c,
+	  src/audio/sun/SDL_sunaudio.h, src/audio/ums/Makefile.am,
+	  src/audio/ums/SDL_umsaudio.c, src/audio/ums/SDL_umsaudio.h,
+	  src/file/Makefile.am, src/file/Makefile.in, src/file/SDL_rwops.c,
+	  src/main/Makefile.am, src/main/Makefile.in, src/main/dummy.c,
+	  src/main/amigaos4/SDL_main.c, src/main/beos/SDL_BeApp.cc,
+	  src/main/beos/SDL_BeApp.h, src/main/epoc/SDL_main.cpp,
+	  src/main/macos/SDL.r, src/main/macos/SDL_main.c,
+	  src/main/macos/SIZE.r, src/main/macos/exports/Makefile,
+	  src/main/macos/exports/SDL.x, src/main/macos/exports/gendef.pl,
+	  src/main/macosx/.cvsignore, src/main/macosx/Info.plist.in,
+	  src/main/macosx/Makefile.am, src/main/macosx/SDLMain.h,
+	  src/main/macosx/SDLMain.m, src/main/macosx/info.nib,
+	  src/main/macosx/SDLMain.nib/classes.nib,
+	  src/main/macosx/SDLMain.nib/info.nib,
+	  src/main/macosx/SDLMain.nib/objects.nib,
+	  src/main/win32/SDL_main.c, src/audio/alsa/Makefile.am,
+	  src/audio/alsa/Makefile.in, src/audio/alsa/SDL_alsa_audio.c,
+	  src/audio/alsa/SDL_alsa_audio.h, src/audio/arts/Makefile.am,
+	  src/audio/arts/Makefile.in, src/audio/arts/SDL_artsaudio.c,
+	  src/audio/arts/SDL_artsaudio.h, src/audio/baudio/Makefile.am,
+	  src/audio/baudio/Makefile.in, src/audio/baudio/SDL_beaudio.cc,
+	  src/audio/baudio/SDL_beaudio.h, src/audio/disk/Makefile.am,
+	  src/audio/disk/Makefile.in, src/audio/disk/SDL_diskaudio.c,
+	  src/audio/disk/SDL_diskaudio.h, src/audio/dmedia/Makefile.am,
+	  src/audio/dmedia/Makefile.in, src/audio/dmedia/SDL_irixaudio.c,
+	  src/audio/dmedia/SDL_irixaudio.h, src/audio/macrom/Makefile.am,
+	  src/audio/macrom/Makefile.in, src/audio/macrom/SDL_romaudio.c,
+	  src/audio/macrom/SDL_romaudio.h, src/audio/mint/Makefile.am,
+	  src/audio/mint/Makefile.in, src/audio/mint/SDL_mintaudio.c,
+	  src/audio/mint/SDL_mintaudio.h,
+	  src/audio/mint/SDL_mintaudio_dma8.c,
+	  src/audio/mint/SDL_mintaudio_dma8.h,
+	  src/audio/mint/SDL_mintaudio_gsxb.c,
+	  src/audio/mint/SDL_mintaudio_gsxb.h,
+	  src/audio/mint/SDL_mintaudio_it.S,
+	  src/audio/mint/SDL_mintaudio_mcsn.c,
+	  src/audio/mint/SDL_mintaudio_mcsn.h,
+	  src/audio/mint/SDL_mintaudio_stfa.c,
+	  src/audio/mint/SDL_mintaudio_stfa.h,
+	  src/audio/mint/SDL_mintaudio_xbios.c,
+	  src/audio/paudio/Makefile.am, src/audio/paudio/Makefile.in,
+	  src/audio/paudio/SDL_paudio.c, src/audio/paudio/SDL_paudio.h,
+	  src/audio/ums/Makefile.in, src/audio/windib/Makefile.am,
+	  src/audio/windib/Makefile.in, src/audio/windib/SDL_dibaudio.c,
+	  src/audio/windib/SDL_dibaudio.h, src/audio/windx5/Makefile.am,
+	  src/audio/windx5/Makefile.in, src/audio/windx5/SDL_dx5audio.c,
+	  src/audio/windx5/SDL_dx5audio.h, src/cdrom/Makefile.am,
+	  src/cdrom/Makefile.in, src/cdrom/SDL_cdrom.c,
+	  src/cdrom/SDL_syscdrom.h, src/cdrom/aix/Makefile.am,
+	  src/cdrom/aix/Makefile.in, src/cdrom/aix/SDL_syscdrom.c,
+	  src/cdrom/beos/Makefile.am, src/cdrom/beos/Makefile.in,
+	  src/cdrom/beos/SDL_syscdrom.cc, src/cdrom/bsdi/Makefile.am,
+	  src/cdrom/bsdi/Makefile.in, src/cdrom/bsdi/SDL_syscdrom.c,
+	  src/cdrom/dc/Makefile.am, src/cdrom/dc/Makefile.in,
+	  src/cdrom/dc/SDL_syscdrom.c, src/cdrom/dummy/Makefile.am,
+	  src/cdrom/dummy/Makefile.in, src/cdrom/dummy/SDL_syscdrom.c,
+	  src/cdrom/freebsd/Makefile.am, src/cdrom/freebsd/Makefile.in,
+	  src/cdrom/freebsd/SDL_syscdrom.c, src/cdrom/linux/Makefile.am,
+	  src/cdrom/linux/Makefile.in, src/cdrom/linux/SDL_syscdrom.c,
+	  src/cdrom/macos/Makefile.am, src/cdrom/macos/Makefile.in,
+	  src/cdrom/macos/SDL_syscdrom.c, src/cdrom/macos/SDL_syscdrom_c.h,
+	  src/cdrom/macosx/AudioFilePlayer.cpp,
+	  src/cdrom/macosx/AudioFileReaderThread.cpp,
+	  src/cdrom/macosx/CAGuard.cpp, src/cdrom/macosx/CDPlayer.cpp,
+	  src/cdrom/macosx/Makefile.am, src/cdrom/macosx/Makefile.in,
+	  src/cdrom/macosx/SDL_syscdrom.c, src/cdrom/openbsd/Makefile.am,
+	  src/cdrom/openbsd/Makefile.in, src/cdrom/openbsd/SDL_syscdrom.c,
+	  src/cdrom/osf/Makefile.am, src/cdrom/osf/Makefile.in,
+	  src/cdrom/osf/SDL_syscdrom.c, src/cdrom/qnx/Makefile.am,
+	  src/cdrom/qnx/Makefile.in, src/cdrom/qnx/SDL_syscdrom.c,
+	  src/cdrom/win32/Makefile.am, src/cdrom/win32/Makefile.in,
+	  src/cdrom/win32/SDL_syscdrom.c, src/timer/Makefile.am,
+	  src/timer/Makefile.in, src/timer/SDL_systimer.h,
+	  src/timer/SDL_timer.c, src/timer/SDL_timer_c.h,
+	  src/timer/amigaos/SDL_systimer.c,
+	  src/timer/amigaos4/SDL_systimer.c, src/timer/beos/SDL_systimer.c,
+	  src/timer/dc/SDL_systimer.c, src/timer/epoc/SDL_systimer.cpp,
+	  src/timer/macos/FastTimes.c, src/timer/macos/FastTimes.h,
+	  src/timer/macos/SDL_MPWtimer.c, src/timer/macos/SDL_systimer.c,
+	  src/timer/mint/SDL_systimer.c, src/timer/mint/SDL_vbltimer.S,
+	  src/timer/mint/SDL_vbltimer_s.h, src/timer/riscos/SDL_systimer.c,
+	  src/timer/win32/SDL_systimer.c, src/video/Makefile.am,
+	  src/video/Makefile.in, src/video/SDL_RLEaccel.c,
+	  src/video/SDL_RLEaccel_c.h, src/video/SDL_blit.c,
+	  src/video/SDL_blit.h, src/video/SDL_blit_0.c,
+	  src/video/SDL_blit_1.c, src/video/SDL_blit_A.c,
+	  src/video/SDL_blit_N.c, src/video/SDL_bmp.c,
+	  src/video/SDL_cursor.c, src/video/SDL_cursor_c.h,
+	  src/video/SDL_gamma.c, src/video/SDL_glfuncs.h,
+	  src/video/SDL_leaks.h, src/video/SDL_memops.h,
+	  src/video/SDL_pixels.c, src/video/SDL_pixels_c.h,
+	  src/video/SDL_stretch.c, src/video/SDL_stretch_c.h,
+	  src/video/SDL_surface.c, src/video/SDL_sysvideo.h,
+	  src/video/SDL_video.c, src/video/SDL_yuv.c,
+	  src/video/SDL_yuv_mmx.c, src/video/SDL_yuv_sw.c,
+	  src/video/SDL_yuv_sw_c.h, src/video/SDL_yuvfuncs.h,
+	  src/video/blank_cursor.h, src/video/default_cursor.h,
+	  src/video/mmx.h, src/video/dc/Makefile.am,
+	  src/video/dc/Makefile.in, src/video/dc/SDL_dcevents.c,
+	  src/video/dc/SDL_dcevents_c.h, src/video/dc/SDL_dcmouse.c,
+	  src/video/dc/SDL_dcmouse_c.h, src/video/dc/SDL_dcvideo.c,
+	  src/video/dc/SDL_dcvideo.h, src/video/dga/Makefile.am,
+	  src/video/dga/Makefile.in, src/video/dga/SDL_dgaevents.c,
+	  src/video/dga/SDL_dgaevents_c.h, src/video/dga/SDL_dgamouse.c,
+	  src/video/dga/SDL_dgamouse_c.h, src/video/dga/SDL_dgavideo.c,
+	  src/video/dga/SDL_dgavideo.h, src/video/gem/Makefile.am,
+	  src/video/gem/Makefile.in, src/video/gem/SDL_gemevents.c,
+	  src/video/gem/SDL_gemevents_c.h, src/video/gem/SDL_gemmouse.c,
+	  src/video/gem/SDL_gemmouse_c.h, src/video/gem/SDL_gemvideo.c,
+	  src/video/gem/SDL_gemvideo.h, src/video/gem/SDL_gemwm.c,
+	  src/video/gem/SDL_gemwm_c.h, src/video/ggi/Makefile.am,
+	  src/video/ggi/Makefile.in, src/video/ggi/SDL_ggievents.c,
+	  src/video/ggi/SDL_ggievents_c.h, src/video/ggi/SDL_ggikeys.h,
+	  src/video/ggi/SDL_ggimouse.c, src/video/ggi/SDL_ggimouse_c.h,
+	  src/video/ggi/SDL_ggivideo.c, src/video/ggi/SDL_ggivideo.h,
+	  src/video/x11/Makefile.am, src/video/x11/Makefile.in,
+	  src/video/x11/SDL_x11dga.c, src/video/x11/SDL_x11events_c.h,
+	  src/video/x11/SDL_x11gamma.c, src/video/x11/SDL_x11gamma_c.h,
+	  src/video/x11/SDL_x11gl.c, src/video/x11/SDL_x11gl_c.h,
+	  src/video/x11/SDL_x11image_c.h, src/video/x11/SDL_x11modes.c,
+	  src/video/x11/SDL_x11modes_c.h, src/video/x11/SDL_x11mouse.c,
+	  src/video/x11/SDL_x11mouse_c.h, src/video/x11/SDL_x11video.c,
+	  src/video/x11/SDL_x11video.h, src/video/x11/SDL_x11wm.c,
+	  src/video/x11/SDL_x11wm_c.h, src/video/x11/SDL_x11yuv.c,
+	  src/video/x11/SDL_x11yuv_c.h, src/video/aalib/Makefile.am,
+	  src/video/aalib/Makefile.in, src/video/aalib/SDL_aaevents.c,
+	  src/video/aalib/SDL_aaevents_c.h, src/video/aalib/SDL_aamouse.c,
+	  src/video/aalib/SDL_aamouse_c.h, src/video/aalib/SDL_aavideo.c,
+	  src/video/aalib/SDL_aavideo.h, src/video/ataricommon/Makefile.am,
+	  src/video/ataricommon/Makefile.in,
+	  src/video/ataricommon/SDL_ataric2p.S,
+	  src/video/ataricommon/SDL_ataric2p060.c,
+	  src/video/ataricommon/SDL_ataric2p060_c.h,
+	  src/video/ataricommon/SDL_ataric2p_s.h,
+	  src/video/ataricommon/SDL_atarieddi.S,
+	  src/video/ataricommon/SDL_atarieddi_s.h,
+	  src/video/ataricommon/SDL_atarievents.c,
+	  src/video/ataricommon/SDL_atarievents_c.h,
+	  src/video/ataricommon/SDL_atarikeys.h,
+	  src/video/ataricommon/SDL_atarimxalloc.c,
+	  src/video/ataricommon/SDL_atarimxalloc_c.h,
+	  src/video/ataricommon/SDL_biosevents.c,
+	  src/video/ataricommon/SDL_biosevents_c.h,
+	  src/video/ataricommon/SDL_gemdosevents.c,
+	  src/video/ataricommon/SDL_gemdosevents_c.h,
+	  src/video/ataricommon/SDL_ikbdevents.c,
+	  src/video/ataricommon/SDL_ikbdevents_c.h,
+	  src/video/ataricommon/SDL_ikbdinterrupt.S,
+	  src/video/ataricommon/SDL_ikbdinterrupt_s.h,
+	  src/video/ataricommon/SDL_xbiosevents.c,
+	  src/video/ataricommon/SDL_xbiosevents_c.h,
+	  src/video/ataricommon/SDL_xbiosinterrupt.S,
+	  src/video/ataricommon/SDL_xbiosinterrupt_s.h,
+	  src/video/cybergfx/SDL_amigamouse.c,
+	  src/video/cybergfx/SDL_cgxgl_c.h,
+	  src/video/cybergfx/SDL_cgximage.c,
+	  src/video/cybergfx/SDL_cgximage_c.h,
+	  src/video/cybergfx/SDL_cgxvideo.c,
+	  src/video/cybergfx/SDL_cgxvideo.h,
+	  src/video/cybergfx/SDL_cgxwm_c.h,
+	  src/video/cybergfx/SDL_cgxyuv.c, src/video/directfb/Makefile.am,
+	  src/video/directfb/Makefile.in,
+	  src/video/directfb/SDL_DirectFB_events.c,
+	  src/video/directfb/SDL_DirectFB_events.h,
+	  src/video/directfb/SDL_DirectFB_video.c,
+	  src/video/directfb/SDL_DirectFB_video.h,
+	  src/video/directfb/SDL_DirectFB_yuv.c,
+	  src/video/directfb/SDL_DirectFB_yuv.h,
+	  src/video/dummy/Makefile.am, src/video/dummy/Makefile.in,
+	  src/video/dummy/SDL_nullevents.c,
+	  src/video/dummy/SDL_nullevents_c.h,
+	  src/video/dummy/SDL_nullmouse.c,
+	  src/video/dummy/SDL_nullmouse_c.h,
+	  src/video/dummy/SDL_nullvideo.c, src/video/dummy/SDL_nullvideo.h,
+	  src/video/epoc/Makefile.am, src/video/epoc/Makefile.in,
+	  src/video/epoc/SDL_epocevents.cpp,
+	  src/video/epoc/SDL_epocevents_c.h,
+	  src/video/epoc/SDL_epocvideo.cpp, src/video/epoc/SDL_epocvideo.h,
+	  src/video/fbcon/3dfx_mmio.h, src/video/fbcon/3dfx_regs.h,
+	  src/video/fbcon/Makefile.am, src/video/fbcon/Makefile.in,
+	  src/video/fbcon/SDL_fb3dfx.c, src/video/fbcon/SDL_fb3dfx.h,
+	  src/video/fbcon/SDL_fbelo.c, src/video/fbcon/SDL_fbelo.h,
+	  src/video/fbcon/SDL_fbevents.c, src/video/fbcon/SDL_fbevents_c.h,
+	  src/video/fbcon/SDL_fbkeys.h, src/video/fbcon/SDL_fbmatrox.c,
+	  src/video/fbcon/SDL_fbmatrox.h, src/video/fbcon/SDL_fbmouse.c,
+	  src/video/fbcon/SDL_fbmouse_c.h, src/video/fbcon/SDL_fbriva.c,
+	  src/video/fbcon/SDL_fbriva.h, src/video/fbcon/SDL_fbvideo.c,
+	  src/video/fbcon/SDL_fbvideo.h, src/video/fbcon/matrox_mmio.h,
+	  src/video/fbcon/matrox_regs.h, src/video/fbcon/riva_mmio.h,
+	  src/video/fbcon/riva_regs.h, src/video/macdsp/Makefile.am,
+	  src/video/macdsp/Makefile.in, src/video/macdsp/SDL_dspvideo.c,
+	  src/video/macdsp/SDL_dspvideo.h, src/video/macrom/Makefile.am,
+	  src/video/macrom/Makefile.in, src/video/macrom/SDL_romvideo.c,
+	  src/video/macrom/SDL_romvideo.h, src/video/nanox/Makefile.am,
+	  src/video/nanox/Makefile.in, src/video/nanox/SDL_nxevents.c,
+	  src/video/nanox/SDL_nxevents_c.h, src/video/nanox/SDL_nximage.c,
+	  src/video/nanox/SDL_nximage_c.h, src/video/nanox/SDL_nxmodes.c,
+	  src/video/nanox/SDL_nxmodes_c.h, src/video/nanox/SDL_nxmouse.c,
+	  src/video/nanox/SDL_nxmouse_c.h, src/video/nanox/SDL_nxvideo.c,
+	  src/video/nanox/SDL_nxvideo.h, src/video/nanox/SDL_nxwm.c,
+	  src/video/nanox/SDL_nxwm_c.h, src/video/photon/Makefile.am,
+	  src/video/photon/Makefile.in, src/video/photon/SDL_ph_events.c,
+	  src/video/photon/SDL_ph_events_c.h,
+	  src/video/photon/SDL_ph_image.c,
+	  src/video/photon/SDL_ph_image_c.h,
+	  src/video/photon/SDL_ph_modes.c,
+	  src/video/photon/SDL_ph_modes_c.h,
+	  src/video/photon/SDL_ph_mouse.c,
+	  src/video/photon/SDL_ph_mouse_c.h,
+	  src/video/photon/SDL_ph_video.c, src/video/photon/SDL_ph_video.h,
+	  src/video/photon/SDL_ph_wm.c, src/video/photon/SDL_ph_wm_c.h,
+	  src/video/photon/SDL_phyuv.c, src/video/photon/SDL_phyuv_c.h,
+	  src/video/ps2gs/Makefile.am, src/video/ps2gs/Makefile.in,
+	  src/video/ps2gs/SDL_gsevents.c, src/video/ps2gs/SDL_gsevents_c.h,
+	  src/video/ps2gs/SDL_gskeys.h, src/video/ps2gs/SDL_gsmouse.c,
+	  src/video/ps2gs/SDL_gsmouse_c.h, src/video/ps2gs/SDL_gsvideo.c,
+	  src/video/ps2gs/SDL_gsvideo.h, src/video/ps2gs/SDL_gsyuv.c,
+	  src/video/ps2gs/SDL_gsyuv_c.h, src/video/qtopia/Makefile.am,
+	  src/video/qtopia/Makefile.in, src/video/qtopia/SDL_QWin.cc,
+	  src/video/qtopia/SDL_QWin.h, src/video/qtopia/SDL_lowvideo.h,
+	  src/video/qtopia/SDL_sysevents.cc,
+	  src/video/qtopia/SDL_sysevents_c.h,
+	  src/video/qtopia/SDL_sysmouse.cc,
+	  src/video/qtopia/SDL_sysmouse_c.h,
+	  src/video/qtopia/SDL_sysvideo.cc, src/video/qtopia/SDL_syswm.cc,
+	  src/video/qtopia/SDL_syswm_c.h, src/video/quartz/Makefile.am,
+	  src/video/quartz/Makefile.in,
+	  src/video/quartz/SDL_QuartzEvents.m,
+	  src/video/quartz/SDL_QuartzKeys.h,
+	  src/video/quartz/SDL_QuartzVideo.h,
+	  src/video/quartz/SDL_QuartzVideo.m,
+	  src/video/quartz/SDL_QuartzWM.m,
+	  src/video/quartz/SDL_QuartzWindow.m,
+	  src/video/riscos/Makefile.am, src/video/riscos/Makefile.in,
+	  src/video/riscos/SDL_riscosFullScreenVideo.c,
+	  src/video/riscos/SDL_riscosevents.c,
+	  src/video/riscos/SDL_riscosevents_c.h,
+	  src/video/riscos/SDL_riscosmouse.c,
+	  src/video/riscos/SDL_riscosmouse_c.h,
+	  src/video/riscos/SDL_riscossprite.c,
+	  src/video/riscos/SDL_riscostask.c,
+	  src/video/riscos/SDL_riscostask.h,
+	  src/video/riscos/SDL_riscosvideo.c,
+	  src/video/riscos/SDL_riscosvideo.h,
+	  src/video/riscos/SDL_wimppoll.c,
+	  src/video/riscos/SDL_wimpvideo.c, src/video/svga/Makefile.am,
+	  src/video/svga/Makefile.in, src/video/svga/SDL_svgaevents.c,
+	  src/video/svga/SDL_svgaevents_c.h,
+	  src/video/svga/SDL_svgamouse.c, src/video/svga/SDL_svgamouse_c.h,
+	  src/video/svga/SDL_svgavideo.c, src/video/svga/SDL_svgavideo.h,
+	  src/video/vgl/Makefile.am, src/video/vgl/Makefile.in,
+	  src/video/vgl/SDL_vglevents.c, src/video/vgl/SDL_vglevents_c.h,
+	  src/video/vgl/SDL_vglmouse.c, src/video/vgl/SDL_vglmouse_c.h,
+	  src/video/vgl/SDL_vglvideo.c, src/video/vgl/SDL_vglvideo.h,
+	  src/video/wincommon/Makefile.am, src/video/wincommon/Makefile.in,
+	  src/video/wincommon/SDL_lowvideo.h,
+	  src/video/wincommon/SDL_sysevents.c,
+	  src/video/wincommon/SDL_sysmouse.c,
+	  src/video/wincommon/SDL_sysmouse_c.h,
+	  src/video/wincommon/SDL_syswm.c,
+	  src/video/wincommon/SDL_syswm_c.h,
+	  src/video/wincommon/SDL_wingl.c,
+	  src/video/wincommon/SDL_wingl_c.h, src/video/wincommon/wmmsg.h,
+	  src/video/windib/Makefile.am, src/video/windib/Makefile.in,
+	  src/video/windib/SDL_dibevents.c,
+	  src/video/windib/SDL_dibevents_c.h,
+	  src/video/windib/SDL_dibvideo.c, src/video/windib/SDL_dibvideo.h,
+	  src/video/windib/SDL_vkeys.h, src/video/windx5/Makefile.am,
+	  src/video/windx5/Makefile.in, src/video/windx5/SDL_dx5events.c,
+	  src/video/windx5/SDL_dx5events_c.h,
+	  src/video/windx5/SDL_dx5video.c, src/video/windx5/SDL_dx5video.h,
+	  src/video/windx5/SDL_dx5yuv.c, src/video/windx5/SDL_dx5yuv_c.h,
+	  src/video/windx5/directx.h, src/video/x11/SDL_x11dga_c.h,
+	  src/video/x11/SDL_x11events.c, src/video/x11/SDL_x11image.c,
+	  src/video/xbios/Makefile.am, src/video/xbios/Makefile.in,
+	  src/video/xbios/SDL_xbios.c, src/video/xbios/SDL_xbios.h,
+	  src/events/Makefile.am, src/events/Makefile.in,
+	  src/events/SDL_active.c, src/events/SDL_events.c,
+	  src/events/SDL_events_c.h, src/events/SDL_expose.c,
+	  src/events/SDL_keyboard.c, src/events/SDL_mouse.c,
+	  src/events/SDL_quit.c, src/events/SDL_resize.c,
+	  src/events/SDL_sysevents.h, src/hermes/COPYING.LIB,
+	  src/hermes/HeadMMX.h, src/hermes/HeadX86.h,
+	  src/hermes/Makefile.am, src/hermes/Makefile.in,
+	  src/hermes/README, src/hermes/mmx_main.asm,
+	  src/hermes/mmxp2_32.asm, src/hermes/x86_main.asm,
+	  src/hermes/x86p_16.asm, src/hermes/x86p_32.asm,
+	  src/joystick/Makefile.am, src/joystick/Makefile.in,
+	  src/joystick/SDL_joystick.c, src/joystick/SDL_joystick_c.h,
+	  src/joystick/SDL_sysjoystick.h, src/joystick/beos/Makefile.am,
+	  src/joystick/beos/Makefile.in,
+	  src/joystick/beos/SDL_bejoystick.cc,
+	  src/joystick/bsd/Makefile.am, src/joystick/bsd/Makefile.in,
+	  src/joystick/bsd/SDL_sysjoystick.c,
+	  src/joystick/darwin/Makefile.am, src/joystick/darwin/Makefile.in,
+	  src/joystick/darwin/SDL_sysjoystick.c,
+	  src/joystick/dc/Makefile.am, src/joystick/dc/Makefile.in,
+	  src/joystick/dc/SDL_sysjoystick.c,
+	  src/joystick/dummy/Makefile.am, src/joystick/dummy/Makefile.in,
+	  src/joystick/dummy/SDL_sysjoystick.c,
+	  src/joystick/linux/Makefile.am, src/joystick/linux/Makefile.in,
+	  src/joystick/linux/SDL_sysjoystick.c,
+	  src/joystick/macos/Makefile.am, src/joystick/macos/Makefile.in,
+	  src/joystick/macos/SDL_sysjoystick.c,
+	  src/joystick/mint/Makefile.am, src/joystick/mint/Makefile.in,
+	  src/joystick/mint/SDL_sysjoystick.c,
+	  src/joystick/riscos/Makefile.am, src/joystick/riscos/Makefile.in,
+	  src/joystick/riscos/SDL_sysjoystick.c,
+	  src/joystick/win32/Makefile.am, src/joystick/win32/Makefile.in,
+	  src/joystick/win32/SDL_mmjoystick.c, src/thread/Makefile.am,
+	  src/thread/Makefile.in, src/thread/SDL_systhread.h,
+	  src/thread/SDL_thread.c, src/thread/SDL_thread_c.h,
+	  src/thread/amigaos/SDL_syssem.c,
+	  src/thread/amigaos/SDL_systhread.c,
+	  src/thread/amigaos/SDL_systhread_c.h,
+	  src/thread/amigaos/SDL_thread.c,
+	  src/thread/amigaos4/SDL_systhread.c,
+	  src/thread/amigaos4/SDL_systhread_c.h,
+	  src/thread/beos/SDL_syssem.c, src/thread/beos/SDL_systhread.c,
+	  src/thread/beos/SDL_systhread_c.h, src/thread/dc/SDL_syscond.c,
+	  src/thread/dc/SDL_syscond_c.h, src/thread/dc/SDL_sysmutex.c,
+	  src/thread/dc/SDL_sysmutex_c.h, src/thread/dc/SDL_syssem.c,
+	  src/thread/dc/SDL_syssem_c.h, src/thread/dc/SDL_systhread.c,
+	  src/thread/dc/SDL_systhread_c.h,
+	  src/thread/epoc/SDL_sysmutex.cpp, src/thread/epoc/SDL_syssem.cpp,
+	  src/thread/epoc/SDL_systhread.cpp,
+	  src/thread/epoc/SDL_systhread_c.h,
+	  src/thread/generic/SDL_syscond.c,
+	  src/thread/generic/SDL_syscond_c.h,
+	  src/thread/generic/SDL_sysmutex.c,
+	  src/thread/generic/SDL_sysmutex_c.h,
+	  src/thread/generic/SDL_syssem.c,
+	  src/thread/generic/SDL_syssem_c.h,
+	  src/thread/generic/SDL_systhread.c,
+	  src/thread/generic/SDL_systhread_c.h,
+	  src/thread/irix/SDL_systhread.c,
+	  src/thread/irix/SDL_systhread_c.h, src/thread/pth/SDL_syscond.c,
+	  src/thread/pth/SDL_syscond_c.h, src/thread/pth/SDL_sysmutex.c,
+	  src/thread/pth/SDL_sysmutex_c.h, src/thread/pth/SDL_systhread.c,
+	  src/thread/pth/SDL_systhread_c.h,
+	  src/thread/win32/SDL_sysmutex.c, src/thread/win32/SDL_syssem.c,
+	  src/thread/win32/SDL_systhread.c,
+	  src/thread/win32/SDL_systhread_c.h,
+	  src/thread/win32/win_ce_semaphore.c,
+	  src/thread/win32/win_ce_semaphore.h,
+	  src/video/amigaos4/Makefile.am, src/video/amigaos4/Makefile.in,
+	  src/video/amigaos4/SDL_os4video.c, src/video/amigaos4/debug.h,
+	  src/video/bwindow/Makefile.am, src/video/bwindow/Makefile.in,
+	  src/video/bwindow/SDL_BView.h, src/video/bwindow/SDL_BWin.h,
+	  src/video/bwindow/SDL_lowvideo.h,
+	  src/video/bwindow/SDL_sysevents.cc,
+	  src/video/bwindow/SDL_sysevents_c.h,
+	  src/video/bwindow/SDL_sysmouse.cc,
+	  src/video/bwindow/SDL_sysmouse_c.h,
+	  src/video/bwindow/SDL_sysvideo.cc,
+	  src/video/bwindow/SDL_syswm.cc, src/video/bwindow/SDL_syswm_c.h,
+	  src/video/cybergfx/Makefile.am, src/video/cybergfx/Makefile.in,
+	  src/video/cybergfx/SDL_amigaevents.c,
+	  src/video/cybergfx/SDL_amigaevents_c.h,
+	  src/video/cybergfx/SDL_amigamouse_c.h,
+	  src/video/cybergfx/SDL_cgxaccel.c,
+	  src/video/cybergfx/SDL_cgxgl.c,
+	  src/video/cybergfx/SDL_cgxmodes.c,
+	  src/video/cybergfx/SDL_cgxmodes_c.h,
+	  src/video/cybergfx/SDL_cgxwm.c,
+	  src/video/cybergfx/SDL_cgxyuv_c.h,
+	  src/video/maccommon/Makefile.am, src/video/maccommon/Makefile.in,
+	  src/video/maccommon/SDL_lowvideo.h,
+	  src/video/maccommon/SDL_macevents.c,
+	  src/video/maccommon/SDL_macevents_c.h,
+	  src/video/maccommon/SDL_macgl.c,
+	  src/video/maccommon/SDL_macgl_c.h,
+	  src/video/maccommon/SDL_mackeys.h,
+	  src/video/maccommon/SDL_macmouse.c,
+	  src/video/maccommon/SDL_macmouse_c.h,
+	  src/video/maccommon/SDL_macwm.c,
+	  src/video/maccommon/SDL_macwm_c.h, src/video/picogui/Makefile.am,
+	  src/video/picogui/Makefile.in, src/video/picogui/SDL_pgevents.c,
+	  src/video/picogui/SDL_pgevents_c.h,
+	  src/video/picogui/SDL_pgvideo.c, src/video/picogui/SDL_pgvideo.h,
+	  docs/Makefile.am, docs/Makefile.in, docs/index.html,
+	  docs/html/Makefile.am, docs/html/Makefile.in,
+	  docs/html/audio.html, docs/html/cdrom.html, docs/html/event.html,
+	  docs/html/eventfunctions.html, docs/html/eventstructures.html,
+	  docs/html/general.html, docs/html/guide.html,
+	  docs/html/guideaboutsdldoc.html,
+	  docs/html/guideaudioexamples.html,
+	  docs/html/guidebasicsinit.html,
+	  docs/html/guidecdromexamples.html, docs/html/guidecredits.html,
+	  docs/html/guideeventexamples.html, docs/html/guideexamples.html,
+	  docs/html/guideinput.html, docs/html/guideinputkeyboard.html,
+	  docs/html/guidepreface.html, docs/html/guidethebasics.html,
+	  docs/html/guidetimeexamples.html, docs/html/guidevideo.html,
+	  docs/html/guidevideoexamples.html,
+	  docs/html/guidevideoopengl.html, docs/html/index.html,
+	  docs/html/joystick.html, docs/html/reference.html,
+	  docs/html/sdlactiveevent.html, docs/html/sdladdtimer.html,
+	  docs/html/sdlaudiocvt.html, docs/html/sdlaudiospec.html,
+	  docs/html/sdlblitsurface.html, docs/html/sdlbuildaudiocvt.html,
+	  docs/html/sdlcd.html, docs/html/sdlcdclose.html,
+	  docs/html/sdlcdeject.html, docs/html/sdlcdname.html,
+	  docs/html/sdlcdnumdrives.html, docs/html/sdlcdopen.html,
+	  docs/html/sdlcdpause.html, docs/html/sdlcdplay.html,
+	  docs/html/sdlcdplaytracks.html, docs/html/sdlcdresume.html,
+	  docs/html/sdlcdstatus.html, docs/html/sdlcdstop.html,
+	  docs/html/sdlcdtrack.html, docs/html/sdlcloseaudio.html,
+	  docs/html/sdlcolor.html, docs/html/sdlcondbroadcast.html,
+	  docs/html/sdlcondsignal.html, docs/html/sdlcondwait.html,
+	  docs/html/sdlcondwaittimeout.html,
+	  docs/html/sdlconvertaudio.html, docs/html/sdlconvertsurface.html,
+	  docs/html/sdlcreatecond.html, docs/html/sdlcreatecursor.html,
+	  docs/html/sdlcreatemutex.html,
+	  docs/html/sdlcreatergbsurface.html,
+	  docs/html/sdlcreatergbsurfacefrom.html,
+	  docs/html/sdlcreatesemaphore.html,
+	  docs/html/sdlcreatethread.html,
+	  docs/html/sdlcreateyuvoverlay.html, docs/html/sdldelay.html,
+	  docs/html/sdldestroycond.html, docs/html/sdldestroymutex.html,
+	  docs/html/sdldestroysemaphore.html,
+	  docs/html/sdldisplayformat.html,
+	  docs/html/sdldisplayformatalpha.html,
+	  docs/html/sdldisplayyuvoverlay.html,
+	  docs/html/sdlenablekeyrepeat.html,
+	  docs/html/sdlenableunicode.html, docs/html/sdlevent.html,
+	  docs/html/sdleventstate.html, docs/html/sdlexposeevent.html,
+	  docs/html/sdlfillrect.html, docs/html/sdlflip.html,
+	  docs/html/sdlfreecursor.html, docs/html/sdlfreesurface.html,
+	  docs/html/sdlfreewav.html, docs/html/sdlfreeyuvoverlay.html,
+	  docs/html/sdlgetappstate.html, docs/html/sdlgetaudiostatus.html,
+	  docs/html/sdlgetcliprect.html, docs/html/sdlgetcursor.html,
+	  docs/html/sdlgeterror.html, docs/html/sdlgeteventfilter.html,
+	  docs/html/sdlgetgammaramp.html, docs/html/sdlgetkeyname.html,
+	  docs/html/sdlgetkeystate.html, docs/html/sdlgetmodstate.html,
+	  docs/html/sdlgetmousestate.html,
+	  docs/html/sdlgetrelativemousestate.html,
+	  docs/html/sdlgetrgb.html, docs/html/sdlgetrgba.html,
+	  docs/html/sdlgetthreadid.html, docs/html/sdlgetticks.html,
+	  docs/html/sdlgetvideoinfo.html,
+	  docs/html/sdlgetvideosurface.html, docs/html/sdlglattr.html,
+	  docs/html/sdlglgetattribute.html,
+	  docs/html/sdlglgetprocaddress.html,
+	  docs/html/sdlglloadlibrary.html,
+	  docs/html/sdlglsetattribute.html,
+	  docs/html/sdlglswapbuffers.html, docs/html/sdlinit.html,
+	  docs/html/sdlinitsubsystem.html, docs/html/sdljoyaxisevent.html,
+	  docs/html/sdljoyballevent.html, docs/html/sdljoybuttonevent.html,
+	  docs/html/sdljoyhatevent.html, docs/html/sdljoystickclose.html,
+	  docs/html/sdljoystickeventstate.html,
+	  docs/html/sdljoystickgetaxis.html,
+	  docs/html/sdljoystickgetball.html,
+	  docs/html/sdljoystickgetbutton.html,
+	  docs/html/sdljoystickgethat.html,
+	  docs/html/sdljoystickindex.html, docs/html/sdljoystickname.html,
+	  docs/html/sdljoysticknumaxes.html,
+	  docs/html/sdljoysticknumballs.html,
+	  docs/html/sdljoysticknumbuttons.html,
+	  docs/html/sdljoysticknumhats.html,
+	  docs/html/sdljoystickopen.html, docs/html/sdljoystickopened.html,
+	  docs/html/sdljoystickupdate.html, docs/html/sdlkey.html,
+	  docs/html/sdlkeyboardevent.html, docs/html/sdlkeysym.html,
+	  docs/html/sdlkillthread.html, docs/html/sdllistmodes.html,
+	  docs/html/sdlloadbmp.html, docs/html/sdlloadwav.html,
+	  docs/html/sdllockaudio.html, docs/html/sdllocksurface.html,
+	  docs/html/sdllockyuvoverlay.html, docs/html/sdlmaprgb.html,
+	  docs/html/sdlmaprgba.html, docs/html/sdlmixaudio.html,
+	  docs/html/sdlmousebuttonevent.html,
+	  docs/html/sdlmousemotionevent.html, docs/html/sdlmutexp.html,
+	  docs/html/sdlmutexv.html, docs/html/sdlnumjoysticks.html,
+	  docs/html/sdlopenaudio.html, docs/html/sdloverlay.html,
+	  docs/html/sdlpalette.html, docs/html/sdlpauseaudio.html,
+	  docs/html/sdlpeepevents.html, docs/html/sdlpixelformat.html,
+	  docs/html/sdlpollevent.html, docs/html/sdlpumpevents.html,
+	  docs/html/sdlpushevent.html, docs/html/sdlquit.html,
+	  docs/html/sdlquitevent.html, docs/html/sdlquitsubsystem.html,
+	  docs/html/sdlrect.html, docs/html/sdlremovetimer.html,
+	  docs/html/sdlresizeevent.html, docs/html/sdlsavebmp.html,
+	  docs/html/sdlsempost.html, docs/html/sdlsemtrywait.html,
+	  docs/html/sdlsemvalue.html, docs/html/sdlsemwait.html,
+	  docs/html/sdlsemwaittimeout.html, docs/html/sdlsetalpha.html,
+	  docs/html/sdlsetcliprect.html, docs/html/sdlsetcolorkey.html,
+	  docs/html/sdlsetcolors.html, docs/html/sdlsetcursor.html,
+	  docs/html/sdlseteventfilter.html, docs/html/sdlsetgamma.html,
+	  docs/html/sdlsetgammaramp.html, docs/html/sdlsetmodstate.html,
+	  docs/html/sdlsetpalette.html, docs/html/sdlsettimer.html,
+	  docs/html/sdlsetvideomode.html, docs/html/sdlshowcursor.html,
+	  docs/html/sdlsurface.html, docs/html/sdlsyswmevent.html,
+	  docs/html/sdlthreadid.html, docs/html/sdlunlockaudio.html,
+	  docs/html/sdlunlocksurface.html,
+	  docs/html/sdlunlockyuvoverlay.html, docs/html/sdlupdaterect.html,
+	  docs/html/sdlupdaterects.html, docs/html/sdluserevent.html,
+	  docs/html/sdlvideodrivername.html, docs/html/sdlvideoinfo.html,
+	  docs/html/sdlvideomodeok.html, docs/html/sdlwaitevent.html,
+	  docs/html/sdlwaitthread.html, docs/html/sdlwarpmouse.html,
+	  docs/html/sdlwasinit.html, docs/html/sdlwmgetcaption.html,
+	  docs/html/sdlwmgrabinput.html, docs/html/sdlwmiconifywindow.html,
+	  docs/html/sdlwmsetcaption.html, docs/html/sdlwmseticon.html,
+	  docs/html/sdlwmtogglefullscreen.html, docs/html/thread.html,
+	  docs/html/time.html, docs/html/video.html, docs/html/wm.html,
+	  docs/man3/SDLKey.3, docs/man3/SDL_ActiveEvent.3,
+	  docs/man3/SDL_AudioSpec.3, docs/man3/SDL_BlitSurface.3,
+	  docs/man3/SDL_BuildAudioCVT.3, docs/man3/SDL_CD.3,
+	  docs/man3/SDL_CDEject.3, docs/man3/SDL_CDPlayTracks.3,
+	  docs/man3/SDL_CDStatus.3, docs/man3/SDL_CDtrack.3,
+	  docs/man3/SDL_CondBroadcast.3, docs/man3/SDL_ConvertAudio.3,
+	  docs/man3/SDL_CreateSemaphore.3, docs/man3/SDL_CreateThread.3,
+	  docs/man3/SDL_CreateYUVOverlay.3, docs/man3/SDL_DestroyMutex.3,
+	  docs/man3/SDL_DestroySemaphore.3,
+	  docs/man3/SDL_DisplayYUVOverlay.3,
+	  docs/man3/SDL_EnableKeyRepeat.3, docs/man3/SDL_Event.3,
+	  docs/man3/SDL_EventState.3, docs/man3/SDL_FreeWAV.3,
+	  docs/man3/SDL_FreeYUVOverlay.3, docs/man3/SDL_GL_GetAttribute.3,
+	  docs/man3/SDL_GL_SetAttribute.3, docs/man3/SDL_GLattr.3,
+	  docs/man3/SDL_GetAppState.3, docs/man3/SDL_GetAudioStatus.3,
+	  docs/man3/SDL_GetCursor.3, docs/man3/SDL_GetModState.3,
+	  docs/man3/SDL_GetMouseState.3, docs/man3/SDL_GetRGB.3,
+	  docs/man3/SDL_JoyAxisEvent.3, docs/man3/SDL_JoyButtonEvent.3,
+	  docs/man3/SDL_JoyHatEvent.3, docs/man3/SDL_JoystickGetAxis.3,
+	  docs/man3/SDL_JoystickGetBall.3,
+	  docs/man3/SDL_JoystickNumButtons.3,
+	  docs/man3/SDL_JoystickUpdate.3, docs/man3/SDL_KeyboardEvent.3,
+	  docs/man3/SDL_ListModes.3, docs/man3/SDL_LoadBMP.3,
+	  docs/man3/SDL_LoadWAV.3, docs/man3/SDL_LockAudio.3,
+	  docs/man3/SDL_LockSurface.3, docs/man3/SDL_LockYUVOverlay.3,
+	  docs/man3/SDL_MapRGB.3, docs/man3/SDL_MapRGBA.3,
+	  docs/man3/SDL_MixAudio.3, docs/man3/SDL_MouseButtonEvent.3,
+	  docs/man3/SDL_MouseMotionEvent.3, docs/man3/SDL_PeepEvents.3,
+	  docs/man3/SDL_PollEvent.3, docs/man3/SDL_RWFromFile.3,
+	  docs/man3/SDL_ResizeEvent.3, docs/man3/SDL_SetColorKey.3,
+	  docs/man3/SDL_SetColors.3, docs/man3/SDL_SetCursor.3,
+	  docs/man3/SDL_SetEventFilter.3, docs/man3/SDL_SetGammaRamp.3,
+	  docs/man3/SDL_SetVideoMode.3, docs/man3/SDL_ShowCursor.3,
+	  docs/man3/SDL_SysWMEvent.3, docs/man3/SDL_UnlockAudio.3,
+	  docs/man3/SDL_UnlockSurface.3, docs/man3/SDL_VideoInfo.3,
+	  docs/man3/SDL_WM_GetCaption.3, docs/man3/SDL_WM_GrabInput.3,
+	  docs/man3/SDL_WM_SetCaption.3, docs/man3/SDL_WM_SetIcon.3,
+	  docs/man3/SDL_WaitEvent.3, docs/man3/SDL_WarpMouse.3,
+	  docs/man3/SDL_mutexP.3, docs/man3/SDL_mutexV.3,
+	  src/joystick/amigaos/Makefile.am,
+	  src/joystick/amigaos/Makefile.in,
+	  src/joystick/amigaos/SDL_sysjoystick.c, docs/man3/Makefile.am,
+	  docs/man3/Makefile.in, docs/man3/SDL_AddTimer.3,
+	  docs/man3/SDL_AudioCVT.3, docs/man3/SDL_CDClose.3,
+	  docs/man3/SDL_CDName.3, docs/man3/SDL_CDNumDrives.3,
+	  docs/man3/SDL_CDOpen.3, docs/man3/SDL_CDPause.3,
+	  docs/man3/SDL_CDPlay.3, docs/man3/SDL_CDResume.3,
+	  docs/man3/SDL_CDStop.3, docs/man3/SDL_CloseAudio.3,
+	  docs/man3/SDL_Color.3, docs/man3/SDL_CondSignal.3,
+	  docs/man3/SDL_CondWait.3, docs/man3/SDL_CondWaitTimeout.3,
+	  docs/man3/SDL_ConvertSurface.3, docs/man3/SDL_CreateCond.3,
+	  docs/man3/SDL_CreateCursor.3, docs/man3/SDL_CreateMutex.3,
+	  docs/man3/SDL_CreateRGBSurface.3,
+	  docs/man3/SDL_CreateRGBSurfaceFrom.3, docs/man3/SDL_Delay.3,
+	  docs/man3/SDL_DestroyCond.3, docs/man3/SDL_DisplayFormat.3,
+	  docs/man3/SDL_DisplayFormatAlpha.3,
+	  docs/man3/SDL_EnableUNICODE.3, docs/man3/SDL_ExposeEvent.3,
+	  docs/man3/SDL_FillRect.3, docs/man3/SDL_Flip.3,
+	  docs/man3/SDL_FreeCursor.3, docs/man3/SDL_FreeSurface.3,
+	  docs/man3/SDL_GL_GetProcAddress.3,
+	  docs/man3/SDL_GL_LoadLibrary.3, docs/man3/SDL_GL_SwapBuffers.3,
+	  docs/man3/SDL_GetClipRect.3, docs/man3/SDL_GetError.3,
+	  docs/man3/SDL_GetEventFilter.3, docs/man3/SDL_GetGamma.3,
+	  docs/man3/SDL_GetGammaRamp.3, docs/man3/SDL_GetKeyName.3,
+	  docs/man3/SDL_GetKeyState.3, docs/man3/SDL_GetRGBA.3,
+	  docs/man3/SDL_GetRelativeMouseState.3,
+	  docs/man3/SDL_GetThreadID.3, docs/man3/SDL_GetTicks.3,
+	  docs/man3/SDL_GetVideoInfo.3, docs/man3/SDL_GetVideoSurface.3,
+	  docs/man3/SDL_Init.3, docs/man3/SDL_InitSubSystem.3,
+	  docs/man3/SDL_JoyBallEvent.3, docs/man3/SDL_JoystickClose.3,
+	  docs/man3/SDL_JoystickEventState.3,
+	  docs/man3/SDL_JoystickGetButton.3,
+	  docs/man3/SDL_JoystickGetHat.3, docs/man3/SDL_JoystickIndex.3,
+	  docs/man3/SDL_JoystickName.3, docs/man3/SDL_JoystickNumAxes.3,
+	  docs/man3/SDL_JoystickNumBalls.3,
+	  docs/man3/SDL_JoystickNumHats.3, docs/man3/SDL_JoystickOpen.3,
+	  docs/man3/SDL_JoystickOpened.3, docs/man3/SDL_KillThread.3,
+	  docs/man3/SDL_NumJoysticks.3, docs/man3/SDL_OpenAudio.3,
+	  docs/man3/SDL_Overlay.3, docs/man3/SDL_Palette.3,
+	  docs/man3/SDL_PauseAudio.3, docs/man3/SDL_PixelFormat.3,
+	  docs/man3/SDL_PumpEvents.3, docs/man3/SDL_PushEvent.3,
+	  docs/man3/SDL_Quit.3, docs/man3/SDL_QuitEvent.3,
+	  docs/man3/SDL_QuitSubSystem.3, docs/man3/SDL_Rect.3,
+	  docs/man3/SDL_RemoveTimer.3, docs/man3/SDL_SaveBMP.3,
+	  docs/man3/SDL_SemPost.3, docs/man3/SDL_SemTryWait.3,
+	  docs/man3/SDL_SemValue.3, docs/man3/SDL_SemWait.3,
+	  docs/man3/SDL_SemWaitTimeout.3, docs/man3/SDL_SetAlpha.3,
+	  docs/man3/SDL_SetClipRect.3, docs/man3/SDL_SetGamma.3,
+	  docs/man3/SDL_SetModState.3, docs/man3/SDL_SetPalette.3,
+	  docs/man3/SDL_SetTimer.3, docs/man3/SDL_Surface.3,
+	  docs/man3/SDL_ThreadID.3, docs/man3/SDL_UnlockYUVOverlay.3,
+	  docs/man3/SDL_UpdateRect.3, docs/man3/SDL_UpdateRects.3,
+	  docs/man3/SDL_UserEvent.3, docs/man3/SDL_VideoDriverName.3,
+	  docs/man3/SDL_VideoModeOK.3, docs/man3/SDL_WM_IconifyWindow.3,
+	  docs/man3/SDL_WM_ToggleFullScreen.3, docs/man3/SDL_WaitThread.3,
+	  docs/man3/SDL_WasInit.3, docs/man3/SDL_keysym.3, test/.gdbinit,
+	  test/Makefile.am, test/README, test/autogen.sh, test/checkkeys.c,
+	  test/config.guess, test/config.sub, test/configure.in,
+	  test/icon.bmp, test/install-sh, test/missing, test/mkinstalldirs,
+	  test/moose.dat, test/sail.bmp, test/sample.bmp, test/sample.wav,
+	  test/testcdrom.c, test/testerror.c, test/testgl.c,
+	  test/testkeys.c, test/testlock.c, test/testpalette.c,
+	  test/testsprite.c, test/testwm.c, include/Makefile.am,
+	  include/Makefile.in, include/SDL.h, include/SDL_active.h,
+	  include/SDL_audio.h, include/SDL_byteorder.h,
+	  include/SDL_cdrom.h, include/SDL_copying.h, include/SDL_endian.h,
+	  include/SDL_error.h, include/SDL_events.h, include/SDL_getenv.h,
+	  include/SDL_joystick.h, include/SDL_keyboard.h,
+	  include/SDL_keysym.h, include/SDL_loadso.h, include/SDL_main.h,
+	  include/SDL_mouse.h, include/SDL_mutex.h, include/SDL_name.h,
+	  include/SDL_opengl.h, include/SDL_quit.h, include/SDL_rwops.h,
+	  include/SDL_syswm.h, include/SDL_thread.h, include/SDL_timer.h,
+	  include/SDL_types.h, include/SDL_version.h, include/SDL_video.h,
+	  include/begin_code.h, include/close_code.h, test/.cvsignore,
+	  test/COPYING, test/acinclude.m4, test/graywin.c, test/loopwave.c,
+	  test/picture.xbm, test/testalpha.c, test/testbitmap.c,
+	  test/testgamma.c, test/testhread.c, test/testjoystick.c,
+	  test/testoverlay.c, test/testoverlay2.c, test/testsem.c,
+	  test/testtimer.c, test/testtypes.c, test/testver.c,
+	  test/testvidinfo.c, test/testwin.c, test/threadwin.c,
+	  test/torturethread.c: Import
+
+2003-12-26 08:02  tfrieden
+
+	* BUGS, Borland.html, CWprojects.sea.bin, PBProjects.tar.gz,
+	  README, README.AmigaOS, README.DC, README.PicoGUI, SDL.qpg.in,
+	  SDL.spec.in, TODO, VisualC.html, VisualC7.zip, VisualCE.zip,
+	  WhatsNew, aclocal.m4, configure, configure.in, depcomp,
+	  docs.html, ltmain.sh, sdl-config.in, Borland.zip, COPYING,
+	  CREDITS, EpocBuildFiles.zip, INSTALL, MPWmake.sea.bin,
+	  Makefile.am, Makefile.dc, Makefile.in, README-SDL.txt,
+	  README.CVS, README.Epoc, README.MacOS, README.MacOSX,
+	  README.MiNT, README.NanoX, README.QNX, README.Qtopia,
+	  README.WinCE, VisualC.zip, acinclude.m4, autogen.sh,
+	  config.guess, config.sub, install-sh, ltconfig, missing,
+	  mkinstalldirs, sdl.m4, strip_fPIC.sh, src/Makefile.am,
+	  src/Makefile.in, src/SDL.c, src/SDL_error.c, src/SDL_error_c.h,
+	  src/SDL_fatal.c, src/SDL_fatal.h, src/SDL_getenv.c,
+	  src/SDL_loadso.c, src/audio/Makefile.am, src/audio/Makefile.in,
+	  src/audio/SDL_audio.c, src/audio/SDL_audio_c.h,
+	  src/audio/SDL_audiocvt.c, src/audio/SDL_audiodev.c,
+	  src/audio/SDL_audiodev_c.h, src/audio/SDL_audiomem.c,
+	  src/audio/SDL_audiomem.h, src/audio/SDL_mixer.c,
+	  src/audio/SDL_mixer_MMX.c, src/audio/SDL_mixer_MMX.h,
+	  src/audio/SDL_mixer_MMX_VC.c, src/audio/SDL_mixer_MMX_VC.h,
+	  src/audio/SDL_mixer_m68k.c, src/audio/SDL_mixer_m68k.h,
+	  src/audio/SDL_sysaudio.h, src/audio/SDL_wave.c,
+	  src/audio/SDL_wave.h, src/audio/dc/Makefile.am,
+	  src/audio/dc/Makefile.in, src/audio/dc/SDL_dcaudio.c,
+	  src/audio/dc/SDL_dcaudio.h, src/audio/dc/aica.c,
+	  src/audio/dc/aica.h, src/audio/dma/Makefile.am,
+	  src/audio/dma/Makefile.in, src/audio/dma/SDL_dmaaudio.c,
+	  src/audio/dma/SDL_dmaaudio.h, src/audio/dsp/Makefile.am,
+	  src/audio/dsp/Makefile.in, src/audio/dsp/SDL_dspaudio.c,
+	  src/audio/dsp/SDL_dspaudio.h, src/audio/esd/Makefile.am,
+	  src/audio/esd/Makefile.in, src/audio/esd/SDL_esdaudio.c,
+	  src/audio/esd/SDL_esdaudio.h, src/audio/mme/Makefile.am,
+	  src/audio/mme/Makefile.in, src/audio/mme/SDL_mmeaudio.c,
+	  src/audio/mme/SDL_mmeaudio.h, src/audio/nas/Makefile.am,
+	  src/audio/nas/Makefile.in, src/audio/nas/SDL_nasaudio.c,
+	  src/audio/nas/SDL_nasaudio.h, src/audio/nto/Makefile.am,
+	  src/audio/nto/Makefile.in, src/audio/nto/SDL_nto_audio.c,
+	  src/audio/nto/SDL_nto_audio.h, src/audio/sun/Makefile.am,
+	  src/audio/sun/Makefile.in, src/audio/sun/SDL_sunaudio.c,
+	  src/audio/sun/SDL_sunaudio.h, src/audio/ums/Makefile.am,
+	  src/audio/ums/SDL_umsaudio.c, src/audio/ums/SDL_umsaudio.h,
+	  src/file/Makefile.am, src/file/Makefile.in, src/file/SDL_rwops.c,
+	  src/main/Makefile.am, src/main/Makefile.in, src/main/dummy.c,
+	  src/main/amigaos4/SDL_main.c, src/main/beos/SDL_BeApp.cc,
+	  src/main/beos/SDL_BeApp.h, src/main/epoc/SDL_main.cpp,
+	  src/main/macos/SDL.r, src/main/macos/SDL_main.c,
+	  src/main/macos/SIZE.r, src/main/macos/exports/Makefile,
+	  src/main/macos/exports/SDL.x, src/main/macos/exports/gendef.pl,
+	  src/main/macosx/.cvsignore, src/main/macosx/Info.plist.in,
+	  src/main/macosx/Makefile.am, src/main/macosx/SDLMain.h,
+	  src/main/macosx/SDLMain.m, src/main/macosx/info.nib,
+	  src/main/macosx/SDLMain.nib/classes.nib,
+	  src/main/macosx/SDLMain.nib/info.nib,
+	  src/main/macosx/SDLMain.nib/objects.nib,
+	  src/main/win32/SDL_main.c, src/audio/alsa/Makefile.am,
+	  src/audio/alsa/Makefile.in, src/audio/alsa/SDL_alsa_audio.c,
+	  src/audio/alsa/SDL_alsa_audio.h, src/audio/arts/Makefile.am,
+	  src/audio/arts/Makefile.in, src/audio/arts/SDL_artsaudio.c,
+	  src/audio/arts/SDL_artsaudio.h, src/audio/baudio/Makefile.am,
+	  src/audio/baudio/Makefile.in, src/audio/baudio/SDL_beaudio.cc,
+	  src/audio/baudio/SDL_beaudio.h, src/audio/disk/Makefile.am,
+	  src/audio/disk/Makefile.in, src/audio/disk/SDL_diskaudio.c,
+	  src/audio/disk/SDL_diskaudio.h, src/audio/dmedia/Makefile.am,
+	  src/audio/dmedia/Makefile.in, src/audio/dmedia/SDL_irixaudio.c,
+	  src/audio/dmedia/SDL_irixaudio.h, src/audio/macrom/Makefile.am,
+	  src/audio/macrom/Makefile.in, src/audio/macrom/SDL_romaudio.c,
+	  src/audio/macrom/SDL_romaudio.h, src/audio/mint/Makefile.am,
+	  src/audio/mint/Makefile.in, src/audio/mint/SDL_mintaudio.c,
+	  src/audio/mint/SDL_mintaudio.h,
+	  src/audio/mint/SDL_mintaudio_dma8.c,
+	  src/audio/mint/SDL_mintaudio_dma8.h,
+	  src/audio/mint/SDL_mintaudio_gsxb.c,
+	  src/audio/mint/SDL_mintaudio_gsxb.h,
+	  src/audio/mint/SDL_mintaudio_it.S,
+	  src/audio/mint/SDL_mintaudio_mcsn.c,
+	  src/audio/mint/SDL_mintaudio_mcsn.h,
+	  src/audio/mint/SDL_mintaudio_stfa.c,
+	  src/audio/mint/SDL_mintaudio_stfa.h,
+	  src/audio/mint/SDL_mintaudio_xbios.c,
+	  src/audio/paudio/Makefile.am, src/audio/paudio/Makefile.in,
+	  src/audio/paudio/SDL_paudio.c, src/audio/paudio/SDL_paudio.h,
+	  src/audio/ums/Makefile.in, src/audio/windib/Makefile.am,
+	  src/audio/windib/Makefile.in, src/audio/windib/SDL_dibaudio.c,
+	  src/audio/windib/SDL_dibaudio.h, src/audio/windx5/Makefile.am,
+	  src/audio/windx5/Makefile.in, src/audio/windx5/SDL_dx5audio.c,
+	  src/audio/windx5/SDL_dx5audio.h, src/cdrom/Makefile.am,
+	  src/cdrom/Makefile.in, src/cdrom/SDL_cdrom.c,
+	  src/cdrom/SDL_syscdrom.h, src/cdrom/aix/Makefile.am,
+	  src/cdrom/aix/Makefile.in, src/cdrom/aix/SDL_syscdrom.c,
+	  src/cdrom/beos/Makefile.am, src/cdrom/beos/Makefile.in,
+	  src/cdrom/beos/SDL_syscdrom.cc, src/cdrom/bsdi/Makefile.am,
+	  src/cdrom/bsdi/Makefile.in, src/cdrom/bsdi/SDL_syscdrom.c,
+	  src/cdrom/dc/Makefile.am, src/cdrom/dc/Makefile.in,
+	  src/cdrom/dc/SDL_syscdrom.c, src/cdrom/dummy/Makefile.am,
+	  src/cdrom/dummy/Makefile.in, src/cdrom/dummy/SDL_syscdrom.c,
+	  src/cdrom/freebsd/Makefile.am, src/cdrom/freebsd/Makefile.in,
+	  src/cdrom/freebsd/SDL_syscdrom.c, src/cdrom/linux/Makefile.am,
+	  src/cdrom/linux/Makefile.in, src/cdrom/linux/SDL_syscdrom.c,
+	  src/cdrom/macos/Makefile.am, src/cdrom/macos/Makefile.in,
+	  src/cdrom/macos/SDL_syscdrom.c, src/cdrom/macos/SDL_syscdrom_c.h,
+	  src/cdrom/macosx/AudioFilePlayer.cpp,
+	  src/cdrom/macosx/AudioFileReaderThread.cpp,
+	  src/cdrom/macosx/CAGuard.cpp, src/cdrom/macosx/CDPlayer.cpp,
+	  src/cdrom/macosx/Makefile.am, src/cdrom/macosx/Makefile.in,
+	  src/cdrom/macosx/SDL_syscdrom.c, src/cdrom/openbsd/Makefile.am,
+	  src/cdrom/openbsd/Makefile.in, src/cdrom/openbsd/SDL_syscdrom.c,
+	  src/cdrom/osf/Makefile.am, src/cdrom/osf/Makefile.in,
+	  src/cdrom/osf/SDL_syscdrom.c, src/cdrom/qnx/Makefile.am,
+	  src/cdrom/qnx/Makefile.in, src/cdrom/qnx/SDL_syscdrom.c,
+	  src/cdrom/win32/Makefile.am, src/cdrom/win32/Makefile.in,
+	  src/cdrom/win32/SDL_syscdrom.c, src/timer/Makefile.am,
+	  src/timer/Makefile.in, src/timer/SDL_systimer.h,
+	  src/timer/SDL_timer.c, src/timer/SDL_timer_c.h,
+	  src/timer/amigaos/SDL_systimer.c,
+	  src/timer/amigaos4/SDL_systimer.c, src/timer/beos/SDL_systimer.c,
+	  src/timer/dc/SDL_systimer.c, src/timer/epoc/SDL_systimer.cpp,
+	  src/timer/macos/FastTimes.c, src/timer/macos/FastTimes.h,
+	  src/timer/macos/SDL_MPWtimer.c, src/timer/macos/SDL_systimer.c,
+	  src/timer/mint/SDL_systimer.c, src/timer/mint/SDL_vbltimer.S,
+	  src/timer/mint/SDL_vbltimer_s.h, src/timer/riscos/SDL_systimer.c,
+	  src/timer/win32/SDL_systimer.c, src/video/Makefile.am,
+	  src/video/Makefile.in, src/video/SDL_RLEaccel.c,
+	  src/video/SDL_RLEaccel_c.h, src/video/SDL_blit.c,
+	  src/video/SDL_blit.h, src/video/SDL_blit_0.c,
+	  src/video/SDL_blit_1.c, src/video/SDL_blit_A.c,
+	  src/video/SDL_blit_N.c, src/video/SDL_bmp.c,
+	  src/video/SDL_cursor.c, src/video/SDL_cursor_c.h,
+	  src/video/SDL_gamma.c, src/video/SDL_glfuncs.h,
+	  src/video/SDL_leaks.h, src/video/SDL_memops.h,
+	  src/video/SDL_pixels.c, src/video/SDL_pixels_c.h,
+	  src/video/SDL_stretch.c, src/video/SDL_stretch_c.h,
+	  src/video/SDL_surface.c, src/video/SDL_sysvideo.h,
+	  src/video/SDL_video.c, src/video/SDL_yuv.c,
+	  src/video/SDL_yuv_mmx.c, src/video/SDL_yuv_sw.c,
+	  src/video/SDL_yuv_sw_c.h, src/video/SDL_yuvfuncs.h,
+	  src/video/blank_cursor.h, src/video/default_cursor.h,
+	  src/video/mmx.h, src/video/dc/Makefile.am,
+	  src/video/dc/Makefile.in, src/video/dc/SDL_dcevents.c,
+	  src/video/dc/SDL_dcevents_c.h, src/video/dc/SDL_dcmouse.c,
+	  src/video/dc/SDL_dcmouse_c.h, src/video/dc/SDL_dcvideo.c,
+	  src/video/dc/SDL_dcvideo.h, src/video/dga/Makefile.am,
+	  src/video/dga/Makefile.in, src/video/dga/SDL_dgaevents.c,
+	  src/video/dga/SDL_dgaevents_c.h, src/video/dga/SDL_dgamouse.c,
+	  src/video/dga/SDL_dgamouse_c.h, src/video/dga/SDL_dgavideo.c,
+	  src/video/dga/SDL_dgavideo.h, src/video/gem/Makefile.am,
+	  src/video/gem/Makefile.in, src/video/gem/SDL_gemevents.c,
+	  src/video/gem/SDL_gemevents_c.h, src/video/gem/SDL_gemmouse.c,
+	  src/video/gem/SDL_gemmouse_c.h, src/video/gem/SDL_gemvideo.c,
+	  src/video/gem/SDL_gemvideo.h, src/video/gem/SDL_gemwm.c,
+	  src/video/gem/SDL_gemwm_c.h, src/video/ggi/Makefile.am,
+	  src/video/ggi/Makefile.in, src/video/ggi/SDL_ggievents.c,
+	  src/video/ggi/SDL_ggievents_c.h, src/video/ggi/SDL_ggikeys.h,
+	  src/video/ggi/SDL_ggimouse.c, src/video/ggi/SDL_ggimouse_c.h,
+	  src/video/ggi/SDL_ggivideo.c, src/video/ggi/SDL_ggivideo.h,
+	  src/video/x11/Makefile.am, src/video/x11/Makefile.in,
+	  src/video/x11/SDL_x11dga.c, src/video/x11/SDL_x11events_c.h,
+	  src/video/x11/SDL_x11gamma.c, src/video/x11/SDL_x11gamma_c.h,
+	  src/video/x11/SDL_x11gl.c, src/video/x11/SDL_x11gl_c.h,
+	  src/video/x11/SDL_x11image_c.h, src/video/x11/SDL_x11modes.c,
+	  src/video/x11/SDL_x11modes_c.h, src/video/x11/SDL_x11mouse.c,
+	  src/video/x11/SDL_x11mouse_c.h, src/video/x11/SDL_x11video.c,
+	  src/video/x11/SDL_x11video.h, src/video/x11/SDL_x11wm.c,
+	  src/video/x11/SDL_x11wm_c.h, src/video/x11/SDL_x11yuv.c,
+	  src/video/x11/SDL_x11yuv_c.h, src/video/aalib/Makefile.am,
+	  src/video/aalib/Makefile.in, src/video/aalib/SDL_aaevents.c,
+	  src/video/aalib/SDL_aaevents_c.h, src/video/aalib/SDL_aamouse.c,
+	  src/video/aalib/SDL_aamouse_c.h, src/video/aalib/SDL_aavideo.c,
+	  src/video/aalib/SDL_aavideo.h, src/video/ataricommon/Makefile.am,
+	  src/video/ataricommon/Makefile.in,
+	  src/video/ataricommon/SDL_ataric2p.S,
+	  src/video/ataricommon/SDL_ataric2p060.c,
+	  src/video/ataricommon/SDL_ataric2p060_c.h,
+	  src/video/ataricommon/SDL_ataric2p_s.h,
+	  src/video/ataricommon/SDL_atarieddi.S,
+	  src/video/ataricommon/SDL_atarieddi_s.h,
+	  src/video/ataricommon/SDL_atarievents.c,
+	  src/video/ataricommon/SDL_atarievents_c.h,
+	  src/video/ataricommon/SDL_atarikeys.h,
+	  src/video/ataricommon/SDL_atarimxalloc.c,
+	  src/video/ataricommon/SDL_atarimxalloc_c.h,
+	  src/video/ataricommon/SDL_biosevents.c,
+	  src/video/ataricommon/SDL_biosevents_c.h,
+	  src/video/ataricommon/SDL_gemdosevents.c,
+	  src/video/ataricommon/SDL_gemdosevents_c.h,
+	  src/video/ataricommon/SDL_ikbdevents.c,
+	  src/video/ataricommon/SDL_ikbdevents_c.h,
+	  src/video/ataricommon/SDL_ikbdinterrupt.S,
+	  src/video/ataricommon/SDL_ikbdinterrupt_s.h,
+	  src/video/ataricommon/SDL_xbiosevents.c,
+	  src/video/ataricommon/SDL_xbiosevents_c.h,
+	  src/video/ataricommon/SDL_xbiosinterrupt.S,
+	  src/video/ataricommon/SDL_xbiosinterrupt_s.h,
+	  src/video/cybergfx/SDL_amigamouse.c,
+	  src/video/cybergfx/SDL_cgxgl_c.h,
+	  src/video/cybergfx/SDL_cgximage.c,
+	  src/video/cybergfx/SDL_cgximage_c.h,
+	  src/video/cybergfx/SDL_cgxvideo.c,
+	  src/video/cybergfx/SDL_cgxvideo.h,
+	  src/video/cybergfx/SDL_cgxwm_c.h,
+	  src/video/cybergfx/SDL_cgxyuv.c, src/video/directfb/Makefile.am,
+	  src/video/directfb/Makefile.in,
+	  src/video/directfb/SDL_DirectFB_events.c,
+	  src/video/directfb/SDL_DirectFB_events.h,
+	  src/video/directfb/SDL_DirectFB_video.c,
+	  src/video/directfb/SDL_DirectFB_video.h,
+	  src/video/directfb/SDL_DirectFB_yuv.c,
+	  src/video/directfb/SDL_DirectFB_yuv.h,
+	  src/video/dummy/Makefile.am, src/video/dummy/Makefile.in,
+	  src/video/dummy/SDL_nullevents.c,
+	  src/video/dummy/SDL_nullevents_c.h,
+	  src/video/dummy/SDL_nullmouse.c,
+	  src/video/dummy/SDL_nullmouse_c.h,
+	  src/video/dummy/SDL_nullvideo.c, src/video/dummy/SDL_nullvideo.h,
+	  src/video/epoc/Makefile.am, src/video/epoc/Makefile.in,
+	  src/video/epoc/SDL_epocevents.cpp,
+	  src/video/epoc/SDL_epocevents_c.h,
+	  src/video/epoc/SDL_epocvideo.cpp, src/video/epoc/SDL_epocvideo.h,
+	  src/video/fbcon/3dfx_mmio.h, src/video/fbcon/3dfx_regs.h,
+	  src/video/fbcon/Makefile.am, src/video/fbcon/Makefile.in,
+	  src/video/fbcon/SDL_fb3dfx.c, src/video/fbcon/SDL_fb3dfx.h,
+	  src/video/fbcon/SDL_fbelo.c, src/video/fbcon/SDL_fbelo.h,
+	  src/video/fbcon/SDL_fbevents.c, src/video/fbcon/SDL_fbevents_c.h,
+	  src/video/fbcon/SDL_fbkeys.h, src/video/fbcon/SDL_fbmatrox.c,
+	  src/video/fbcon/SDL_fbmatrox.h, src/video/fbcon/SDL_fbmouse.c,
+	  src/video/fbcon/SDL_fbmouse_c.h, src/video/fbcon/SDL_fbriva.c,
+	  src/video/fbcon/SDL_fbriva.h, src/video/fbcon/SDL_fbvideo.c,
+	  src/video/fbcon/SDL_fbvideo.h, src/video/fbcon/matrox_mmio.h,
+	  src/video/fbcon/matrox_regs.h, src/video/fbcon/riva_mmio.h,
+	  src/video/fbcon/riva_regs.h, src/video/macdsp/Makefile.am,
+	  src/video/macdsp/Makefile.in, src/video/macdsp/SDL_dspvideo.c,
+	  src/video/macdsp/SDL_dspvideo.h, src/video/macrom/Makefile.am,
+	  src/video/macrom/Makefile.in, src/video/macrom/SDL_romvideo.c,
+	  src/video/macrom/SDL_romvideo.h, src/video/nanox/Makefile.am,
+	  src/video/nanox/Makefile.in, src/video/nanox/SDL_nxevents.c,
+	  src/video/nanox/SDL_nxevents_c.h, src/video/nanox/SDL_nximage.c,
+	  src/video/nanox/SDL_nximage_c.h, src/video/nanox/SDL_nxmodes.c,
+	  src/video/nanox/SDL_nxmodes_c.h, src/video/nanox/SDL_nxmouse.c,
+	  src/video/nanox/SDL_nxmouse_c.h, src/video/nanox/SDL_nxvideo.c,
+	  src/video/nanox/SDL_nxvideo.h, src/video/nanox/SDL_nxwm.c,
+	  src/video/nanox/SDL_nxwm_c.h, src/video/photon/Makefile.am,
+	  src/video/photon/Makefile.in, src/video/photon/SDL_ph_events.c,
+	  src/video/photon/SDL_ph_events_c.h,
+	  src/video/photon/SDL_ph_image.c,
+	  src/video/photon/SDL_ph_image_c.h,
+	  src/video/photon/SDL_ph_modes.c,
+	  src/video/photon/SDL_ph_modes_c.h,
+	  src/video/photon/SDL_ph_mouse.c,
+	  src/video/photon/SDL_ph_mouse_c.h,
+	  src/video/photon/SDL_ph_video.c, src/video/photon/SDL_ph_video.h,
+	  src/video/photon/SDL_ph_wm.c, src/video/photon/SDL_ph_wm_c.h,
+	  src/video/photon/SDL_phyuv.c, src/video/photon/SDL_phyuv_c.h,
+	  src/video/ps2gs/Makefile.am, src/video/ps2gs/Makefile.in,
+	  src/video/ps2gs/SDL_gsevents.c, src/video/ps2gs/SDL_gsevents_c.h,
+	  src/video/ps2gs/SDL_gskeys.h, src/video/ps2gs/SDL_gsmouse.c,
+	  src/video/ps2gs/SDL_gsmouse_c.h, src/video/ps2gs/SDL_gsvideo.c,
+	  src/video/ps2gs/SDL_gsvideo.h, src/video/ps2gs/SDL_gsyuv.c,
+	  src/video/ps2gs/SDL_gsyuv_c.h, src/video/qtopia/Makefile.am,
+	  src/video/qtopia/Makefile.in, src/video/qtopia/SDL_QWin.cc,
+	  src/video/qtopia/SDL_QWin.h, src/video/qtopia/SDL_lowvideo.h,
+	  src/video/qtopia/SDL_sysevents.cc,
+	  src/video/qtopia/SDL_sysevents_c.h,
+	  src/video/qtopia/SDL_sysmouse.cc,
+	  src/video/qtopia/SDL_sysmouse_c.h,
+	  src/video/qtopia/SDL_sysvideo.cc, src/video/qtopia/SDL_syswm.cc,
+	  src/video/qtopia/SDL_syswm_c.h, src/video/quartz/Makefile.am,
+	  src/video/quartz/Makefile.in,
+	  src/video/quartz/SDL_QuartzEvents.m,
+	  src/video/quartz/SDL_QuartzKeys.h,
+	  src/video/quartz/SDL_QuartzVideo.h,
+	  src/video/quartz/SDL_QuartzVideo.m,
+	  src/video/quartz/SDL_QuartzWM.m,
+	  src/video/quartz/SDL_QuartzWindow.m,
+	  src/video/riscos/Makefile.am, src/video/riscos/Makefile.in,
+	  src/video/riscos/SDL_riscosFullScreenVideo.c,
+	  src/video/riscos/SDL_riscosevents.c,
+	  src/video/riscos/SDL_riscosevents_c.h,
+	  src/video/riscos/SDL_riscosmouse.c,
+	  src/video/riscos/SDL_riscosmouse_c.h,
+	  src/video/riscos/SDL_riscossprite.c,
+	  src/video/riscos/SDL_riscostask.c,
+	  src/video/riscos/SDL_riscostask.h,
+	  src/video/riscos/SDL_riscosvideo.c,
+	  src/video/riscos/SDL_riscosvideo.h,
+	  src/video/riscos/SDL_wimppoll.c,
+	  src/video/riscos/SDL_wimpvideo.c, src/video/svga/Makefile.am,
+	  src/video/svga/Makefile.in, src/video/svga/SDL_svgaevents.c,
+	  src/video/svga/SDL_svgaevents_c.h,
+	  src/video/svga/SDL_svgamouse.c, src/video/svga/SDL_svgamouse_c.h,
+	  src/video/svga/SDL_svgavideo.c, src/video/svga/SDL_svgavideo.h,
+	  src/video/vgl/Makefile.am, src/video/vgl/Makefile.in,
+	  src/video/vgl/SDL_vglevents.c, src/video/vgl/SDL_vglevents_c.h,
+	  src/video/vgl/SDL_vglmouse.c, src/video/vgl/SDL_vglmouse_c.h,
+	  src/video/vgl/SDL_vglvideo.c, src/video/vgl/SDL_vglvideo.h,
+	  src/video/wincommon/Makefile.am, src/video/wincommon/Makefile.in,
+	  src/video/wincommon/SDL_lowvideo.h,
+	  src/video/wincommon/SDL_sysevents.c,
+	  src/video/wincommon/SDL_sysmouse.c,
+	  src/video/wincommon/SDL_sysmouse_c.h,
+	  src/video/wincommon/SDL_syswm.c,
+	  src/video/wincommon/SDL_syswm_c.h,
+	  src/video/wincommon/SDL_wingl.c,
+	  src/video/wincommon/SDL_wingl_c.h, src/video/wincommon/wmmsg.h,
+	  src/video/windib/Makefile.am, src/video/windib/Makefile.in,
+	  src/video/windib/SDL_dibevents.c,
+	  src/video/windib/SDL_dibevents_c.h,
+	  src/video/windib/SDL_dibvideo.c, src/video/windib/SDL_dibvideo.h,
+	  src/video/windib/SDL_vkeys.h, src/video/windx5/Makefile.am,
+	  src/video/windx5/Makefile.in, src/video/windx5/SDL_dx5events.c,
+	  src/video/windx5/SDL_dx5events_c.h,
+	  src/video/windx5/SDL_dx5video.c, src/video/windx5/SDL_dx5video.h,
+	  src/video/windx5/SDL_dx5yuv.c, src/video/windx5/SDL_dx5yuv_c.h,
+	  src/video/windx5/directx.h, src/video/x11/SDL_x11dga_c.h,
+	  src/video/x11/SDL_x11events.c, src/video/x11/SDL_x11image.c,
+	  src/video/xbios/Makefile.am, src/video/xbios/Makefile.in,
+	  src/video/xbios/SDL_xbios.c, src/video/xbios/SDL_xbios.h,
+	  src/events/Makefile.am, src/events/Makefile.in,
+	  src/events/SDL_active.c, src/events/SDL_events.c,
+	  src/events/SDL_events_c.h, src/events/SDL_expose.c,
+	  src/events/SDL_keyboard.c, src/events/SDL_mouse.c,
+	  src/events/SDL_quit.c, src/events/SDL_resize.c,
+	  src/events/SDL_sysevents.h, src/hermes/COPYING.LIB,
+	  src/hermes/HeadMMX.h, src/hermes/HeadX86.h,
+	  src/hermes/Makefile.am, src/hermes/Makefile.in,
+	  src/hermes/README, src/hermes/mmx_main.asm,
+	  src/hermes/mmxp2_32.asm, src/hermes/x86_main.asm,
+	  src/hermes/x86p_16.asm, src/hermes/x86p_32.asm,
+	  src/joystick/Makefile.am, src/joystick/Makefile.in,
+	  src/joystick/SDL_joystick.c, src/joystick/SDL_joystick_c.h,
+	  src/joystick/SDL_sysjoystick.h, src/joystick/beos/Makefile.am,
+	  src/joystick/beos/Makefile.in,
+	  src/joystick/beos/SDL_bejoystick.cc,
+	  src/joystick/bsd/Makefile.am, src/joystick/bsd/Makefile.in,
+	  src/joystick/bsd/SDL_sysjoystick.c,
+	  src/joystick/darwin/Makefile.am, src/joystick/darwin/Makefile.in,
+	  src/joystick/darwin/SDL_sysjoystick.c,
+	  src/joystick/dc/Makefile.am, src/joystick/dc/Makefile.in,
+	  src/joystick/dc/SDL_sysjoystick.c,
+	  src/joystick/dummy/Makefile.am, src/joystick/dummy/Makefile.in,
+	  src/joystick/dummy/SDL_sysjoystick.c,
+	  src/joystick/linux/Makefile.am, src/joystick/linux/Makefile.in,
+	  src/joystick/linux/SDL_sysjoystick.c,
+	  src/joystick/macos/Makefile.am, src/joystick/macos/Makefile.in,
+	  src/joystick/macos/SDL_sysjoystick.c,
+	  src/joystick/mint/Makefile.am, src/joystick/mint/Makefile.in,
+	  src/joystick/mint/SDL_sysjoystick.c,
+	  src/joystick/riscos/Makefile.am, src/joystick/riscos/Makefile.in,
+	  src/joystick/riscos/SDL_sysjoystick.c,
+	  src/joystick/win32/Makefile.am, src/joystick/win32/Makefile.in,
+	  src/joystick/win32/SDL_mmjoystick.c, src/thread/Makefile.am,
+	  src/thread/Makefile.in, src/thread/SDL_systhread.h,
+	  src/thread/SDL_thread.c, src/thread/SDL_thread_c.h,
+	  src/thread/amigaos/SDL_syssem.c,
+	  src/thread/amigaos/SDL_systhread.c,
+	  src/thread/amigaos/SDL_systhread_c.h,
+	  src/thread/amigaos/SDL_thread.c,
+	  src/thread/amigaos4/SDL_systhread.c,
+	  src/thread/amigaos4/SDL_systhread_c.h,
+	  src/thread/beos/SDL_syssem.c, src/thread/beos/SDL_systhread.c,
+	  src/thread/beos/SDL_systhread_c.h, src/thread/dc/SDL_syscond.c,
+	  src/thread/dc/SDL_syscond_c.h, src/thread/dc/SDL_sysmutex.c,
+	  src/thread/dc/SDL_sysmutex_c.h, src/thread/dc/SDL_syssem.c,
+	  src/thread/dc/SDL_syssem_c.h, src/thread/dc/SDL_systhread.c,
+	  src/thread/dc/SDL_systhread_c.h,
+	  src/thread/epoc/SDL_sysmutex.cpp, src/thread/epoc/SDL_syssem.cpp,
+	  src/thread/epoc/SDL_systhread.cpp,
+	  src/thread/epoc/SDL_systhread_c.h,
+	  src/thread/generic/SDL_syscond.c,
+	  src/thread/generic/SDL_syscond_c.h,
+	  src/thread/generic/SDL_sysmutex.c,
+	  src/thread/generic/SDL_sysmutex_c.h,
+	  src/thread/generic/SDL_syssem.c,
+	  src/thread/generic/SDL_syssem_c.h,
+	  src/thread/generic/SDL_systhread.c,
+	  src/thread/generic/SDL_systhread_c.h,
+	  src/thread/irix/SDL_systhread.c,
+	  src/thread/irix/SDL_systhread_c.h, src/thread/pth/SDL_syscond.c,
+	  src/thread/pth/SDL_syscond_c.h, src/thread/pth/SDL_sysmutex.c,
+	  src/thread/pth/SDL_sysmutex_c.h, src/thread/pth/SDL_systhread.c,
+	  src/thread/pth/SDL_systhread_c.h,
+	  src/thread/win32/SDL_sysmutex.c, src/thread/win32/SDL_syssem.c,
+	  src/thread/win32/SDL_systhread.c,
+	  src/thread/win32/SDL_systhread_c.h,
+	  src/thread/win32/win_ce_semaphore.c,
+	  src/thread/win32/win_ce_semaphore.h,
+	  src/video/amigaos4/Makefile.am, src/video/amigaos4/Makefile.in,
+	  src/video/amigaos4/SDL_os4video.c, src/video/amigaos4/debug.h,
+	  src/video/bwindow/Makefile.am, src/video/bwindow/Makefile.in,
+	  src/video/bwindow/SDL_BView.h, src/video/bwindow/SDL_BWin.h,
+	  src/video/bwindow/SDL_lowvideo.h,
+	  src/video/bwindow/SDL_sysevents.cc,
+	  src/video/bwindow/SDL_sysevents_c.h,
+	  src/video/bwindow/SDL_sysmouse.cc,
+	  src/video/bwindow/SDL_sysmouse_c.h,
+	  src/video/bwindow/SDL_sysvideo.cc,
+	  src/video/bwindow/SDL_syswm.cc, src/video/bwindow/SDL_syswm_c.h,
+	  src/video/cybergfx/Makefile.am, src/video/cybergfx/Makefile.in,
+	  src/video/cybergfx/SDL_amigaevents.c,
+	  src/video/cybergfx/SDL_amigaevents_c.h,
+	  src/video/cybergfx/SDL_amigamouse_c.h,
+	  src/video/cybergfx/SDL_cgxaccel.c,
+	  src/video/cybergfx/SDL_cgxgl.c,
+	  src/video/cybergfx/SDL_cgxmodes.c,
+	  src/video/cybergfx/SDL_cgxmodes_c.h,
+	  src/video/cybergfx/SDL_cgxwm.c,
+	  src/video/cybergfx/SDL_cgxyuv_c.h,
+	  src/video/maccommon/Makefile.am, src/video/maccommon/Makefile.in,
+	  src/video/maccommon/SDL_lowvideo.h,
+	  src/video/maccommon/SDL_macevents.c,
+	  src/video/maccommon/SDL_macevents_c.h,
+	  src/video/maccommon/SDL_macgl.c,
+	  src/video/maccommon/SDL_macgl_c.h,
+	  src/video/maccommon/SDL_mackeys.h,
+	  src/video/maccommon/SDL_macmouse.c,
+	  src/video/maccommon/SDL_macmouse_c.h,
+	  src/video/maccommon/SDL_macwm.c,
+	  src/video/maccommon/SDL_macwm_c.h, src/video/picogui/Makefile.am,
+	  src/video/picogui/Makefile.in, src/video/picogui/SDL_pgevents.c,
+	  src/video/picogui/SDL_pgevents_c.h,
+	  src/video/picogui/SDL_pgvideo.c, src/video/picogui/SDL_pgvideo.h,
+	  docs/Makefile.am, docs/Makefile.in, docs/index.html,
+	  docs/html/Makefile.am, docs/html/Makefile.in,
+	  docs/html/audio.html, docs/html/cdrom.html, docs/html/event.html,
+	  docs/html/eventfunctions.html, docs/html/eventstructures.html,
+	  docs/html/general.html, docs/html/guide.html,
+	  docs/html/guideaboutsdldoc.html,
+	  docs/html/guideaudioexamples.html,
+	  docs/html/guidebasicsinit.html,
+	  docs/html/guidecdromexamples.html, docs/html/guidecredits.html,
+	  docs/html/guideeventexamples.html, docs/html/guideexamples.html,
+	  docs/html/guideinput.html, docs/html/guideinputkeyboard.html,
+	  docs/html/guidepreface.html, docs/html/guidethebasics.html,
+	  docs/html/guidetimeexamples.html, docs/html/guidevideo.html,
+	  docs/html/guidevideoexamples.html,
+	  docs/html/guidevideoopengl.html, docs/html/index.html,
+	  docs/html/joystick.html, docs/html/reference.html,
+	  docs/html/sdlactiveevent.html, docs/html/sdladdtimer.html,
+	  docs/html/sdlaudiocvt.html, docs/html/sdlaudiospec.html,
+	  docs/html/sdlblitsurface.html, docs/html/sdlbuildaudiocvt.html,
+	  docs/html/sdlcd.html, docs/html/sdlcdclose.html,
+	  docs/html/sdlcdeject.html, docs/html/sdlcdname.html,
+	  docs/html/sdlcdnumdrives.html, docs/html/sdlcdopen.html,
+	  docs/html/sdlcdpause.html, docs/html/sdlcdplay.html,
+	  docs/html/sdlcdplaytracks.html, docs/html/sdlcdresume.html,
+	  docs/html/sdlcdstatus.html, docs/html/sdlcdstop.html,
+	  docs/html/sdlcdtrack.html, docs/html/sdlcloseaudio.html,
+	  docs/html/sdlcolor.html, docs/html/sdlcondbroadcast.html,
+	  docs/html/sdlcondsignal.html, docs/html/sdlcondwait.html,
+	  docs/html/sdlcondwaittimeout.html,
+	  docs/html/sdlconvertaudio.html, docs/html/sdlconvertsurface.html,
+	  docs/html/sdlcreatecond.html, docs/html/sdlcreatecursor.html,
+	  docs/html/sdlcreatemutex.html,
+	  docs/html/sdlcreatergbsurface.html,
+	  docs/html/sdlcreatergbsurfacefrom.html,
+	  docs/html/sdlcreatesemaphore.html,
+	  docs/html/sdlcreatethread.html,
+	  docs/html/sdlcreateyuvoverlay.html, docs/html/sdldelay.html,
+	  docs/html/sdldestroycond.html, docs/html/sdldestroymutex.html,
+	  docs/html/sdldestroysemaphore.html,
+	  docs/html/sdldisplayformat.html,
+	  docs/html/sdldisplayformatalpha.html,
+	  docs/html/sdldisplayyuvoverlay.html,
+	  docs/html/sdlenablekeyrepeat.html,
+	  docs/html/sdlenableunicode.html, docs/html/sdlevent.html,
+	  docs/html/sdleventstate.html, docs/html/sdlexposeevent.html,
+	  docs/html/sdlfillrect.html, docs/html/sdlflip.html,
+	  docs/html/sdlfreecursor.html, docs/html/sdlfreesurface.html,
+	  docs/html/sdlfreewav.html, docs/html/sdlfreeyuvoverlay.html,
+	  docs/html/sdlgetappstate.html, docs/html/sdlgetaudiostatus.html,
+	  docs/html/sdlgetcliprect.html, docs/html/sdlgetcursor.html,
+	  docs/html/sdlgeterror.html, docs/html/sdlgeteventfilter.html,
+	  docs/html/sdlgetgammaramp.html, docs/html/sdlgetkeyname.html,
+	  docs/html/sdlgetkeystate.html, docs/html/sdlgetmodstate.html,
+	  docs/html/sdlgetmousestate.html,
+	  docs/html/sdlgetrelativemousestate.html,
+	  docs/html/sdlgetrgb.html, docs/html/sdlgetrgba.html,
+	  docs/html/sdlgetthreadid.html, docs/html/sdlgetticks.html,
+	  docs/html/sdlgetvideoinfo.html,
+	  docs/html/sdlgetvideosurface.html, docs/html/sdlglattr.html,
+	  docs/html/sdlglgetattribute.html,
+	  docs/html/sdlglgetprocaddress.html,
+	  docs/html/sdlglloadlibrary.html,
+	  docs/html/sdlglsetattribute.html,
+	  docs/html/sdlglswapbuffers.html, docs/html/sdlinit.html,
+	  docs/html/sdlinitsubsystem.html, docs/html/sdljoyaxisevent.html,
+	  docs/html/sdljoyballevent.html, docs/html/sdljoybuttonevent.html,
+	  docs/html/sdljoyhatevent.html, docs/html/sdljoystickclose.html,
+	  docs/html/sdljoystickeventstate.html,
+	  docs/html/sdljoystickgetaxis.html,
+	  docs/html/sdljoystickgetball.html,
+	  docs/html/sdljoystickgetbutton.html,
+	  docs/html/sdljoystickgethat.html,
+	  docs/html/sdljoystickindex.html, docs/html/sdljoystickname.html,
+	  docs/html/sdljoysticknumaxes.html,
+	  docs/html/sdljoysticknumballs.html,
+	  docs/html/sdljoysticknumbuttons.html,
+	  docs/html/sdljoysticknumhats.html,
+	  docs/html/sdljoystickopen.html, docs/html/sdljoystickopened.html,
+	  docs/html/sdljoystickupdate.html, docs/html/sdlkey.html,
+	  docs/html/sdlkeyboardevent.html, docs/html/sdlkeysym.html,
+	  docs/html/sdlkillthread.html, docs/html/sdllistmodes.html,
+	  docs/html/sdlloadbmp.html, docs/html/sdlloadwav.html,
+	  docs/html/sdllockaudio.html, docs/html/sdllocksurface.html,
+	  docs/html/sdllockyuvoverlay.html, docs/html/sdlmaprgb.html,
+	  docs/html/sdlmaprgba.html, docs/html/sdlmixaudio.html,
+	  docs/html/sdlmousebuttonevent.html,
+	  docs/html/sdlmousemotionevent.html, docs/html/sdlmutexp.html,
+	  docs/html/sdlmutexv.html, docs/html/sdlnumjoysticks.html,
+	  docs/html/sdlopenaudio.html, docs/html/sdloverlay.html,
+	  docs/html/sdlpalette.html, docs/html/sdlpauseaudio.html,
+	  docs/html/sdlpeepevents.html, docs/html/sdlpixelformat.html,
+	  docs/html/sdlpollevent.html, docs/html/sdlpumpevents.html,
+	  docs/html/sdlpushevent.html, docs/html/sdlquit.html,
+	  docs/html/sdlquitevent.html, docs/html/sdlquitsubsystem.html,
+	  docs/html/sdlrect.html, docs/html/sdlremovetimer.html,
+	  docs/html/sdlresizeevent.html, docs/html/sdlsavebmp.html,
+	  docs/html/sdlsempost.html, docs/html/sdlsemtrywait.html,
+	  docs/html/sdlsemvalue.html, docs/html/sdlsemwait.html,
+	  docs/html/sdlsemwaittimeout.html, docs/html/sdlsetalpha.html,
+	  docs/html/sdlsetcliprect.html, docs/html/sdlsetcolorkey.html,
+	  docs/html/sdlsetcolors.html, docs/html/sdlsetcursor.html,
+	  docs/html/sdlseteventfilter.html, docs/html/sdlsetgamma.html,
+	  docs/html/sdlsetgammaramp.html, docs/html/sdlsetmodstate.html,
+	  docs/html/sdlsetpalette.html, docs/html/sdlsettimer.html,
+	  docs/html/sdlsetvideomode.html, docs/html/sdlshowcursor.html,
+	  docs/html/sdlsurface.html, docs/html/sdlsyswmevent.html,
+	  docs/html/sdlthreadid.html, docs/html/sdlunlockaudio.html,
+	  docs/html/sdlunlocksurface.html,
+	  docs/html/sdlunlockyuvoverlay.html, docs/html/sdlupdaterect.html,
+	  docs/html/sdlupdaterects.html, docs/html/sdluserevent.html,
+	  docs/html/sdlvideodrivername.html, docs/html/sdlvideoinfo.html,
+	  docs/html/sdlvideomodeok.html, docs/html/sdlwaitevent.html,
+	  docs/html/sdlwaitthread.html, docs/html/sdlwarpmouse.html,
+	  docs/html/sdlwasinit.html, docs/html/sdlwmgetcaption.html,
+	  docs/html/sdlwmgrabinput.html, docs/html/sdlwmiconifywindow.html,
+	  docs/html/sdlwmsetcaption.html, docs/html/sdlwmseticon.html,
+	  docs/html/sdlwmtogglefullscreen.html, docs/html/thread.html,
+	  docs/html/time.html, docs/html/video.html, docs/html/wm.html,
+	  docs/man3/SDLKey.3, docs/man3/SDL_ActiveEvent.3,
+	  docs/man3/SDL_AudioSpec.3, docs/man3/SDL_BlitSurface.3,
+	  docs/man3/SDL_BuildAudioCVT.3, docs/man3/SDL_CD.3,
+	  docs/man3/SDL_CDEject.3, docs/man3/SDL_CDPlayTracks.3,
+	  docs/man3/SDL_CDStatus.3, docs/man3/SDL_CDtrack.3,
+	  docs/man3/SDL_CondBroadcast.3, docs/man3/SDL_ConvertAudio.3,
+	  docs/man3/SDL_CreateSemaphore.3, docs/man3/SDL_CreateThread.3,
+	  docs/man3/SDL_CreateYUVOverlay.3, docs/man3/SDL_DestroyMutex.3,
+	  docs/man3/SDL_DestroySemaphore.3,
+	  docs/man3/SDL_DisplayYUVOverlay.3,
+	  docs/man3/SDL_EnableKeyRepeat.3, docs/man3/SDL_Event.3,
+	  docs/man3/SDL_EventState.3, docs/man3/SDL_FreeWAV.3,
+	  docs/man3/SDL_FreeYUVOverlay.3, docs/man3/SDL_GL_GetAttribute.3,
+	  docs/man3/SDL_GL_SetAttribute.3, docs/man3/SDL_GLattr.3,
+	  docs/man3/SDL_GetAppState.3, docs/man3/SDL_GetAudioStatus.3,
+	  docs/man3/SDL_GetCursor.3, docs/man3/SDL_GetModState.3,
+	  docs/man3/SDL_GetMouseState.3, docs/man3/SDL_GetRGB.3,
+	  docs/man3/SDL_JoyAxisEvent.3, docs/man3/SDL_JoyButtonEvent.3,
+	  docs/man3/SDL_JoyHatEvent.3, docs/man3/SDL_JoystickGetAxis.3,
+	  docs/man3/SDL_JoystickGetBall.3,
+	  docs/man3/SDL_JoystickNumButtons.3,
+	  docs/man3/SDL_JoystickUpdate.3, docs/man3/SDL_KeyboardEvent.3,
+	  docs/man3/SDL_ListModes.3, docs/man3/SDL_LoadBMP.3,
+	  docs/man3/SDL_LoadWAV.3, docs/man3/SDL_LockAudio.3,
+	  docs/man3/SDL_LockSurface.3, docs/man3/SDL_LockYUVOverlay.3,
+	  docs/man3/SDL_MapRGB.3, docs/man3/SDL_MapRGBA.3,
+	  docs/man3/SDL_MixAudio.3, docs/man3/SDL_MouseButtonEvent.3,
+	  docs/man3/SDL_MouseMotionEvent.3, docs/man3/SDL_PeepEvents.3,
+	  docs/man3/SDL_PollEvent.3, docs/man3/SDL_RWFromFile.3,
+	  docs/man3/SDL_ResizeEvent.3, docs/man3/SDL_SetColorKey.3,
+	  docs/man3/SDL_SetColors.3, docs/man3/SDL_SetCursor.3,
+	  docs/man3/SDL_SetEventFilter.3, docs/man3/SDL_SetGammaRamp.3,
+	  docs/man3/SDL_SetVideoMode.3, docs/man3/SDL_ShowCursor.3,
+	  docs/man3/SDL_SysWMEvent.3, docs/man3/SDL_UnlockAudio.3,
+	  docs/man3/SDL_UnlockSurface.3, docs/man3/SDL_VideoInfo.3,
+	  docs/man3/SDL_WM_GetCaption.3, docs/man3/SDL_WM_GrabInput.3,
+	  docs/man3/SDL_WM_SetCaption.3, docs/man3/SDL_WM_SetIcon.3,
+	  docs/man3/SDL_WaitEvent.3, docs/man3/SDL_WarpMouse.3,
+	  docs/man3/SDL_mutexP.3, docs/man3/SDL_mutexV.3,
+	  src/joystick/amigaos/Makefile.am,
+	  src/joystick/amigaos/Makefile.in,
+	  src/joystick/amigaos/SDL_sysjoystick.c, docs/man3/Makefile.am,
+	  docs/man3/Makefile.in, docs/man3/SDL_AddTimer.3,
+	  docs/man3/SDL_AudioCVT.3, docs/man3/SDL_CDClose.3,
+	  docs/man3/SDL_CDName.3, docs/man3/SDL_CDNumDrives.3,
+	  docs/man3/SDL_CDOpen.3, docs/man3/SDL_CDPause.3,
+	  docs/man3/SDL_CDPlay.3, docs/man3/SDL_CDResume.3,
+	  docs/man3/SDL_CDStop.3, docs/man3/SDL_CloseAudio.3,
+	  docs/man3/SDL_Color.3, docs/man3/SDL_CondSignal.3,
+	  docs/man3/SDL_CondWait.3, docs/man3/SDL_CondWaitTimeout.3,
+	  docs/man3/SDL_ConvertSurface.3, docs/man3/SDL_CreateCond.3,
+	  docs/man3/SDL_CreateCursor.3, docs/man3/SDL_CreateMutex.3,
+	  docs/man3/SDL_CreateRGBSurface.3,
+	  docs/man3/SDL_CreateRGBSurfaceFrom.3, docs/man3/SDL_Delay.3,
+	  docs/man3/SDL_DestroyCond.3, docs/man3/SDL_DisplayFormat.3,
+	  docs/man3/SDL_DisplayFormatAlpha.3,
+	  docs/man3/SDL_EnableUNICODE.3, docs/man3/SDL_ExposeEvent.3,
+	  docs/man3/SDL_FillRect.3, docs/man3/SDL_Flip.3,
+	  docs/man3/SDL_FreeCursor.3, docs/man3/SDL_FreeSurface.3,
+	  docs/man3/SDL_GL_GetProcAddress.3,
+	  docs/man3/SDL_GL_LoadLibrary.3, docs/man3/SDL_GL_SwapBuffers.3,
+	  docs/man3/SDL_GetClipRect.3, docs/man3/SDL_GetError.3,
+	  docs/man3/SDL_GetEventFilter.3, docs/man3/SDL_GetGamma.3,
+	  docs/man3/SDL_GetGammaRamp.3, docs/man3/SDL_GetKeyName.3,
+	  docs/man3/SDL_GetKeyState.3, docs/man3/SDL_GetRGBA.3,
+	  docs/man3/SDL_GetRelativeMouseState.3,
+	  docs/man3/SDL_GetThreadID.3, docs/man3/SDL_GetTicks.3,
+	  docs/man3/SDL_GetVideoInfo.3, docs/man3/SDL_GetVideoSurface.3,
+	  docs/man3/SDL_Init.3, docs/man3/SDL_InitSubSystem.3,
+	  docs/man3/SDL_JoyBallEvent.3, docs/man3/SDL_JoystickClose.3,
+	  docs/man3/SDL_JoystickEventState.3,
+	  docs/man3/SDL_JoystickGetButton.3,
+	  docs/man3/SDL_JoystickGetHat.3, docs/man3/SDL_JoystickIndex.3,
+	  docs/man3/SDL_JoystickName.3, docs/man3/SDL_JoystickNumAxes.3,
+	  docs/man3/SDL_JoystickNumBalls.3,
+	  docs/man3/SDL_JoystickNumHats.3, docs/man3/SDL_JoystickOpen.3,
+	  docs/man3/SDL_JoystickOpened.3, docs/man3/SDL_KillThread.3,
+	  docs/man3/SDL_NumJoysticks.3, docs/man3/SDL_OpenAudio.3,
+	  docs/man3/SDL_Overlay.3, docs/man3/SDL_Palette.3,
+	  docs/man3/SDL_PauseAudio.3, docs/man3/SDL_PixelFormat.3,
+	  docs/man3/SDL_PumpEvents.3, docs/man3/SDL_PushEvent.3,
+	  docs/man3/SDL_Quit.3, docs/man3/SDL_QuitEvent.3,
+	  docs/man3/SDL_QuitSubSystem.3, docs/man3/SDL_Rect.3,
+	  docs/man3/SDL_RemoveTimer.3, docs/man3/SDL_SaveBMP.3,
+	  docs/man3/SDL_SemPost.3, docs/man3/SDL_SemTryWait.3,
+	  docs/man3/SDL_SemValue.3, docs/man3/SDL_SemWait.3,
+	  docs/man3/SDL_SemWaitTimeout.3, docs/man3/SDL_SetAlpha.3,
+	  docs/man3/SDL_SetClipRect.3, docs/man3/SDL_SetGamma.3,
+	  docs/man3/SDL_SetModState.3, docs/man3/SDL_SetPalette.3,
+	  docs/man3/SDL_SetTimer.3, docs/man3/SDL_Surface.3,
+	  docs/man3/SDL_ThreadID.3, docs/man3/SDL_UnlockYUVOverlay.3,
+	  docs/man3/SDL_UpdateRect.3, docs/man3/SDL_UpdateRects.3,
+	  docs/man3/SDL_UserEvent.3, docs/man3/SDL_VideoDriverName.3,
+	  docs/man3/SDL_VideoModeOK.3, docs/man3/SDL_WM_IconifyWindow.3,
+	  docs/man3/SDL_WM_ToggleFullScreen.3, docs/man3/SDL_WaitThread.3,
+	  docs/man3/SDL_WasInit.3, docs/man3/SDL_keysym.3, test/.gdbinit,
+	  test/Makefile.am, test/README, test/autogen.sh, test/checkkeys.c,
+	  test/config.guess, test/config.sub, test/configure.in,
+	  test/icon.bmp, test/install-sh, test/missing, test/mkinstalldirs,
+	  test/moose.dat, test/sail.bmp, test/sample.bmp, test/sample.wav,
+	  test/testcdrom.c, test/testerror.c, test/testgl.c,
+	  test/testkeys.c, test/testlock.c, test/testpalette.c,
+	  test/testsprite.c, test/testwm.c, include/Makefile.am,
+	  include/Makefile.in, include/SDL.h, include/SDL_active.h,
+	  include/SDL_audio.h, include/SDL_byteorder.h,
+	  include/SDL_cdrom.h, include/SDL_copying.h, include/SDL_endian.h,
+	  include/SDL_error.h, include/SDL_events.h, include/SDL_getenv.h,
+	  include/SDL_joystick.h, include/SDL_keyboard.h,
+	  include/SDL_keysym.h, include/SDL_loadso.h, include/SDL_main.h,
+	  include/SDL_mouse.h, include/SDL_mutex.h, include/SDL_name.h,
+	  include/SDL_opengl.h, include/SDL_quit.h, include/SDL_rwops.h,
+	  include/SDL_syswm.h, include/SDL_thread.h, include/SDL_timer.h,
+	  include/SDL_types.h, include/SDL_version.h, include/SDL_video.h,
+	  include/begin_code.h, include/close_code.h, test/.cvsignore,
+	  test/COPYING, test/acinclude.m4, test/graywin.c, test/loopwave.c,
+	  test/picture.xbm, test/testalpha.c, test/testbitmap.c,
+	  test/testgamma.c, test/testhread.c, test/testjoystick.c,
+	  test/testoverlay.c, test/testoverlay2.c, test/testsem.c,
+	  test/testtimer.c, test/testtypes.c, test/testver.c,
+	  test/testvidinfo.c, test/testwin.c, test/threadwin.c,
+	  test/torturethread.c: Initial revision
+

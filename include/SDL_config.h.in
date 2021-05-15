@@ -162,8 +162,10 @@
 #undef SDL_VIDEO_DISABLED
 
 /* Enable various audio drivers */
+#undef SDL_AUDIO_DRIVER_AHI
 #undef SDL_AUDIO_DRIVER_ALSA
 #undef SDL_AUDIO_DRIVER_ALSA_DYNAMIC
+#undef SDL_AUDIO_DRIVER_AMIGAOS4
 #undef SDL_AUDIO_DRIVER_ARTS
 #undef SDL_AUDIO_DRIVER_ARTS_DYNAMIC
 #undef SDL_AUDIO_DRIVER_BAUDIO
@@ -212,6 +214,8 @@
 /* Enable various input drivers */
 #undef SDL_INPUT_LINUXEV
 #undef SDL_INPUT_TSLIB
+#undef SDL_JOYSTICK_AMIGA
+#undef SDL_JOYSTICK_AMIGAINPUT
 #undef SDL_JOYSTICK_BEOS
 #undef SDL_JOYSTICK_DC
 #undef SDL_JOYSTICK_DUMMY
@@ -236,6 +240,8 @@
 #undef SDL_LOADSO_WIN32
 
 /* Enable various threading systems */
+#undef SDL_THREAD_AMIGA
+#undef SDL_THREAD_AMIGAOS4
 #undef SDL_THREAD_BEOS
 #undef SDL_THREAD_DC
 #undef SDL_THREAD_OS2
@@ -247,6 +253,8 @@
 #undef SDL_THREAD_WIN32
 
 /* Enable various timer systems */
+#undef SDL_TIMER_AMIGA
+#undef SDL_TIMER_AMIGAOS4
 #undef SDL_TIMER_BEOS
 #undef SDL_TIMER_DC
 #undef SDL_TIMER_DUMMY
@@ -260,7 +268,9 @@
 
 /* Enable various video drivers */
 #undef SDL_VIDEO_DRIVER_AALIB
+#undef SDL_VIDEO_DRIVER_AMIGAOS4
 #undef SDL_VIDEO_DRIVER_BWINDOW
+#undef SDL_VIDEO_DRIVER_CYBERGRAPHICS
 #undef SDL_VIDEO_DRIVER_CACA
 #undef SDL_VIDEO_DRIVER_DC
 #undef SDL_VIDEO_DRIVER_DDRAW

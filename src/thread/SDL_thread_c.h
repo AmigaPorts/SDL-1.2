@@ -27,6 +27,10 @@
 /* Need the definitions of SYS_ThreadHandle */
 #if SDL_THREADS_DISABLED
 #include "generic/SDL_systhread_c.h"
+#elif SDL_THREAD_AMIGA
+#include "amigaos/SDL_systhread_c.h"
+#elif SDL_THREAD_AMIGAOS4
+#include "amigaos4/SDL_systhread_c.h"
 #elif SDL_THREAD_BEOS
 #include "beos/SDL_systhread_c.h"
 #elif SDL_THREAD_DC

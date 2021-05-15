@@ -95,6 +95,17 @@ int SDL_CondBroadcast(SDL_cond *cond)
 	return retval;
 }
 
+#ifdef __amigaos4__
+
+/* FIXME: hack to get compile working. At least my SDK defines timespec only for CLIB2 */
+struct timespec
+{
+	unsigned int tv_sec;
+	unsigned int tv_nsec;
+};
+
+#endif  
+
 int SDL_CondWaitTimeout(SDL_cond *cond, SDL_mutex *mutex, Uint32 ms)
 {
 	int retval;
