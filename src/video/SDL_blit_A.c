@@ -2958,3 +2958,4 @@ SDL_loblit SDL_CalculateAlphaBlit(SDL_Surface *surface, int blit_index)
 	}
     }
 }
+

@@ -26,7 +26,7 @@
  *
  * Original version by Sam Lantinga
  *
- * Mattias EngdegÃ¥rd (Yorick): Rewrite. New encoding format, encoder and
+ * Mattias Engdegård (Yorick): Rewrite. New encoding format, encoder and
  * decoder. Added per-surface alpha blitter. Added per-pixel alpha
  * format, encoder and blitter.
  *
@@ -1937,4 +1937,5 @@ void SDL_UnRLESurface(SDL_Surface *surface, int recode)
 	}
     }
 }
+
 

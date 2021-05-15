@@ -368,3 +368,4 @@ int SDL_CalculateBlit(SDL_Surface *surface)
 	}
 	return(0);
 }
+

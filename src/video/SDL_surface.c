@@ -409,11 +409,11 @@ void SDLA_SetQuickLazyBlit(SDL_Surface *surface, Uint32 yesno )
 
 /* 
  * Set up a blit between two surfaces -- split into three parts:
- * The upper part, SDL_UpperBlit(), performs clipping and rectangle
+ * The upper part, SDL_UpperBlit(), performs clipping and rectangle 
  * verification.  The lower part is a pointer to a low level
  * accelerated blitting function.
  *
- * These parts are separated out and each used internally by this
+ * These parts are separated out and each used internally by this 
  * library in the optimimum places.  They are exported so that if
  * you know exactly what you are doing, you can optimize your code
  * by calling the one(s) you need.
@@ -502,7 +502,7 @@ int SDL_UpperBlit (SDL_Surface *src, SDL_Rect *srcrect,
 	/* clip the source rectangle to the source surface */
 	if(srcrect) {
 	        int maxw, maxh;
-
+	
 		srcx = srcrect->x;
 		w = srcrect->w;
 		if(srcx < 0) {
@@ -524,7 +524,7 @@ int SDL_UpperBlit (SDL_Surface *src, SDL_Rect *srcrect,
 		maxh = src->h - srcy;
 		if(maxh < h)
 			h = maxh;
-
+	    
 	} else {
 	        srcx = srcy = 0;
 		w = src->w;
@@ -583,7 +583,7 @@ static int SDL_FillRect4(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
 	return -1;
 }
 
-/*
+/* 
  * This function performs a fast fill of the given rectangle with 'color'
  */
 int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
@@ -863,7 +863,7 @@ void SDL_UnlockSurface (SDL_Surface *surface)
 	}
 }
 
-/*
+/* 
  * Convert a surface into the specified pixel format.
  */
 SDL_Surface * SDL_ConvertSurface (SDL_Surface *surface,
