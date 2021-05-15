@@ -46,17 +46,20 @@ extern void SDL_CDROMQuit(void);
 extern void SDL_StartTicks(void);
 extern int  SDL_TimerInit(void);
 extern void SDL_TimerQuit(void);
+#if defined(__amigaos3__)
+#include "SDL_systimer.h"
+#endif
 #endif
 
 /* The current SDL version */
-static SDL_version version = 
+static SDL_version version =
 	{ SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL };
 
-#ifdef __amigaos4__
-#ifdef __AMIGADATE__
-static const char __attribute((used)) amiga_ver[] = "$VER: SDL1_2_16 1.4 (" __AMIGADATE__ ")\0";
+#if defined(__AMIGA__)
+#include "SDL_amigaversion.h"
 #endif
 
+#ifdef __amigaos4__
 //#define DEBUG
 #include "main/amigaos4/SDL_os4debug.h"
 
@@ -302,8 +305,11 @@ void SDL_Quit(void)
   printf("[SDL_Quit] : Returning!\n"); fflush(stdout);
 #endif
 
-#ifdef __amigaos4__
+#if defined(__amigaos4__)
 	os4_quit();
+#endif
+#if defined(__amigaos3__)
+    amiga_quit_timer();
 #endif
 }
 
