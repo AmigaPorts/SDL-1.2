@@ -403,13 +403,14 @@ int SDL_VideoModeOK(int width, int height, int bpp, Uint32 flags) {
 		if ( sizes == (SDL_Rect **)0 ) {
 			/* No sizes supported at this bit-depth */
 			continue;
-		} else if ( sizes == (SDL_Rect * *) NEGATIVE_ONE ) {
+		} else 
+		if (sizes == (SDL_Rect **)NEGATIVE_ONE) {
 			/* Any size supported at this bit-depth */
 			supported = 1;
 			continue;
-		} else if ( current_video->handles_any_size ) {
+		} else if (current_video->handles_any_size) {
 			/* Driver can center a smaller surface to simulate fullscreen */
-			for ( i = 0; sizes[i]; ++i ) {
+			for ( i=0; sizes[i]; ++i ) {
 				if ((sizes[i]->w >= width) && (sizes[i]->h >= height)) {
 					supported = 1; /* this mode can fit the centered window. */
 					break;
@@ -425,16 +426,17 @@ int SDL_VideoModeOK(int width, int height, int bpp, Uint32 flags) {
 	}
 	if ( supported ) {
 		--b;
-		return (SDL_closest_depths[table][b]);
+		return(SDL_closest_depths[table][b]);
 	} else {
-		return (0);
+		return(0);
 	}
 }
 
 /*
  * Get the closest non-emulated video mode to the one requested
  */
-static int SDL_GetVideoMode(int *w, int *h, int *BitsPerPixel, Uint32 flags) {
+static int SDL_GetVideoMode(int *w, int *h, int *BitsPerPixel, Uint32 flags)
+{
 	int table, b, i;
 	int supported;
 	int native_bpp;
@@ -444,28 +446,27 @@ static int SDL_GetVideoMode(int *w, int *h, int *BitsPerPixel, Uint32 flags) {
 	/* Check parameters */
 	if ( *BitsPerPixel < 8 || *BitsPerPixel > 32 ) {
 		SDL_SetError("Invalid bits per pixel (range is {8...32})");
-		return (0);
+		return(0);
 	}
 	if ((*w <= 0) || (*h <= 0)) {
 		SDL_SetError("Invalid width or height");
-		return (0);
+		return(0);
 	}
 
 	/* Try the original video mode, get the closest depth */
 	native_bpp = SDL_VideoModeOK(*w, *h, *BitsPerPixel, flags);
-
 	if ( native_bpp == *BitsPerPixel ) {
-		return (1);
+		return(1);
 	}
 	if ( native_bpp > 0 ) {
 		*BitsPerPixel = native_bpp;
-		return (1);
+		return(1);
 	}
 
 	/* No exact size match at any depth, look for closest match */
 	SDL_memset(&format, 0, sizeof(format));
 	supported = 0;
-	table = ((*BitsPerPixel + 7) / 8) - 1;
+	table = ((*BitsPerPixel+7)/8)-1;
 	SDL_closest_depths[table][0] = *BitsPerPixel;
 	SDL_closest_depths[table][7] = SDL_VideoSurface->format->BitsPerPixel;
 	for ( b = 0; !supported && SDL_closest_depths[table][b]; ++b ) {
@@ -477,47 +478,48 @@ static int SDL_GetVideoMode(int *w, int *h, int *BitsPerPixel, Uint32 flags) {
 			/* No sizes supported at this bit-depth */
 			continue;
 		}
-		best = 0;
-		for ( i = 0; sizes[i]; ++i ) {
+		best=0;
+		for ( i=0; sizes[i]; ++i ) {
 			/* Mode with both dimensions bigger or equal than asked ? */
 			if ((sizes[i]->w >= *w) && (sizes[i]->h >= *h)) {
 				/* Mode with any dimension smaller or equal than current best ? */
 				if ((sizes[i]->w <= sizes[best]->w) || (sizes[i]->h <= sizes[best]->h)) {
 					/* Now choose the mode that has less pixels */
 					if ((sizes[i]->w * sizes[i]->h) <= (sizes[best]->w * sizes[best]->h)) {
-						best = i;
+						best=i;
 						supported = 1;
 					}
 				}
 			}
 		}
-		if ( supported ) {
-			*w = sizes[best]->w;
-			*h = sizes[best]->h;
+		if (supported) {
+			*w=sizes[best]->w;
+			*h=sizes[best]->h;
 			*BitsPerPixel = SDL_closest_depths[table][b];
 		}
 	}
-	if ( !supported ) {
+	if ( ! supported ) {
 		SDL_SetError("No video mode large enough for %dx%d", *w, *h);
 	}
-	return (supported);
+	return(supported);
 }
 
 /* This should probably go somewhere else -- like SDL_surface.c */
-static void SDL_ClearSurface(SDL_Surface *surface) {
+static void SDL_ClearSurface(SDL_Surface *surface)
+{
 	Uint32 black;
 
 	black = SDL_MapRGB(surface->format, 0, 0, 0);
 	SDL_FillRect(surface, NULL, black);
-	if ((surface->flags & SDL_HWSURFACE) && (surface->flags & SDL_DOUBLEBUF)) {
+	if ((surface->flags&SDL_HWSURFACE) && (surface->flags&SDL_DOUBLEBUF)) {
 		SDL_Flip(surface);
 		SDL_FillRect(surface, NULL, black);
 	}
-#ifndef __AMIGA__
+#if !defined(__amigaos3__) 
 	if (surface->flags&SDL_FULLSCREEN) {
 #endif
 		SDL_Flip(surface);
-#ifndef __AMIGA__
+#if !defined(__amigaos3__) 
 	}
 #endif
 }
@@ -525,7 +527,8 @@ static void SDL_ClearSurface(SDL_Surface *surface) {
 /*
  * Create a shadow surface suitable for fooling the app. :-)
  */
-static void SDL_CreateShadowSurface(int depth) {
+static void SDL_CreateShadowSurface(int depth)
+{
 	Uint32 Rmask, Gmask, Bmask;
 
 	/* Allocate the shadow surface */
@@ -552,15 +555,15 @@ static void SDL_CreateShadowSurface(int depth) {
 	}
 
 	/* If the video surface is resizable, the shadow should say so */
-	if ((SDL_VideoSurface->flags & SDL_RESIZABLE) == SDL_RESIZABLE ) {
+	if ( (SDL_VideoSurface->flags & SDL_RESIZABLE) == SDL_RESIZABLE ) {
 		SDL_ShadowSurface->flags |= SDL_RESIZABLE;
 	}
 	/* If the video surface has no frame, the shadow should say so */
-	if ((SDL_VideoSurface->flags & SDL_NOFRAME) == SDL_NOFRAME ) {
+	if ( (SDL_VideoSurface->flags & SDL_NOFRAME) == SDL_NOFRAME ) {
 		SDL_ShadowSurface->flags |= SDL_NOFRAME;
 	}
 	/* If the video surface is fullscreen, the shadow should say so */
-	if ((SDL_VideoSurface->flags & SDL_FULLSCREEN) == SDL_FULLSCREEN ) {
+	if ( (SDL_VideoSurface->flags & SDL_FULLSCREEN) == SDL_FULLSCREEN ) {
 		SDL_ShadowSurface->flags |= SDL_FULLSCREEN;
 	}
 	/* If the video surface is flippable, the shadow should say so */
@@ -581,7 +584,8 @@ static void SDL_CreateShadowSurface(int depth) {
 /*
  * Set the requested video mode, allocating a shadow buffer if necessary.
  */
-SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
+SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags)
+{
 	SDL_VideoDevice *video, *this;
 	SDL_Surface *prev_mode, *mode;
 	int video_w;
@@ -594,7 +598,7 @@ SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
 		sysevents_mouse_pressed = 0;
 	#endif
 
-#if defined(__AMIGA__) && !defined(__amigaos4__)
+#if defined(__amigaos3__) 
 #ifndef APOLLO_BLIT
 	flags &= ~SDL_DOUBLEBUF;
 #endif
@@ -604,9 +608,9 @@ SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
 	/* Start up the video driver, if necessary..
 	   WARNING: This is the only function protected this way!
 	 */
-	if ( !current_video ) {
-		if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) < 0 ) {
-			return (NULL);
+	if ( ! current_video ) {
+		if ( SDL_Init(SDL_INIT_VIDEO|SDL_INIT_NOPARACHUTE) < 0 ) {
+			return(NULL);
 		}
 	}
 	this = video = current_video;
@@ -628,8 +632,8 @@ SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
 	video_w = width;
 	video_h = height;
 	video_bpp = bpp;
-	if ( !SDL_GetVideoMode(&video_w, &video_h, &video_bpp, flags) ) {
-		return (NULL);
+	if ( ! SDL_GetVideoMode(&video_w, &video_h, &video_bpp, flags) ) {
+		return(NULL);
 	}
 
 	/* Check the requested flags */
@@ -648,10 +652,10 @@ SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
 		flags |= SDL_HWSURFACE;
 	}
 
-	is_opengl = ((flags & SDL_OPENGL) == SDL_OPENGL);
+	is_opengl = ( ( flags & SDL_OPENGL ) == SDL_OPENGL );
 	if ( is_opengl ) {
 		/* These flags are for 2D video modes only */
-		flags &= ~(SDL_HWSURFACE | SDL_DOUBLEBUF);
+		flags &= ~(SDL_HWSURFACE|SDL_DOUBLEBUF);
 	}
 
 	/* Reset the keyboard here so event callbacks can run */
@@ -675,7 +679,7 @@ SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
 		SDL_free(video->physpal);
 		video->physpal = NULL;
 	}
-	if ( video->gammacols ) {
+	if( video->gammacols) {
 		SDL_free(video->gammacols);
 		video->gammacols = NULL;
 	}
@@ -688,7 +692,6 @@ SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
 	SDL_LockCursor();
 	SDL_VideoSurface = NULL;	/* In case it's freed by driver */
 	mode = video->SetVideoMode(this, prev_mode,video_w,video_h,video_bpp,flags);
-
 	if ( mode ) { /* Prevent resize events from mode change */
 		/* But not on OS/2 */
 #ifndef __OS2__
@@ -754,11 +757,11 @@ SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
 
 	/* If we failed setting a video mode, return NULL... (Uh Oh!) */
 	if ( mode == NULL ) {
-		return (NULL);
+		return(NULL);
 	}
 
 	/* If there is no window manager, set the SDL_NOFRAME flag */
-	if ( !video->info.wm_available ) {
+	if ( ! video->info.wm_available ) {
 		mode->flags |= SDL_NOFRAME;
 	}
 
@@ -1106,7 +1109,7 @@ void SDL_UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects) {
  */
 int SDL_Flip(SDL_Surface *screen)
 {
-#if defined(__AMIGA__) && !defined(__amigaos4__)
+#if defined(__amigaos3__) 
 	extern int skipframe,toggle;
 
 	if (skipframe) {
@@ -1155,7 +1158,7 @@ int SDL_Flip(SDL_Surface *screen)
 		}
 
 		/* Fall through to video surface update */
-#ifndef __AMIGA__
+#if !defined(__amigaos3__) 
 		screen = SDL_VideoSurface;
 #endif
 	}

@@ -39,7 +39,7 @@
 #include "mmx.h"
 #endif
 
-#if defined(APOLLO_BLIT)
+#if defined(__amigaos3__) && defined(APOLLO_BLIT)
 #include "blitapollo.h"
 #endif
 
@@ -158,7 +158,7 @@ static __inline__ void SDL_memcpySSE(Uint8 *to, const Uint8 *from, int len)
 
 static void SDL_BlitCopy(SDL_BlitInfo *info)
 {
-#if defined(APOLLO_BLIT)
+#if defined(__amigaos3__) && defined(APOLLO_BLIT)
 	ApolloCopyRect( info->s_pixels, info->d_pixels,
 			info->s_skip, info->d_skip,
 			info->d_width*info->dst->BytesPerPixel,
@@ -368,4 +368,3 @@ int SDL_CalculateBlit(SDL_Surface *surface)
 	}
 	return(0);
 }
-

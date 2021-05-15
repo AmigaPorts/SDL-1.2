@@ -27,7 +27,7 @@
 #include "SDL_mutex.h"
 #include "SDL_thread.h"
 
-#if defined(__AMIGA__) && !defined(__amigaos4__)
+#if defined(__amigaos3__)
 #include <exec/exec.h>
 #include <dos/dos.h>
 #if defined(__SASC) || defined(WARPOS)

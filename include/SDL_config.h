@@ -40,7 +40,7 @@
 #include "SDL_config_os2.h"
 #elif defined(__amigaos4__)
 #include "SDL_config_amigaos4.h"
-#elif defined(__AMIGA__) && !defined(__amigaos4__)
+#elif defined(__amigaos3__) 
 #include "SDL_config_amiga.h"
 #else
 #include "SDL_config_minimal.h"

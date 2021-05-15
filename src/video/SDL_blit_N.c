@@ -44,7 +44,7 @@ enum blit_features {
 	BLIT_FEATURE_HAS_ARM_SIMD = 8
 };
 
-#if defined(APOLLO_BLIT)
+#if defined(__amigaos3__) && defined(APOLLO_BLIT)
 #include "blitapollo.h"
 #include "colorkeyapollo.h"
 #endif
@@ -2469,7 +2469,7 @@ static void BlitNto1Key(SDL_BlitInfo *info)
 
 static void Blit2to2Key(SDL_BlitInfo *info)
 {
-#if defined(APOLLO_BLIT)
+#if defined(__amigaos3__) && defined(APOLLO_BLIT)
 	ApolloKeyRGB565toRGB565(	// works with 555, too (unless 1 bit is defined as alpha, ofc)
 				(Uint8 *)info->s_pixels,
 				(Uint8 *)info->d_pixels,
@@ -2879,7 +2879,7 @@ static void BlitNtoNKeyCopyAlpha(SDL_BlitInfo *info)
 	}
 }
 
-#if defined(APOLLO_BLIT)
+#if defined(__amigaos3__) && defined(APOLLO_BLIT)
 
 #define APOLLOCONVERT( __a__ ) \
 static void Convert##__a__ (SDL_BlitInfo *info);\
@@ -3132,7 +3132,7 @@ static const struct blit_table normal_blit_2[] = {
     { 0,0,0, 0, 0,0,0, 0, NULL, BlitNtoN, 0 }
 };
 static const struct blit_table normal_blit_3[] = {
-#if defined(APOLLO_BLIT)
+#if defined(__amigaos3__) && defined(APOLLO_BLIT)
     { 0x00FF0000,0x0000FF00,0x000000FF, 2, 0x0000F800,0x000007E0,0x0000001F,
       0, (void*)(1), ConvertApolloRGBtoRGB565, NO_ALPHA  },
     { 0x000000FF,0x0000FF00,0x00FF0000, 2, 0x0000F800,0x000007E0,0x0000001F,
@@ -3220,7 +3220,7 @@ static const struct blit_table normal_blit_4[] = {
     { 0x000000FF,0x0000FF00,0x00FF0000, 4, 0x00FF0000,0x0000FF00,0x000000FF,
       BLIT_FEATURE_HAS_ARM_SIMD, NULL, Blit_BGR888_RGB888ARMSIMD, NO_ALPHA | COPY_ALPHA },
 #endif
-#if defined(APOLLO_BLIT)
+#if defined(__amigaos3__) && defined(APOLLO_BLIT)
     { 0x00FF0000,0x0000FF00,0x000000FF, 2, 0x0000F800,0x000007E0,0x0000001F,
       0, (void*)(1), ConvertApolloARGBtoRGB565, NO_ALPHA  },
     { 0x0000FF00,0x00FF0000,0xFF000000, 2, 0x0000001F,0x000007E0,0x0000F800,
@@ -3287,7 +3287,7 @@ SDL_loblit SDL_CalculateBlitN(SDL_Surface *surface, int blit_index)
 	srcfmt = surface->format;
 	dstfmt = surface->map->dst->format;
 
-#if defined(APOLLO_BLITDBG)
+#if defined(__amigaos3__) && defined(APOLLO_BLITDBG)
 	printf("SDL_CalculateBlitN from BPP %d to BPP %d blit_index %d AMask %x ",srcfmt->BytesPerPixel,dstfmt->BytesPerPixel,blit_index,srcfmt->Amask);
 	printf("Src %x %x %x Dst %x %x %x\n",
 		     srcfmt->Rmask,
@@ -3395,7 +3395,7 @@ SDL_loblit SDL_CalculateBlitN(SDL_Surface *surface, int blit_index)
 		}
 	}
 
-#if defined(APOLLO_BLITDBG)
+#if defined(__amigaos3__) && defined(APOLLO_BLITDBG)
 	if( sdata->aux_data == (void*)(1) )
 	{
 		printf("AMMX blit ");
