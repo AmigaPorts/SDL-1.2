@@ -183,21 +183,25 @@ int SDL_VideoInit (const char *driver_name, Uint32 flags)
 	}
 
 	/* Select the proper video driver */
-	index = 0;
+	i = index = 0;
 	video = NULL;
 	if ( driver_name != NULL ) {
-#if 0	/* This will be replaced with a better driver selection API */
-		if ( SDL_strrchr(driver_name, ':') != NULL ) {
-			index = atoi(SDL_strrchr(driver_name, ':')+1);
-		}
-#endif
-		for ( i=0; bootstrap[i]; ++i ) {
-			if ( SDL_strcasecmp(bootstrap[i]->name, driver_name) == 0) {
-				if ( bootstrap[i]->available() ) {
-					video = bootstrap[i]->create(index);
-					break;
+		const char *driver_attempt = driver_name;
+		while(driver_attempt != NULL && *driver_attempt != 0 && video == NULL) {
+			const char* driver_attempt_end = SDL_strchr(driver_attempt, ',');
+			size_t driver_attempt_len = (driver_attempt_end != NULL) ? (driver_attempt_end - driver_attempt)
+			                                                         : SDL_strlen(driver_attempt);
+
+			for ( i=0; bootstrap[i]; ++i ) {
+				if ((driver_attempt_len == SDL_strlen(bootstrap[i]->name)) &&
+				    (SDL_strncasecmp(bootstrap[i]->name, driver_attempt, driver_attempt_len) == 0)) {
+					if ( bootstrap[i]->available() ) {
+						video = bootstrap[i]->create(index);
+						break;
+					}
 				}
 			}
+			driver_attempt = (driver_attempt_end != NULL) ? (driver_attempt_end + 1) : NULL;
 		}
 	} else {
 		for ( i=0; bootstrap[i]; ++i ) {
@@ -401,7 +405,7 @@ int SDL_VideoModeOK (int width, int height, int bpp, Uint32 flags)
 	supported = 0;
 	table = ((bpp+7)/8)-1;
 	SDL_closest_depths[table][0] = bpp;
-	SDL_closest_depths[table][7] = 0;
+	SDL_closest_depths[table][6] = 0;
 	for ( b = 0; !supported && SDL_closest_depths[table][b]; ++b ) {
 		format.BitsPerPixel = SDL_closest_depths[table][b];
 		sizes = SDL_ListModes(&format, flags);
@@ -473,7 +477,7 @@ static int SDL_GetVideoMode (int *w, int *h, int *BitsPerPixel, Uint32 flags)
 	supported = 0;
 	table = ((*BitsPerPixel+7)/8)-1;
 	SDL_closest_depths[table][0] = *BitsPerPixel;
-	SDL_closest_depths[table][7] = SDL_VideoSurface->format->BitsPerPixel;
+	SDL_closest_depths[table][6] = SDL_VideoSurface->format->BitsPerPixel;
 	for ( b = 0; !supported && SDL_closest_depths[table][b]; ++b ) {
 		int best;
 

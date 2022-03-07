@@ -277,23 +277,16 @@ static Uint16 SDL_ParseAudioFormat(const char *string)
 int SDL_AudioInit(const char *driver_name)
 {
 	SDL_AudioDevice *audio;
-	int i = 0, idx;
+	int i, idx;
 
 	/* Check to make sure we don't overwrite 'current_audio' */
 	if ( current_audio != NULL ) {
 		SDL_AudioQuit();
 	}
 
-#if SDL_AUDIO_DRIVER_PULSE
-	/* SDL 2.0 uses the name "pulseaudio", so we'll support both */
-	if ( driver_name && SDL_strcasecmp(driver_name, "pulseaudio") == 0 ) {
-		driver_name = "pulse";
-	}
-#endif /* */
-
 	/* Select the proper audio driver */
 	audio = NULL;
-	idx = 0;
+	i = idx = 0;
 #if SDL_AUDIO_DRIVER_ESD
 	if ( (driver_name == NULL) && (SDL_getenv("ESPEAKER") != NULL) ) {
 		/* Ahem, we know that if ESPEAKER is set, user probably wants
@@ -326,18 +319,28 @@ int SDL_AudioInit(const char *driver_name)
 #endif /* SDL_AUDIO_DRIVER_ESD */
 	if ( audio == NULL ) {
 		if ( driver_name != NULL ) {
-#if 0	/* This will be replaced with a better driver selection API */
-			if ( SDL_strrchr(driver_name, ':') != NULL ) {
-				idx = atoi(SDL_strrchr(driver_name, ':')+1);
-			}
+			const char *driver_attempt = driver_name;
+			while(driver_attempt != NULL && *driver_attempt != 0 && audio == NULL) {
+				const char* driver_attempt_end = SDL_strchr(driver_attempt, ',');
+				size_t driver_attempt_len = (driver_attempt_end != NULL) ? (driver_attempt_end - driver_attempt)
+				                                                         : SDL_strlen(driver_attempt);
+#if SDL_AUDIO_DRIVER_PULSE
+				/* SDL 2.0 uses the name "pulseaudio", so we'll support both */
+				if ( (driver_attempt_len == SDL_strlen("pulseaudio")) &&
+				     (SDL_strncasecmp(driver_attempt, "pulseaudio", driver_attempt_len) == 0 ) ) {
+					driver_attempt_len = SDL_strlen("pulse");
+				}
 #endif
-			for ( i=0; bootstrap[i]; ++i ) {
-				if (SDL_strcasecmp(bootstrap[i]->name, driver_name) == 0) {
-					if ( bootstrap[i]->available() ) {
-						audio=bootstrap[i]->create(idx);
-						break;
+				for ( i=0; bootstrap[i]; ++i ) {
+					if ((driver_attempt_len == SDL_strlen(bootstrap[i]->name)) &&
+					    (SDL_strncasecmp(bootstrap[i]->name, driver_attempt, driver_attempt_len) == 0)) {
+						if ( bootstrap[i]->available() ) {
+							audio=bootstrap[i]->create(idx);
+							break;
+						}
 					}
 				}
+				driver_attempt = (driver_attempt_end != NULL) ? (driver_attempt_end + 1) : NULL;
 			}
 		} else {
 			for ( i=0; bootstrap[i]; ++i ) {
@@ -351,9 +354,7 @@ int SDL_AudioInit(const char *driver_name)
 		}
 		if ( audio == NULL ) {
 			SDL_SetError("No available audio device");
-#if 0 /* Don't fail SDL_Init() if audio isn't available.
-         SDL_OpenAudio() will handle it at that point.  *sigh*
-       */
+#if 0 /* Don't fail SDL_Init() if audio isn't available. SDL_OpenAudio() will handle it at that point. sigh.. */
 			return(-1);
 #endif
 		}
@@ -684,4 +685,3 @@ void SDL_Audio_SetCaption(const char *caption)
 		current_audio->SetCaption(current_audio, caption);
 	}
 }
-
