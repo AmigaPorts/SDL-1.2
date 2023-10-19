@@ -112,7 +112,7 @@ static AudioBootStrap *bootstrap[] = {
 #endif
 #if SDL_AUDIO_DRIVER_EPOCAUDIO
 	&EPOCAudio_bootstrap,
-#endif     
+#endif
 #if SDL_AUDIO_DRIVER_AMIGAOS4
 	&AmigaOS4_bootstrap,
 #endif
@@ -452,6 +452,8 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 		while ( power2 < samples ) {
 			power2 *= 2;
 		}
+		if( (unsigned int)power2 > 65536 ) /* <0, >65536 */
+			power2 = 2048;
 		desired->samples = power2;
 	}
 	if ( desired->callback == NULL ) {

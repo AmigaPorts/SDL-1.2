@@ -17,10 +17,13 @@ build-deps
 *.dll
 *.exe
 *.o
+*.go
 *.obj
 *.lib
 *.a
+*.ao
 *.la
+*.ll
 *.dSYM
 *,e1f
 *,ff8
@@ -51,6 +54,13 @@ Release
 *.ncb
 *.suo
 *.sdf
+
+# for CLion
+/Default/
+.idea/
+build/
+cmake-build-*/*
+build-*/
 
 test/stdout.txt
 test/stderr.txt
