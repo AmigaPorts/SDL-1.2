@@ -31,6 +31,7 @@
  */
 
 #include <gem.h>
+#include <mint/osbind.h>
 
 #include "SDL_timer.h"
 #include "../../events/SDL_sysevents.h"
@@ -41,7 +42,6 @@
 #include "../ataricommon/SDL_atarikeys.h"	/* for keyboard scancodes */
 #include "../ataricommon/SDL_atarievents_c.h"
 #include "../ataricommon/SDL_xbiosevents_c.h"
-#include "../ataricommon/SDL_ataridevmouse_c.h"
 
 /* Duration after which we consider key released */
 
@@ -84,12 +84,14 @@ void GEM_InitOSKeymap(_THIS)
 
 void GEM_PumpEvents(_THIS)
 {
-	short prevkc=0, mousex, mousey, mouseb, kstate;
+	short prevkc=0, mousex, mousey, mouseb;
 	int i, quit = 0;
 	SDL_keysym keysym;
 	Uint32 cur_tick;
 	static Uint32 prev_now = 0, prev_msg = 0;
 	static short latest_msg_id = 0;
+	EVMULT_IN em_in;
+	EVMULT_OUT em_out;
 
 	cur_tick = SDL_GetTicks();
 	if (prev_now == cur_tick) {
@@ -98,7 +100,6 @@ void GEM_PumpEvents(_THIS)
 	prev_now = cur_tick;
 
 	SDL_AtariMint_BackgroundTasks();
-	clearKeyboardState(cur_tick);
 
 	if (prev_msg) {
 		/* Wait at least 20ms before each event processing loop */
@@ -114,19 +115,14 @@ void GEM_PumpEvents(_THIS)
 		--latest_msg_id;
 	}
 
+	em_in.emi_flags = MU_MESAG|MU_TIMER|MU_KEYBD;
+	em_in.emi_tlow = 1000;
+	em_in.emi_thigh = 0;
 	while (!quit) {
 		int resultat;
-		short buffer[8], kc, dummy;
+		short buffer[8];
 
-		resultat = evnt_multi(
-			MU_MESAG|MU_TIMER|MU_KEYBD,
-			0,0,0,
-			0,0,0,0,0,
-			0,0,0,0,0,
-			buffer,
-			1000,
-			&dummy,&dummy,&dummy,&kstate,&kc,&dummy
-		);
+		resultat = evnt_multi_fast(&em_in, buffer, &em_out);
 
 		/* Message event ? */
 		if (resultat & MU_MESAG)
@@ -134,10 +130,11 @@ void GEM_PumpEvents(_THIS)
 
 		/* Keyboard event ? */
 		if (resultat & MU_KEYBD) {
-			do_keyboard_special(kstate, cur_tick);
-			if (prevkc != kc) {
-				do_keyboard(kc, cur_tick);
-				prevkc = kc;
+			em_out.emo_kmeta |= (Kbshift(-1) & (0x80 | K_CAPSLOCK));	/* MU_KEYBD is not aware of AltGr and CAPSLOCK */
+			do_keyboard_special(em_out.emo_kmeta, cur_tick);
+			if (prevkc != em_out.emo_kreturn) {
+				do_keyboard(em_out.emo_kreturn, cur_tick);
+				prevkc = em_out.emo_kreturn;
 			}
 		}
 
@@ -150,22 +147,42 @@ void GEM_PumpEvents(_THIS)
 	GEM_CheckMouseMode(this);
 
 	/* Update mouse state */
-	graf_mkstate(&mousex, &mousey, &mouseb, &kstate);
-	do_keyboard_special(kstate, cur_tick);
+	graf_mkstate(&mousex, &mousey, &mouseb, &em_out.emo_kmeta);
+	em_out.emo_kmeta |= (Kbshift(-1) & (0x80 | K_CAPSLOCK));	/* MU_KEYBD is not aware of AltGr and CAPSLOCK */
+	do_keyboard_special(em_out.emo_kmeta, cur_tick);
 	do_mouse_motion(this, mousex, mousey);
 	do_mouse_buttons(this, mouseb);
+
+	/* Purge inactive / lost keys */
+	clearKeyboardState(cur_tick);
 
 	/* Now generate keyboard events */
 	for (i=0; i<ATARIBIOS_MAXKEYS; i++) {
 		/* Key pressed ? */
-		if (gem_currentkeyboard[i] && !gem_previouskeyboard[i])
+		if (gem_currentkeyboard[i] && !gem_previouskeyboard[i]) {
 			SDL_PrivateKeyboard(SDL_PRESSED,
-				SDL_Atari_TranslateKey(i, &keysym, SDL_TRUE));
+				SDL_Atari_TranslateKey(i, &keysym, SDL_TRUE, em_out.emo_kmeta));
+			if (i == SCANCODE_CAPSLOCK) {
+				/* Pressed capslock: generate a release event, too because this
+				 * is what SDL expects; it handles locking by itself.
+				 */
+				SDL_PrivateKeyboard(SDL_RELEASED,
+					SDL_Atari_TranslateKey(i, &keysym, SDL_FALSE, em_out.emo_kmeta & ~K_CAPSLOCK));
+			}
+		}
 
 		/* Key unpressed ? */
-		if (gem_previouskeyboard[i] && !gem_currentkeyboard[i])
+		if (gem_previouskeyboard[i] && !gem_currentkeyboard[i]) {
+			if (i == SCANCODE_CAPSLOCK) {
+				/* Released capslock: generate a pressed event, too because this
+				 * is what SDL expects; it handles locking by itself.
+				 */
+				SDL_PrivateKeyboard(SDL_PRESSED,
+					SDL_Atari_TranslateKey(i, &keysym, SDL_TRUE, em_out.emo_kmeta | K_CAPSLOCK));
+			}
 			SDL_PrivateKeyboard(SDL_RELEASED,
-				SDL_Atari_TranslateKey(i, &keysym, SDL_FALSE));
+				SDL_Atari_TranslateKey(i, &keysym, SDL_FALSE, em_out.emo_kmeta));
+		}
 	}
 
 	SDL_memcpy(gem_previouskeyboard,gem_currentkeyboard,sizeof(gem_previouskeyboard));
@@ -176,10 +193,7 @@ void GEM_PumpEvents(_THIS)
 			(SDL_GetAppState() & SDL_APPACTIVE)
 			? GEM_title_name : GEM_icon_name;
 		if (window_name) {
-			wind_set(GEM_handle,WF_NAME,
-				(short)(((unsigned long)window_name)>>16),
-				(short)(((unsigned long)window_name) & 0xffff),
-				0,0);
+			wind_set_str(GEM_handle,WF_NAME,window_name);
 		}
 		GEM_refresh_name = SDL_FALSE;
 	}
@@ -200,24 +214,25 @@ static int do_messages(_THIS, short *message, short latest_msg_id)
 			quit=1;
 			break;
 		case WM_MOVED:
-			wind_set(message[3],WF_CURRXYWH,message[4],message[5],message[6],message[7]);
+			wind_set_grect(message[3],WF_CURRXYWH,(GRECT *)&message[4]);
 			update_work_area = 1;
 			break;
 		case WM_TOPPED:
-			wind_set(message[3],WF_TOP,message[4],0,0,0);
+			wind_set_int(message[3],WF_TOP,message[4]);
 			/* Continue with TOP event processing */
 		case WM_ONTOP:
 			SDL_PrivateAppActive(1, SDL_APPINPUTFOCUS);
 			VDI_setpalette(this, VDI_curpalette);
+			SDL_Atari_InitializeConsoleSettings();
 			break;
 		case WM_REDRAW:
 			if (!GEM_lock_redraw) {
-				GEM_wind_redraw(this, message[3], &message[4], SDL_FALSE);
+				GEM_RedrawWindow(this, message[3], (GRECT *)&message[4]);
 			}
 			break;
 		case WM_ICONIFY:
 		case WM_ALLICONIFY:
-			wind_set (message[3],WF_ICONIFY,message[4],message[5],message[6],message[7]);
+			wind_set_grect (message[3],WF_ICONIFY,(GRECT *)&message[4]);
 			/* If we're active, make ourselves inactive */
 			if ( SDL_GetAppState() & SDL_APPACTIVE ) {
 				/* Send an internal deactivate event */
@@ -225,71 +240,67 @@ static int do_messages(_THIS, short *message, short latest_msg_id)
 			}
 			/* Update window title */
 			if (GEM_refresh_name && GEM_icon_name) {
-				wind_set(GEM_handle,WF_NAME,
-					(short)(((unsigned long)GEM_icon_name)>>16),
-					(short)(((unsigned long)GEM_icon_name) & 0xffff),
-					0,0);
+				wind_set_str(GEM_handle,WF_NAME, GEM_icon_name);
 				GEM_refresh_name = SDL_FALSE;
 			}
 			GEM_iconified = SDL_TRUE;
 			update_work_area = 1;
 			break;
 		case WM_UNICONIFY:
-			wind_set (message[3],WF_UNICONIFY,message[4],message[5],message[6],message[7]);
+			wind_set_grect (message[3],WF_UNICONIFY, (GRECT *)&message[4]);
 			/* If we're not active, make ourselves active */
 			if ( !(SDL_GetAppState() & SDL_APPACTIVE) ) {
 				/* Send an internal activate event */
 				SDL_PrivateAppActive(1, SDL_APPACTIVE);
 			}
 			if (GEM_refresh_name && GEM_title_name) {
-				wind_set(GEM_handle,WF_NAME,
-					(short)(((unsigned long)GEM_title_name)>>16),
-					(short)(((unsigned long)GEM_title_name) & 0xffff),
-					0,0);
+				wind_set_str(GEM_handle,WF_NAME, GEM_title_name);
 				GEM_refresh_name = SDL_FALSE;
 			}
 			GEM_iconified = SDL_FALSE;
 			update_work_area = 1;
 			break;
 		case WM_SIZED:
-			wind_set (message[3], WF_CURRXYWH, message[4], message[5], message[6], message[7]);
+			/* width must be multiple of 16, for vro_cpyfm() and c2p_convert() */
+			if ((message[6] & 15) != 0) {
+				message[6] = (message[6] | 15) +1;
+			}
+			wind_set_grect (message[3], WF_CURRXYWH, (GRECT *)&message[4]);
 			update_work_area = sdl_resize = 1;
 			GEM_win_fulled = SDL_FALSE;		/* Cancel maximized flag */
 			GEM_lock_redraw = SDL_TRUE;		/* Prevent redraw till buffers resized */
 			break;
 		case WM_FULLED:
 			{
-				short x,y,w,h;
+				GRECT gr;
 
 				if (GEM_win_fulled) {
-					wind_get (message[3], WF_PREVXYWH, &x, &y, &w, &h);
+					wind_get_grect (message[3], WF_PREVXYWH, &gr);
 					GEM_win_fulled = SDL_FALSE;
 				} else {
-					x = GEM_desk_x;
-					y = GEM_desk_y;
-					w = GEM_desk_w;
-					h = GEM_desk_h;
+					gr = GEM_desk;
 					GEM_win_fulled = SDL_TRUE;
 				}
-				wind_set (message[3], WF_CURRXYWH, x, y, w, h);
+				wind_set_grect (message[3], WF_CURRXYWH, &gr);
 				update_work_area = sdl_resize = 1;
 				GEM_lock_redraw = SDL_TRUE;		/* Prevent redraw till buffers resized */
 			}
 			break;
 		case WM_BOTTOMED:
-			wind_set(message[3],WF_BOTTOM,0,0,0,0);
+			wind_set_int(message[3],WF_BOTTOM,0);
 			/* Continue with BOTTOM event processing */
 		case WM_UNTOPPED:
 			SDL_PrivateAppActive(0, SDL_APPINPUTFOCUS);
 			VDI_setpalette(this, VDI_oldpalette);
+			SDL_Atari_RestoreConsoleSettings();
 			break;
 	}
 
 	if (update_work_area) {
-		GEM_align_work_area(this, message[3], SDL_TRUE);
+		GEM_AlignWorkArea(this, message[3]);
 
 		if (sdl_resize) {
-			SDL_PrivateResize(GEM_work_w, GEM_work_h);
+			SDL_PrivateResize(GEM_work.g_w, GEM_work.g_h);
 		}
 	}
 
@@ -309,22 +320,20 @@ static void do_keyboard(short kc, Uint32 tick)
 
 static void do_keyboard_special(short ks, Uint32 tick)
 {
-	int scancode=0;
-
-	/* Read special keys */
-	if (ks & K_RSHIFT)
-		scancode=SCANCODE_RIGHTSHIFT;
-	if (ks & K_LSHIFT)
-		scancode=SCANCODE_LEFTSHIFT;
-	if (ks & K_CTRL)
-		scancode=SCANCODE_LEFTCONTROL;
-	if (ks & K_ALT)
-		scancode=SCANCODE_LEFTALT;
-
-	if (scancode) {
-		gem_currentkeyboard[scancode]=0xFF;
-		keyboard_ticks[scancode]=tick;
+#define UPDATE_SPECIAL_KEYS(mask,scancode) \
+	{	\
+		if (ks & mask) { \
+			gem_currentkeyboard[scancode]=0xFF; \
+			keyboard_ticks[scancode]=tick; \
+		}	\
 	}
+
+	UPDATE_SPECIAL_KEYS(K_RSHIFT, SCANCODE_RIGHTSHIFT);
+	UPDATE_SPECIAL_KEYS(K_LSHIFT, SCANCODE_LEFTSHIFT);
+	UPDATE_SPECIAL_KEYS(K_CTRL, SCANCODE_LEFTCONTROL);
+	UPDATE_SPECIAL_KEYS(K_ALT, SCANCODE_LEFTALT);
+	UPDATE_SPECIAL_KEYS(K_CAPSLOCK, SCANCODE_CAPSLOCK);
+	UPDATE_SPECIAL_KEYS(0x80, SCANCODE_ALTGR);
 }
 
 static void do_mouse_motion(_THIS, short mx, short my)
@@ -348,11 +357,7 @@ static void do_mouse_motion(_THIS, short mx, short my)
 
 	/* Relative mouse motion ? */
 	if (GEM_mouse_relative) {
-		if (GEM_usedevmouse) {
-			SDL_AtariDevMouse_PostMouseEvents(this, SDL_FALSE);
-		} else {
-			SDL_AtariXbios_PostMouseEvents(this, SDL_FALSE);
-		}
+		SDL_AtariXbios_PostMouseEvents(this, SDL_FALSE);
 		return;
 	}
 
@@ -361,10 +366,10 @@ static void do_mouse_motion(_THIS, short mx, short my)
 	w2 = VDI_w;
 	h2 = VDI_h;
 	if ((!GEM_fullscreen) && (GEM_handle>=0)) {
-		x2 = GEM_work_x;
-		y2 = GEM_work_y;
-		w2 = GEM_work_w;
-		h2 = GEM_work_h;
+		x2 = GEM_work.g_x;
+		y2 = GEM_work.g_y;
+		w2 = GEM_work.g_w;
+		h2 = GEM_work.g_h;
 	}
 
 	if ((prevmx!=mx) || (prevmy!=my)) {
@@ -385,6 +390,22 @@ static void do_mouse_motion(_THIS, short mx, short my)
 	prevmy = my;
 }
 
+static int atari_GetButton(int button)
+{
+	switch(button) {
+		case 0:
+		default:
+			return SDL_BUTTON_LEFT;
+			break;
+		case 1:
+			return SDL_BUTTON_RIGHT;
+			break;
+		case 2:
+			return SDL_BUTTON_MIDDLE;
+			break;
+	}
+}
+
 static void do_mouse_buttons(_THIS, short mb)
 {
 	int i;
@@ -403,10 +424,10 @@ static void do_mouse_buttons(_THIS, short mb)
 		prevbutton = prevmb & (1<<i);
 
 		if (curbutton && !prevbutton) {
-			SDL_PrivateMouseButton(SDL_PRESSED, i+1, 0, 0);
+			SDL_PrivateMouseButton(SDL_PRESSED, atari_GetButton(i), 0, 0);
 		}
 		if (!curbutton && prevbutton) {
-			SDL_PrivateMouseButton(SDL_RELEASED, i+1, 0, 0);
+			SDL_PrivateMouseButton(SDL_RELEASED, atari_GetButton(i), 0, 0);
 		}
 	}
 
@@ -416,17 +437,17 @@ static void do_mouse_buttons(_THIS, short mb)
 /* Check if mouse in visible area of the window */
 static int mouse_in_work_area(int winhandle, short mx, short my)
 {
-	short todo[4];
-	short inside[4] = {mx,my,1,1};
+	GRECT todo;
+	GRECT inside = {mx,my,1,1};
 
 	/* Browse the rectangle list */
-	if (wind_get(winhandle, WF_FIRSTXYWH, &todo[0], &todo[1], &todo[2], &todo[3])!=0) {
-		while (todo[2] && todo[3]) {
-			if (rc_intersect((GRECT *)inside,(GRECT *)todo)) {
+	if (wind_get_grect(winhandle, WF_FIRSTXYWH, &todo)!=0) {
+		while (todo.g_w && todo.g_h) {
+			if (rc_intersect(&inside, &todo)) {
 				return 1;
 			}
 
-			if (wind_get(winhandle, WF_NEXTXYWH, &todo[0], &todo[1], &todo[2], &todo[3])==0) {
+			if (wind_get_grect(winhandle, WF_NEXTXYWH, &todo)==0) {
 				break;
 			}
 		}

@@ -28,6 +28,8 @@
  */
 
 /* Mint includes */
+#include <mint/cookie.h>
+#include <mint/mintbind.h>
 #include <mint/osbind.h>
 
 #include "../../events/SDL_sysevents.h"
@@ -43,18 +45,7 @@
 
 static Uint16 atari_prevmouseb;	/* save state of mouse buttons */
 
-void AtariIkbd_InitOSKeymap(_THIS)
-{
-	SDL_memset((void *) SDL_AtariIkbd_keyboard, KEY_UNDEFINED, sizeof(SDL_AtariIkbd_keyboard));
-
-	/* Now install our handler */
-	SDL_AtariIkbd_mouseb = SDL_AtariIkbd_mousex = SDL_AtariIkbd_mousey = 0;
-	atari_prevmouseb = 0;
-
-	Supexec(SDL_AtariIkbdInstall);
-}
-
-static int atari_GetButton(int button)
+static int GetButton(int button)
 {
 	switch(button)
 	{
@@ -68,27 +59,120 @@ static int atari_GetButton(int button)
 	}
 }
 
+static SDL_bool CheckAccess(const void *addr, size_t length)
+{
+	Uint32 flags;
+
+	if (Getcookie(C_MiNT, NULL) != C_FOUND)
+		return SDL_TRUE;
+
+	if (Mvalidate(0, addr, length, &flags) < 0)
+		return SDL_FALSE;
+
+	if (((flags+0x10)&0xf0) != MX_SUPERVISOR && ((flags+0x10)&0xf0) != MX_GLOBAL)
+		return SDL_FALSE;
+
+	return SDL_TRUE;
+}
+
+void AtariIkbd_InitOSKeymap(_THIS)
+{
+	SDL_memset((void *) SDL_AtariIkbd_keyboard, KEY_UNDEFINED, sizeof(SDL_AtariIkbd_keyboard));
+
+	/* Now install our handler */
+	SDL_AtariIkbd_mouseb = SDL_AtariIkbd_mousex = SDL_AtariIkbd_mousey = 0;
+	atari_prevmouseb = 0;
+
+	if (!CheckAccess((void *)&SDL_AtariIkbd_keyboard, sizeof(SDL_AtariIkbd_keyboard))) {
+		fprintf(stderr, "Insufficient privileges to install IKBD vectors. Set application's PRGFLAGS to Super.\n");
+		return;
+	}
+
+	Supexec(SDL_AtariIkbd_Install);
+	Setexc(VEC_PROCTERM, SDL_AtariIkbd_Restore);
+}
+
 void AtariIkbd_PumpEvents(_THIS)
 {
 	int i;
 	SDL_keysym keysym;
+	static short shiftstate;
 
 	SDL_AtariMint_BackgroundTasks();
+
+	if (!SDL_AtariIkbd_enabled)
+		return;
 
 	/*--- Send keyboard events ---*/
 
 	for (i=0; i<ATARIBIOS_MAXKEYS; i++) {
 		/* Key pressed ? */
 		if (SDL_AtariIkbd_keyboard[i]==KEY_PRESSED) {
+			switch (i) {
+			case SCANCODE_LEFTSHIFT:
+				shiftstate |= K_LSHIFT;
+				break;
+			case SCANCODE_RIGHTSHIFT:
+				shiftstate |= K_RSHIFT;
+				break;
+			case SCANCODE_LEFTCONTROL:
+				shiftstate |= K_CTRL;
+				break;
+			case SCANCODE_LEFTALT:
+				shiftstate |= K_ALT;
+				break;
+			case SCANCODE_CAPSLOCK:
+				shiftstate |= K_CAPSLOCK;
+				break;
+			case SCANCODE_ALTGR:
+				shiftstate |= 0x80;
+				break;
+			}
+
 			SDL_PrivateKeyboard(SDL_PRESSED,
-				SDL_Atari_TranslateKey(i, &keysym, SDL_TRUE));
+				SDL_Atari_TranslateKey(i, &keysym, SDL_TRUE, shiftstate));
+			if (i == SCANCODE_CAPSLOCK) {
+				/* Pressed capslock: generate a release event, too because this
+				 * is what SDL expects; it handles locking by itself.
+				 */
+				SDL_PrivateKeyboard(SDL_RELEASED,
+					SDL_Atari_TranslateKey(i, &keysym, SDL_FALSE, shiftstate & ~K_CAPSLOCK));
+			}
 			SDL_AtariIkbd_keyboard[i]=KEY_UNDEFINED;
 		}
-			
+
 		/* Key released ? */
 		if (SDL_AtariIkbd_keyboard[i]==KEY_RELEASED) {
+			switch (i) {
+			case SCANCODE_LEFTSHIFT:
+				shiftstate &= ~K_LSHIFT;
+				break;
+			case SCANCODE_RIGHTSHIFT:
+				shiftstate &= ~K_RSHIFT;
+				break;
+			case SCANCODE_LEFTCONTROL:
+				shiftstate &= ~K_CTRL;
+				break;
+			case SCANCODE_LEFTALT:
+				shiftstate &= ~K_ALT;
+				break;
+			case SCANCODE_CAPSLOCK:
+				shiftstate &= ~K_CAPSLOCK;
+				break;
+			case SCANCODE_ALTGR:
+				shiftstate &= ~0x80;
+				break;
+			}
+
+			if (i == SCANCODE_CAPSLOCK) {
+				/* Released capslock: generate a pressed event, too because this
+				 * is what SDL expects; it handles locking by itself.
+				 */
+				SDL_PrivateKeyboard(SDL_PRESSED,
+					SDL_Atari_TranslateKey(i, &keysym, SDL_TRUE, shiftstate | K_CAPSLOCK));
+			}
 			SDL_PrivateKeyboard(SDL_RELEASED,
-				SDL_Atari_TranslateKey(i, &keysym, SDL_FALSE));
+				SDL_Atari_TranslateKey(i, &keysym, SDL_FALSE, shiftstate));
 			SDL_AtariIkbd_keyboard[i]=KEY_UNDEFINED;
 		}
 	}
@@ -110,17 +194,20 @@ void AtariIkbd_PumpEvents(_THIS)
 			prevbutton = atari_prevmouseb & (1<<i);
 
 			if (curbutton && !prevbutton) {
-				SDL_PrivateMouseButton(SDL_PRESSED, atari_GetButton(i), 0, 0);
+				SDL_PrivateMouseButton(SDL_PRESSED, GetButton(i), 0, 0);
 			}
 			if (!curbutton && prevbutton) {
-				SDL_PrivateMouseButton(SDL_RELEASED, atari_GetButton(i), 0, 0);
+				SDL_PrivateMouseButton(SDL_RELEASED, GetButton(i), 0, 0);
 			}
 		}
 		atari_prevmouseb = SDL_AtariIkbd_mouseb;
 	}
 }
 
-void AtariIkbd_ShutdownEvents(void)
+void AtariIkbd_ShutdownEvents(_THIS)
 {
-	Supexec(SDL_AtariIkbdUninstall);
+	if (!SDL_AtariIkbd_enabled)
+		return;
+
+	Supexec(SDL_AtariIkbd_Restore);
 }

@@ -33,23 +33,22 @@
 #include "SDL_xbios.h"
 #include "SDL_xbios_milan.h"
 
-#define NUM_PREDEFINED_MODES 7
-
 typedef struct {
-	Uint16 width, height;
+	Uint16 modecode, width, height;
 } predefined_mode_t;
 
-static const predefined_mode_t mode_list[NUM_PREDEFINED_MODES]={
-	{640,400},
-	{640,480},
-	{800,608},
-	{1024,768},
-	{1152,864},
-	{1280,1024},
-	{1600,1200}
+
+static const predefined_mode_t mode_list[]={
+	{0x1000+(0<<4),640,400},
+	{0x1000+(1<<4),640,480},
+	{0x1000+(2<<4),800,608},
+	{0x1000+(3<<4),1024,768},
+	{0x1000+(4<<4),1152,864},
+	{0x1000+(5<<4),1280,1024},
+	{0x1000+(6<<4),1600,1200}
 };
 
-static const Uint8 mode_bpp[4]={
+static const Uint8 mode_bpp[]={
 	8, 15, 16, 32
 };
 
@@ -62,11 +61,11 @@ static SDL_VideoDevice *enum_this;
 
 static void listModes(_THIS, int actually_add);
 static void saveMode(_THIS, SDL_PixelFormat *vformat);
-static void setMode(_THIS, xbiosmode_t *new_video_mode);
+static void setMode(_THIS, const xbiosmode_t *new_video_mode);
 static void restoreMode(_THIS);
-static int getLineWidth(_THIS, xbiosmode_t *new_video_mode, int width, int bpp);
+static int getLineWidth(_THIS, const xbiosmode_t *new_video_mode, int width, int bpp);
 static void swapVbuffers(_THIS);
-static int allocVbuffers(_THIS, int num_buffers, int bufsize);
+static int allocVbuffers(_THIS, const xbiosmode_t *new_video_mode, int num_buffers, int bufsize);
 static void freeVbuffers(_THIS);
 static int setColors(_THIS, int firstcolor, int ncolors, SDL_Color *colors);
 
@@ -81,6 +80,7 @@ void SDL_XBIOS_VideoInit_Milan(_THIS)
 	XBIOS_allocVbuffers = allocVbuffers;
 	XBIOS_freeVbuffers = freeVbuffers;
 
+	/* CTPCI doesn't need this as it's inherited from xbios_f030 */
 	this->SetColors = setColors;
 }
 
@@ -104,9 +104,9 @@ static void listModes(_THIS, int actually_add)
 	int i;
 
 	/* Read validated predefined modes */
-	for (i=0; i<NUM_PREDEFINED_MODES; i++) {
+	for (i=0; i<sizeof(mode_list)/sizeof(predefined_mode_t); i++) {
 		int j;
-		Uint16 deviceid = 0x1000 + (i<<4);
+		Uint16 deviceid = mode_list[i].modecode;
 
 		for (j=1; j<4; j++) {
 			if (Validmode(deviceid + j)) {
@@ -131,7 +131,7 @@ static void listModes(_THIS, int actually_add)
 
 static void saveMode(_THIS, SDL_PixelFormat *vformat)
 {
-	SCREENINFO si;
+	SCREENINFO si = { 0 };
 
 	/* Read infos about current mode */
 	VsetScreen(-1, &XBIOS_oldvmode, MI_MAGIC, CMD_GETMODE);
@@ -144,18 +144,12 @@ static void saveMode(_THIS, SDL_PixelFormat *vformat)
 	this->info.current_w = si.scrWidth;
 	this->info.current_h = si.scrHeight;
 
-	XBIOS_oldnumcol = 0;
-	if (si.scrFlags & SCRINFO_OK) {
-		if (si.scrPlanes <= 8) {
-			XBIOS_oldnumcol = 1<<si.scrPlanes;
-		}
-	}
-	if (XBIOS_oldnumcol) {
-		VgetRGB(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
+	XBIOS_oldvbase = (void*)si.frameadr;
+
+	vformat->BitsPerPixel = si.scrPlanes;
 }
 
-static void setMode(_THIS, xbiosmode_t *new_video_mode)
+static void setMode(_THIS, const xbiosmode_t *new_video_mode)
 {
 	VsetScreen(-1, XBIOS_screens[0], MI_MAGIC, CMD_SETADR);
 
@@ -170,19 +164,16 @@ static void setMode(_THIS, xbiosmode_t *new_video_mode)
 
 static void restoreMode(_THIS)
 {
-	VsetScreen(-1, &XBIOS_oldvbase, MI_MAGIC, CMD_SETADR);
-	VsetScreen(-1, &XBIOS_oldvmode, MI_MAGIC, CMD_SETMODE);
-	if (XBIOS_oldnumcol) {
-		VsetRGB(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
+	VsetScreen(-1, XBIOS_oldvbase, MI_MAGIC, CMD_SETADR);
+	VsetScreen(-1, XBIOS_oldvmode, MI_MAGIC, CMD_SETMODE);
 }
 
 static void swapVbuffers(_THIS)
 {
-	VsetScreen(-1, XBIOS_screens[XBIOS_fbnum], MI_MAGIC, CMD_SETADR);
+	VsetScreen(-1, -1, MI_MAGIC, CMD_FLIPPAGE);
 }
 
-static int getLineWidth(_THIS, xbiosmode_t *new_video_mode, int width, int bpp)
+static int getLineWidth(_THIS, const xbiosmode_t *new_video_mode, int width, int bpp)
 {
 	SCREENINFO si;
 	int retvalue = width * (((bpp==15) ? 16 : bpp)>>3);
@@ -199,7 +190,7 @@ static int getLineWidth(_THIS, xbiosmode_t *new_video_mode, int width, int bpp)
 	return (retvalue);
 }
 
-static int allocVbuffers(_THIS, int num_buffers, int bufsize)
+static int allocVbuffers(_THIS, const xbiosmode_t *new_video_mode, int num_buffers, int bufsize)
 {
 	int i;
 
@@ -208,7 +199,7 @@ static int allocVbuffers(_THIS, int num_buffers, int bufsize)
 			/* Buffer 0 is current screen */
 			XBIOS_screensmem[i] = XBIOS_oldvbase;
 		} else {
-			VsetScreen(-1, &XBIOS_screensmem[i], MI_MAGIC, CMD_ALLOCPAGE);
+			VsetScreen(&XBIOS_screensmem[i], new_video_mode->number, MI_MAGIC, CMD_ALLOCPAGE);
 		}
 
 		if (!XBIOS_screensmem[i]) {

@@ -10,7 +10,7 @@ Using the Simple DirectMedia Layer on Atari
         download it from my web site (URL at end of this file).
 
     If you want to configure a program using SDL on Atari,
-	    see sections IV - VI.
+        see sections IV - VI.
 
 
 ==============================================================================
@@ -24,7 +24,7 @@ I.  Building the Simple DirectMedia Layer libraries:
     Tos does not support threads.
 
     MiNT version (maybe Magic, only for multitasking OS):
-      --disable-pthreads --enable-pth
+      --enable-pthreads --enable-pth
     Mint and Magic may supports threads, so audio can be used with current
     devices, like Sun audio, or disk-writing support. Like Tos, interrupt
     audio without threads is more suited for Atari machines.
@@ -41,36 +41,24 @@ II. Building the Simple DirectMedia Layer test programs:
 ==============================================================================
 III.  Enjoy! :)
 
-  If you have a project you'd like me to know about, or want to ask questions,
-  go ahead and join the SDL developer's mailing list by sending e-mail to:
-
-	sdl-request@libsdl.org
-
-  and put "subscribe" into the subject of the message. Or alternatively you
-  can use the web interface:
-
-	http://www.libsdl.org/mailman/listinfo/sdl
+  If you have a project you'd like announce, or want to ask questions, go
+  ahead and join the discussion forum for SDL, with categories for
+  development, announcements, games and repository commits. Sign up at:
+  https://discourse.libsdl.org
 
 ==============================================================================
 IV.  What is supported:
 
-Keyboard (GEMDOS, BIOS, GEM, Ikbd)
-Mouse (XBIOS, GEM, Ikbd, /dev/mouse (non working atm, disabled))
+Keyboard (XBIOS, GEM(1), Ikbd)
+Mouse (XBIOS, GEM(2), Ikbd)
 Video (XBIOS (Fullscreen), GEM (Windowed and Fullscreen))
-Timer (VBL vector, GNU pth library)
-Joysticks and joypads (Ikbd, Hardware)
+Timer (Timer C interrupt, GNU pth library)
+Joysticks (XBIOS, Ikbd) and joypads (Hardware)
 Audio (Hardware, XBIOS, GSXB, MCSN, STFA, /dev/audio if threads enabled)
 Threads (Multitasking OS only via GNU pth library)
 Shared object loader (using LDG library from http://ldg.atari.org/)
 Audio CD (MetaDOS)
 OpenGL (using Mesa offscreen rendering driver)
-
-- Dependent driver combinations:
-Video   Kbd     Mouse   Timer   Joysticks
-xbios   ikbd    ikbd    vbl(2)  ikbd
-xbios   gemdos  xbios   vbl(2)  xbios
-xbios   bios    xbios   vbl(2)  xbios
-gem     gem     gem(1)  vbl(2)  xbios
 
 Audio   O/S     Misc
 dma8    All     Uses MFP Timer A interrupt
@@ -86,23 +74,24 @@ gsxb    All     Uses GSXB callback
 Joypad driver always uses hardware access.
 OpenGL driver always uses OSMesa.
 
-(1) GEM does not report relative mouse motion, so xbios mouse driver is used
+(1) GEM does not report AltrGr and CAPSLOCK key states, so Kbshift() (a BIOS
+function) is used to report those key events.
+(2) GEM does not report relative mouse motion, so xbios mouse driver is used
 to report this type event.
-A preliminary driver for /dev/mouse device driver is present, but is disabled
-till it can be used with other applications simultaneously.
-
-(2) If you build SDL with threads using the GNU pth library, timers are
-supported via the pth library.
 
 ==============================================================================
 V.  Environment variables:
 
 SDL_VIDEODRIVER:
-	Set to 'xbios' to force xbios video driver
-	Set to 'gem' to force gem video driver
+	Set to 'xbios' to force xbios video driver. Uses XBIOS/Ikbd events driver.
+	Set to 'gem' to force gem video driver. Uses an internal events driver.
 
 SDL_VIDEO_GL_DRIVER:
 	Set to filename to load as OpenGL library, if you use SDL_GL_LoadLibrary()
+
+SDL_VIDEO_ALIGNED_WINDOWS:
+	Set to force aligning of the window's x coordinate to a 16-pixel boundary
+	(e.g. for speed reasons)
 
 SDL_AUDIODRIVER:
 	Set to 'mint_gsxb' to force Atari GSXB audio driver
@@ -114,16 +103,16 @@ SDL_AUDIODRIVER:
 	Set to 'disk' to force disk-writing audio driver
 
 SDL_ATARI_EVENTSDRIVER
-	Set to 'ikbd' to force IKBD 6301 keyboard driver
-	Set to 'gemdos' to force gemdos keyboard driver
-	Set to 'bios' to force bios keyboard driver
+	Set to 'ikbd' to force IKBD 6301 events driver
+	Set to 'xbios' to force XBIOS events driver
+	GEM events driver is used implicitly if 'gem' video driver is used.
 
 SDL_JOYSTICK_ATARI:
 	Use any of these strings in the environment variable to enable or
 	disable a joystick:
 
 	'ikbd-joy1-[on|off]' for IKBD joystick on port 1 (hardware access)
-	'xbios-joy1-[on|off]' for IKBD joystick on port 1 (xbios access)
+	'xbios-joy1-[on|off]' for IKBD joystick on port 1 (XBIOS access)
 	'porta-pad-[on|off]' for joypad and/or teamtap on port A
 	'porta-joy0-[on|off]' for joystick 0 on port A
 	'porta-joy1-[on|off]' for joystick 1 on port A
@@ -136,7 +125,7 @@ SDL_JOYSTICK_ATARI:
 
 	Default configuration is:
 		'ikbd-joy1-on' (if IKBD events driver enabled)
-		'xbios-joy1-on' (if gemdos/bios/gem events driver enabled)
+		'xbios-joy1-on' (if xbios/gem events driver enabled)
 		'porta-pad-on portb-pad-on' (if available on the machine)
 
 	port[a|b]-[pad|joy?|lp|anpad]-* strings are mutually exclusives.
@@ -177,25 +166,41 @@ OpenGL:
 
 Xbios video:
 	Video chip is detected using the _VDO cookie.
-	Screen enhancers are not supported, but could be if you know how to
-	use them.
+	Screen enhancers are not supported, but could be if you know how to use
+	them.
 
 	ST, STE, Mega ST, Mega STE:
-		320x200x4 bits, shades of grey, available only for the purpose
-		of testing SDL.
+		320x200x4 bits, shades of grey, available only for the purpose of
+		testing SDL.
 	TT:
 		320x480x8 and 320x240x8 (software double-lined mode).
-		NOVA video card: All modes with 8 bits or higher depth.
 	Falcon:
 		All modes supported by the current monitor (RVB or VGA).
 		BlowUp and Centscreen: Extended modes.
 		ScreenBlaster 3: Only current mode.
-		Supervidel: Same resolutions as standard Falcon.
-		CTPCI: Experimental support.
+		Supervidel: Extended modes.
+		CTPCI: Only the modes supported by XBIOS (640x480, 800x600, 1024x768,
+			   1280x960, 1600x1200 in 8/16/32 bpp).
 	Milan:
-		Experimental support
+		Nearly identical with CTPCI driver. Works only on Milan with S3 video
+		card driver (which should be newer than 12.1.2000). To be verified.
+	Any machine with NOVA video card:
+		All modes with 8 bits or higher depth.
 	Clones and any machine with monochrome monitor:
 		Not supported.
+
+	Beware: As of 2025-09-07, it is solely the developer's responsibility to
+	decide whether SDL_SetVideoMode should be called with SDL_SWSURFACE or
+	SDL_HWSURFACE (including SDL_DOUBLEBUF).
+
+	In the case of SDL_SWSURFACE, a shadow buffer will be created, and all
+	rendering will be done there until SDL_UpdateRect or SDL_UpdateRects is
+	called.
+
+	The decision should depend on how the framebuffer is used. If the SDL
+	application already maintains its own framebuffer and SDL is used merely as
+	a display device, use SDL_HWSURFACE. If the framebuffer is accessed on a
+	per-pixel basis —or if pixels are read multiple times— prefer SDL_SWSURFACE.
 
 Gem video:
 	Automatically used if xbios not available.
@@ -203,26 +208,21 @@ Gem video:
 	All machines:
 		Only the current resolution, if 8 bits or higher depth.
 
-IKBD keyboard, mouse and joystick driver:
-	Available if _MCH cookie is ST, Mega ST, STE, Mega STE, TT or Falcon.
+Keyboard, mouse and joystick driver:
+	XBIOS driver is automatically used in TOS >= 2.x and/or in MagiC. Otherwise
+	IKBD driver is used.
 
-	Hades has an IKBD, but xbios is not available for video, so IKBD
-	driver is disabled.
-
-Gemdos and bios keyboard driver:
-	Available on all machines.
-
-Mouse and joystick xbios driver:
-	Available on all machines (I think).
+	As XBIOS video driver is not available on Hades, it is forced to use the
+	implicit GEM driver despite the fact that it has both IKBD and XBIOS
+	features available.
 
 Joypad driver:
 	Available if _MCH cookie is STE or Falcon. Supports teamtap.
 
-PTH timer driver:
-	Available with multitasking OS.
-
-VBL timer driver:
-	Available on all machines (I think).
+Timer driver:
+	If you build SDL with threads using the GNU pth library and running on a
+	multitasking OS , timers are supported via the pth library. Otherwise
+	Timer C is used (which should be available on all machines).
 
 Audio drivers:
 	Cookies _SND, MCSN, STFA and GSXB used to detect supported audio
@@ -252,3 +252,6 @@ Audio drivers:
 --
 Patrice Mandin <patmandin@gmail.com>
 http://pmandin.atari.org/
+
+Miro Kropacek <miro.kropacek@gmail.com>
+http://mikro.atari.org/

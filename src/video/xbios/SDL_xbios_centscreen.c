@@ -35,7 +35,7 @@
 
 static void listModes(_THIS, int actually_add);
 static void saveMode(_THIS, SDL_PixelFormat *vformat);
-static void setMode(_THIS, xbiosmode_t *new_video_mode);
+static void setMode(_THIS, const xbiosmode_t *new_video_mode);
 static void restoreMode(_THIS);
 
 void SDL_XBIOS_VideoInit_Centscreen(_THIS)
@@ -88,17 +88,9 @@ static void saveMode(_THIS, SDL_PixelFormat *vformat)
 
 	Vread(&curmode);
 	XBIOS_oldvmode = curmode.handle;
-
-	XBIOS_oldnumcol= 1<< (1 << (XBIOS_oldvmode & NUMCOLS));
-	if (XBIOS_oldnumcol > 256) {
-		XBIOS_oldnumcol = 256;
-	}
-	if (XBIOS_oldnumcol) {
-		VgetRGB(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
 }
 
-static void setMode(_THIS, xbiosmode_t *new_video_mode)
+static void setMode(_THIS, const xbiosmode_t *new_video_mode)
 {
 	centscreen_mode_t newmode, curmode;
 
@@ -134,8 +126,4 @@ static void restoreMode(_THIS)
 	newmode.mode = newmode.physx = newmode.physy = newmode.plan =
 		newmode.logx = newmode.logy = -1;
 	Vwrite(0, &newmode, &curmode);
-
-	if (XBIOS_oldnumcol) {
-		VsetRGB(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
 }

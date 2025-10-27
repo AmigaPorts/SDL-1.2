@@ -22,21 +22,31 @@
 #include "SDL_config.h"
 
 /*
-	MiNT /dev/mouse driver
+ *	XBRA protocol
+ *
+ *	Miro Kropacek
+ */
 
-	Patrice Mandin
-*/
+#ifndef _SDL_ATARI_XBRA_H_
+#define _SDL_ATARI_XBRA_H_
 
-#ifndef _SDL_ATARI_DEVMOUSE_H_
-#define _SDL_ATARI_DEVMOUSE_H_
+#include "SDL_stdinc.h"
 
-#include "../SDL_sysvideo.h"
+typedef void (*XbraHandler) (void);
 
-/* Hidden "this" pointer for the video functions */
-#define _THIS	SDL_VideoDevice *this
+typedef struct xbra
+{
+	Uint32		xbra_id;
+	Uint32		app_id;
+	XbraHandler	oldvec;
+} XBRA;
 
-extern int SDL_AtariDevMouse_Open(void);
-extern void SDL_AtariDevMouse_Close(void);
-extern void SDL_AtariDevMouse_PostMouseEvents(_THIS, SDL_bool buttonEvents);
+/* Const */
 
-#endif /* _SDL_ATARI_DEVMOUSE_H_ */
+#define XBRA_ID	0x58425241UL /* 'XBRA' */
+
+/* Functions */
+
+extern XbraHandler Atari_UnhookXbra(Uint32 vecnum, Uint32 app_id, XbraHandler handler);
+
+#endif /* _SDL_ATARI_XBRA_H_ */

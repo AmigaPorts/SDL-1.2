@@ -31,16 +31,7 @@
 #include "SDL_stdinc.h"
 #include "SDL_endian.h"
 
-#ifdef HAVE_ICONV
-
-/* Depending on which standard the iconv() was implemented with,
-   iconv() may or may not use const char ** for the inbuf param.
-   If we get this wrong, it's just a warning, so no big deal.
-*/
-#if defined(_XGP6) || defined(__RISCOS__) || \
-    defined(__GLIBC__) && ((__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 2))
-#define ICONV_INBUF_NONCONST
-#endif
+#if defined(HAVE_ICONV) && defined(HAVE_ICONV_H)
 
 #include <errno.h>
 
@@ -48,12 +39,9 @@ size_t SDL_iconv(SDL_iconv_t cd,
                  const char **inbuf, size_t *inbytesleft,
                  char **outbuf, size_t *outbytesleft)
 {
-	size_t retCode;
-#ifdef ICONV_INBUF_NONCONST
-	retCode = iconv(cd, (char **)inbuf, inbytesleft, outbuf, outbytesleft);
-#else
-	retCode = iconv(cd, inbuf, inbytesleft, outbuf, outbytesleft);
-#endif
+	/* iconv's second parameter may or may not be `const char const *` depending on the
+	   C runtime's whims. Casting to void * seems to make everyone happy, though. */
+	const size_t retCode = iconv((iconv_t) ((uintptr_t) cd), (void *)inbuf, inbytesleft, outbuf, outbytesleft);
 	if ( retCode == (size_t)-1 ) {
 		switch(errno) {
 		    case E2BIG:
@@ -157,13 +145,13 @@ static const char *getlocale(char *buffer, size_t bufsize)
 
 	/* We need to trim down strings like "en_US.UTF-8@blah" to "UTF-8" */
 	ptr = SDL_strchr(lang, '.');
-	if (ptr != NULL) {
+	if (ptr) {
 		lang = ptr + 1;
 	}
 
 	SDL_strlcpy(buffer, lang, bufsize);
 	ptr = SDL_strchr(buffer, '@');
-	if (ptr != NULL) {
+	if (ptr) {
 		*ptr = '\0';  /* chop end of string. */
 	}
 
@@ -395,7 +383,7 @@ size_t SDL_iconv(SDL_iconv_t cd,
 						left = 1;
 					}
 				} else {
-					if ( (p[0] & 0x80) != 0x00 ) {
+					if ( p[0] & 0x80 ) {
 						/* Skip illegal sequences
 						return SDL_ICONV_EILSEQ;
 						*/
@@ -430,8 +418,7 @@ size_t SDL_iconv(SDL_iconv_t cd,
 					ch = UNKNOWN_UNICODE;
 				}
 				if ( (ch >= 0xD800 && ch <= 0xDFFF) ||
-				     (ch == 0xFFFE || ch == 0xFFFF) ||
-				     ch > 0x10FFFF ) {
+				     (ch == 0xFFFE || ch == 0xFFFF) || ch > 0x10FFFF ) {
 					/* Skip illegal sequences
 					return SDL_ICONV_EILSEQ;
 					*/
@@ -446,8 +433,7 @@ size_t SDL_iconv(SDL_iconv_t cd,
 				if ( srclen < 2 ) {
 					return SDL_ICONV_EINVAL;
 				}
-				W1 = ((Uint16)p[0] << 8) |
-				      (Uint16)p[1];
+				W1 = ((Uint16)p[0] << 8) | (Uint16)p[1];
 				src += 2;
 				srclen -= 2;
 				if ( W1 < 0xD800 || W1 > 0xDFFF ) {
@@ -465,8 +451,7 @@ size_t SDL_iconv(SDL_iconv_t cd,
 					return SDL_ICONV_EINVAL;
 				}
 				p = (Uint8 *)src;
-				W2 = ((Uint16)p[0] << 8) |
-				      (Uint16)p[1];
+				W2 = ((Uint16)p[0] << 8) | (Uint16)p[1];
 				src += 2;
 				srclen -= 2;
 				if ( W2 < 0xDC00 || W2 > 0xDFFF ) {
@@ -487,8 +472,7 @@ size_t SDL_iconv(SDL_iconv_t cd,
 				if ( srclen < 2 ) {
 					return SDL_ICONV_EINVAL;
 				}
-				W1 = ((Uint16)p[1] << 8) |
-				      (Uint16)p[0];
+				W1 = ((Uint16)p[1] << 8) | (Uint16)p[0];
 				src += 2;
 				srclen -= 2;
 				if ( W1 < 0xD800 || W1 > 0xDFFF ) {
@@ -506,8 +490,7 @@ size_t SDL_iconv(SDL_iconv_t cd,
 					return SDL_ICONV_EINVAL;
 				}
 				p = (Uint8 *)src;
-				W2 = ((Uint16)p[1] << 8) |
-				      (Uint16)p[0];
+				W2 = ((Uint16)p[1] << 8) | (Uint16)p[0];
 				src += 2;
 				srclen -= 2;
 				if ( W2 < 0xDC00 || W2 > 0xDFFF ) {
@@ -809,7 +792,7 @@ size_t SDL_iconv(SDL_iconv_t cd,
 
 int SDL_iconv_close(SDL_iconv_t cd)
 {
-	if ( cd && cd != (SDL_iconv_t)-1 ) {
+	if ( cd != (SDL_iconv_t)-1 ) {
 		SDL_free(cd);
 	}
 	return 0;
@@ -826,49 +809,47 @@ char *SDL_iconv_string(const char *tocode, const char *fromcode, const char *inb
 	size_t outbytesleft;
 	size_t retCode = 0;
 
-	cd = SDL_iconv_open(tocode, fromcode);
-	if ( cd == (SDL_iconv_t)-1 ) {
-		/* See if we can recover here (fixes iconv on Solaris 11) */
-		if ( !tocode || !*tocode ) {
-			tocode = "UTF-8";
-		}
-		if ( !fromcode || !*fromcode ) {
-			fromcode = "UTF-8";
-		}
-		cd = SDL_iconv_open(tocode, fromcode);
+	if ( !tocode || !*tocode ) {
+		tocode = "UTF-8";
 	}
+	if ( !fromcode || !*fromcode ) {
+		fromcode = "UTF-8";
+	}
+	cd = SDL_iconv_open(tocode, fromcode);
 	if ( cd == (SDL_iconv_t)-1 ) {
 		return NULL;
 	}
 
-	stringsize = inbytesleft > 4 ? inbytesleft : 4;
-	string = SDL_malloc(stringsize);
+	stringsize = inbytesleft;
+	string = (char *) SDL_malloc(stringsize + sizeof(Uint32));
 	if ( !string ) {
 		SDL_iconv_close(cd);
 		return NULL;
 	}
 	outbuf = string;
 	outbytesleft = stringsize;
-	SDL_memset(outbuf, 0, 4);
+	SDL_memset(outbuf, 0, sizeof(Uint32));
 
 	while ( inbytesleft > 0 ) {
+		const size_t oldinbytesleft = inbytesleft;
 		retCode = SDL_iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
 		switch (retCode) {
 		    case SDL_ICONV_E2BIG:
 			{
+				const ptrdiff_t diff = (ptrdiff_t) (outbuf - string);
 				char *oldstring = string;
 				stringsize *= 2;
-				string = SDL_realloc(string, stringsize);
+				string = (char *) SDL_realloc(string, stringsize + sizeof(Uint32));
 				if ( !string ) {
 					SDL_free(oldstring);
 					SDL_iconv_close(cd);
 					return NULL;
 				}
-				outbuf = string + (outbuf - oldstring);
-				outbytesleft = stringsize - (outbuf - string);
-				SDL_memset(outbuf, 0, 4);
+				outbuf = string + diff;
+				outbytesleft = stringsize - diff;
+				SDL_memset(outbuf, 0, sizeof(Uint32));
+				continue;
 			}
-			break;
 		    case SDL_ICONV_EILSEQ:
 			/* Try skipping some input data - not perfect, but... */
 			++inbuf;
@@ -880,7 +861,12 @@ char *SDL_iconv_string(const char *tocode, const char *fromcode, const char *inb
 			inbytesleft = 0;
 			break;
 		}
+		/* Avoid infinite loops when nothing gets converted */
+		if (oldinbytesleft == inbytesleft) {
+			break;
+		}
 	}
+	SDL_memset(outbuf, 0, sizeof(Uint32));
 	SDL_iconv_close(cd);
 
 	return string;

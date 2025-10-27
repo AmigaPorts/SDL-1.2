@@ -29,33 +29,28 @@
 */
 
 #include <mint/cookie.h>
-#include <mint/osbind.h>
 #include <mint/falcon.h>
-
-#include "../SDL_sysvideo.h"
-
-#include "../ataricommon/SDL_atarimxalloc_c.h"
 
 #include "SDL_xbios.h"
 #include "SDL_xbios_milan.h"
 
-/* use predefined, hardcoded table if CTPCI_USE_TABLE == 1
-   else enumerate all non virtual video modes */
-#define CTPCI_USE_TABLE 1
+/*
+ * Use predefined, hardcoded table if CTPCI_USE_TABLE is defined
+ * else enumerate all non virtual video modes
+ */
+#define CTPCI_USE_TABLE
 
 typedef struct {
 	Uint16 modecode, width, height;
 } predefined_mode_t;
 
 static const predefined_mode_t mode_list[]={
-	{0x4260,320,200},
-	{0x4270,320,240},
-	{0x4138,640,480},
-	{0x4160,800,600},
-	{0x4188,1024,768},
-	{0x42c8,1280,800},
-	{0x41e0,1280,1024},
-	{0x4210,1600,1200}
+	/*{VERTFLAG|PAL|VGA,320,240},*/	/* falls back to 640x480 */
+	{PAL|VGA|COL80,640,480},
+	{VESA_600|HORFLAG2|PAL|VGA|COL80,800,600},
+	{VESA_768|HORFLAG2|PAL|VGA|COL80,1024,768},
+	{VERTFLAG2|HORFLAG|PAL|VGA|COL80,1280,960},
+	{VERTFLAG2|VESA_600|HORFLAG2|HORFLAG|PAL|VGA|COL80,1600,1200}
 };
 
 static const Uint8 mode_bpp[]={
@@ -64,20 +59,21 @@ static const Uint8 mode_bpp[]={
 
 /*--- Variables ---*/
 
+#ifndef CTPCI_USE_TABLE
 static int enum_actually_add;
 static SDL_VideoDevice *enum_this;
+#endif
 
 /*--- Functions ---*/
 
 static void listModes(_THIS, int actually_add);
 static void saveMode(_THIS, SDL_PixelFormat *vformat);
-static void setMode(_THIS, xbiosmode_t *new_video_mode);
+static void setMode(_THIS, const xbiosmode_t *new_video_mode);
 static void restoreMode(_THIS);
-static int getLineWidth(_THIS, xbiosmode_t *new_video_mode, int width, int bpp);
-static int allocVbuffers(_THIS, int num_buffers, int bufsize);
+static int getLineWidth(_THIS, const xbiosmode_t *new_video_mode, int width, int bpp);
+static void swapVbuffers(_THIS);
+static int allocVbuffers(_THIS, const xbiosmode_t *new_video_mode, int num_buffers, int bufsize);
 static void freeVbuffers(_THIS);
-static void updateRects(_THIS, int numrects, SDL_Rect *rects);
-static int flipHWSurface(_THIS, SDL_Surface *surface);
 
 void SDL_XBIOS_VideoInit_Ctpci(_THIS)
 {
@@ -86,13 +82,12 @@ void SDL_XBIOS_VideoInit_Ctpci(_THIS)
 	XBIOS_setMode = setMode;
 	XBIOS_restoreMode = restoreMode;
 	XBIOS_getLineWidth = getLineWidth;
+	XBIOS_swapVbuffers = swapVbuffers;
 	XBIOS_allocVbuffers = allocVbuffers;
 	XBIOS_freeVbuffers = freeVbuffers;
-
-	XBIOS_updRects = updateRects;
-	this->FlipHWSurface = flipHWSurface;
 }
 
+#ifndef CTPCI_USE_TABLE
 static unsigned long /*cdecl*/ enumfunc(SCREENINFO *inf, unsigned long flag)
 {
 	xbiosmode_t modeinfo;
@@ -107,6 +102,7 @@ static unsigned long /*cdecl*/ enumfunc(SCREENINFO *inf, unsigned long flag)
 
 	return ENUMMODE_CONT;
 }
+#endif
 
 static void listModes(_THIS, int actually_add)
 {
@@ -142,7 +138,7 @@ static void listModes(_THIS, int actually_add)
 
 static void saveMode(_THIS, SDL_PixelFormat *vformat)
 {
-	SCREENINFO si;
+	SCREENINFO si = { 0 };
 
 	/* Read infos about current mode */
 	VsetScreen(-1, &XBIOS_oldvmode, VN_MAGIC, CMD_GETMODE);
@@ -155,20 +151,12 @@ static void saveMode(_THIS, SDL_PixelFormat *vformat)
 	this->info.current_w = si.scrWidth;
 	this->info.current_h = si.scrHeight;
 
-	vformat->BitsPerPixel = si.scrPlanes;
+	XBIOS_oldvbase = (void*)si.frameadr;
 
-	XBIOS_oldnumcol = 0;
-	if (si.scrFlags & SCRINFO_OK) {
-		if (si.scrPlanes <= 8) {
-			XBIOS_oldnumcol = 1<<si.scrPlanes;
-		}
-	}
-	if (XBIOS_oldnumcol) {
-		VgetRGB(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
+	vformat->BitsPerPixel = si.scrPlanes;
 }
 
-static void setMode(_THIS, xbiosmode_t *new_video_mode)
+static void setMode(_THIS, const xbiosmode_t *new_video_mode)
 {
 	VsetScreen(-1, XBIOS_screens[0], VN_MAGIC, CMD_SETADR);
 
@@ -183,14 +171,16 @@ static void setMode(_THIS, xbiosmode_t *new_video_mode)
 
 static void restoreMode(_THIS)
 {
-	VsetScreen(-1, &XBIOS_oldvbase, VN_MAGIC, CMD_SETADR);
-	VsetScreen(-1, &XBIOS_oldvmode, VN_MAGIC, CMD_SETMODE);
-	if (XBIOS_oldnumcol) {
-		VsetRGB(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
+	VsetScreen(-1, XBIOS_oldvbase, VN_MAGIC, CMD_SETADR);
+	VsetScreen(-1, XBIOS_oldvmode, VN_MAGIC, CMD_SETMODE);
 }
 
-static int getLineWidth(_THIS, xbiosmode_t *new_video_mode, int width, int bpp)
+static void swapVbuffers(_THIS)
+{
+	VsetScreen(-1, -1, VN_MAGIC, CMD_FLIPPAGE);
+}
+
+static int getLineWidth(_THIS, const xbiosmode_t *new_video_mode, int width, int bpp)
 {
 	SCREENINFO si;
 	int retvalue = width * (((bpp==15) ? 16 : bpp)>>3);
@@ -207,7 +197,7 @@ static int getLineWidth(_THIS, xbiosmode_t *new_video_mode, int width, int bpp)
 	return (retvalue);
 }
 
-static int allocVbuffers(_THIS, int num_buffers, int bufsize)
+static int allocVbuffers(_THIS, const xbiosmode_t *new_video_mode, int num_buffers, int bufsize)
 {
 	int i;
 
@@ -216,7 +206,7 @@ static int allocVbuffers(_THIS, int num_buffers, int bufsize)
 			/* Buffer 0 is current screen */
 			XBIOS_screensmem[i] = XBIOS_oldvbase;
 		} else {
-			VsetScreen(-1, &XBIOS_screensmem[i], VN_MAGIC, CMD_ALLOCPAGE);
+			VsetScreen(&XBIOS_screensmem[i], new_video_mode->number, VN_MAGIC, CMD_ALLOCPAGE);
 		}
 
 		if (!XBIOS_screensmem[i]) {
@@ -227,23 +217,6 @@ static int allocVbuffers(_THIS, int num_buffers, int bufsize)
 
 		XBIOS_screens[i]=XBIOS_screensmem[i];
 	}
-
-	/*--- Always use shadow buffer ---*/
-	if (XBIOS_shadowscreen) {
-		Mfree(XBIOS_shadowscreen);
-		XBIOS_shadowscreen=NULL;
-	}
-
-	/* allocate shadow buffer in TT-RAM, blitting directly to screen is
-	   damn slow, send postcards to R.Czuba for fixing TT-RAM->CTPCI burst
-	   mode */
-	XBIOS_shadowscreen = Atari_SysMalloc(bufsize, MX_PREFTTRAM);
-
-	if (XBIOS_shadowscreen == NULL) {
-		SDL_SetError("Can not allocate %d KB for shadow buffer", bufsize>>10);
-		return (0);
-	}
-	SDL_memset(XBIOS_shadowscreen, 0, bufsize);
 
 	return (1);
 }
@@ -262,64 +235,4 @@ static void freeVbuffers(_THIS)
 			XBIOS_screensmem[i]=NULL;
 		}
 	}
-}
-
-static void updateRects(_THIS, int numrects, SDL_Rect *rects)
-{
-	SDL_Surface *surface;
-	int i;
-
-	surface = this->screen;
-
-	for (i=0;i<numrects;i++) {
-		Uint8 *blockSrcStart, *blockDstStart;
-		int y;
-
-		blockSrcStart = (Uint8 *) surface->pixels;
-		blockSrcStart += surface->pitch*rects[i].y;
-		blockSrcStart += surface->format->BytesPerPixel*rects[i].x;
-
-		blockDstStart = ((Uint8 *) XBIOS_screens[XBIOS_fbnum]) + surface->offset;
-		blockDstStart += XBIOS_pitch*rects[i].y;
-		blockDstStart += surface->format->BytesPerPixel*rects[i].x;
-
-		for(y=0;y<rects[i].h;y++){
-			SDL_memcpy(blockDstStart,blockSrcStart,surface->pitch);
-
-			blockSrcStart += surface->pitch;
-			blockDstStart += XBIOS_pitch;
-		}
-	}
-
-	if ((surface->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF) {
-		VsetScreen(-1L, -1L, VN_MAGIC, CMD_FLIPPAGE);
-		(*XBIOS_vsync)(this);
-
-		XBIOS_fbnum ^= 1;
-	}
-}
-
-static int flipHWSurface(_THIS, SDL_Surface *surface)
-{
-	int i;
-	Uint8 *src, *dst;
-
-	src = surface->pixels;
-	dst = ((Uint8 *) XBIOS_screens[XBIOS_fbnum]) + surface->offset;
-
-	for (i=0; i<surface->h; i++) {
-		SDL_memcpy(dst, src, surface->w * surface->format->BytesPerPixel);
-		src += surface->pitch;
-		dst += XBIOS_pitch;
-
-	}
-
-	if ((surface->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF) {
-		VsetScreen(-1L, -1L, VN_MAGIC, CMD_FLIPPAGE);
-		(*XBIOS_vsync)(this);
-
-		XBIOS_fbnum ^= 1;
-	}
-
-	return(0);
 }

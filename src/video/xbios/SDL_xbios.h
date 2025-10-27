@@ -24,6 +24,8 @@
 #ifndef _SDL_xbios_h
 #define _SDL_xbios_h
 
+#include <gem.h>
+
 #include "SDL_stdinc.h"
 #include "../SDL_sysvideo.h"
 
@@ -46,18 +48,30 @@ typedef struct
 #define NUM_MODELISTS	4		/* 8, 16, 24, and 32 bits-per-pixel */
 
 struct SDL_PrivateVideoData {
-	long old_video_mode;				/* Old video mode before entering SDL */
-	void *old_video_base;			/* Old pointer to screen buffer */
-	void *old_palette;				/* Old palette */
-	Uint32 old_num_colors;			/* Nb of colors in saved palette */
+	/* Shared with SDL_geminit.c */
+	short vdi_handle;			/* VDI handle */
+	short bpp;					/* Colour depth */
+	short old_numcolors;		/* Number of colors in saved palette */
+	Uint16 old_palette[256][3];	/* Saved current palette */
+
+	short ap_id;
+	GRECT desk;					/* Desktop properties */
+	SDL_bool locked;			/* AES locked for fullscreen ? */
+	OBJECT *menubar;			/* Menu bar to force desktop to restore its menu bar when going from fullscreen */
+
+	/* Exclusive to SDL_xbios.h */
+
+	long old_video_mode;		/* Old video mode before entering SDL */
+	void *old_video_base;		/* Old pointer to screen buffer */
 
 	void *screens[2];		/* Pointers to aligned screen buffer */
-	void *screensmem[2];	/* Pointers to screen buffer */
-	void *shadowscreen;		/* Shadow screen for c2p conversion */
+	void *screensmem[2];		/* Pointers to screen buffer */
+	void *shadowscreen;		/* Pointer to aligned shadow screen buffer */
+	void *shadowscreenmem;		/* Pointers to shadow screen buffer */
 	int frame_number;		/* Number of frame for double buffer */
-	int pitch;				/* Destination line width for C2P */
+	int pitch;			/* Destination line width for C2P */
 
-	xbiosmode_t *current;	/* Current set mode */
+	const xbiosmode_t *current;	/* Current set mode */
 	int SDL_nummodes[NUM_MODELISTS];
 	SDL_Rect **SDL_modelist[NUM_MODELISTS];
 	xbiosmode_t **SDL_xbiosmode[NUM_MODELISTS];
@@ -69,16 +83,18 @@ struct SDL_PrivateVideoData {
 
 	void (*listModes)(_THIS, int actually_add);	/* List video modes */
 	void (*saveMode)(_THIS, SDL_PixelFormat *vformat);	/* Save mode,palette,vbase change format if needed */
-	void (*setMode)(_THIS, xbiosmode_t *new_video_mode);	/* Set mode */
+	void (*setMode)(_THIS, const xbiosmode_t *new_video_mode);	/* Set mode */
 	void (*restoreMode)(_THIS);	/* Restore system mode */
 	void (*vsync)(_THIS);
 	void (*getScreenFormat)(_THIS, int bpp, Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);	/* Get TrueColor screen format */
-	int (*getLineWidth)(_THIS, xbiosmode_t *new_video_mode, int width, int bpp);	/* Return video mode pitch */
+	int (*getLineWidth)(_THIS, const xbiosmode_t *new_video_mode, int width, int bpp);	/* Return video mode pitch */
 	void (*swapVbuffers)(_THIS);	/* Swap video buffers */
-	int (*allocVbuffers)(_THIS, int num_buffers, int bufsize);	/* Allocate video buffers */
+	int (*allocVbuffers)(_THIS, const xbiosmode_t *new_video_mode, int num_buffers, int bufsize);	/* Allocate video buffers */
 	void (*freeVbuffers)(_THIS);	/* Free video buffers */
 
 	void (*updRects)(_THIS, int numrects, SDL_Rect *rects);	/* updateRects to use when video ready */
+
+	void (*ShutdownEvents)(_THIS);	/* Shut down related XBIOS/IKBD events driver */
 };
 
 /* _VDO cookie values */
@@ -90,6 +106,17 @@ enum {
 	VDO_MILAN
 };
 
+/* _MCH cookie values */
+enum {
+	MCH_ST=0,
+	MCH_STE,
+	MCH_TT,
+	MCH_F30,
+	MCH_MILAN,
+	MCH_ARANYM,
+	MCH_V4
+};
+
 /* Monitor types */
 enum {
 	MONITOR_MONO=0,
@@ -98,24 +125,24 @@ enum {
 	MONITOR_RGB
 };
 
-/* EgetShift masks */
-#define ES_MODE		0x0700
-
 /* Hidden structure -> variables names */
+#define VDI_handle			(this->hidden->vdi_handle)
+#define VDI_oldnumcolors	(this->hidden->old_numcolors)
+#define VDI_oldpalette		(this->hidden->old_palette)
+#define GEM_ap_id			(this->hidden->ap_id)
+
 #define SDL_nummodes		(this->hidden->SDL_nummodes)
 #define SDL_modelist		(this->hidden->SDL_modelist)
 #define SDL_xbiosmode		(this->hidden->SDL_xbiosmode)
-#define XBIOS_oldpalette	(this->hidden->old_palette)
-#define XBIOS_oldnumcol		(this->hidden->old_num_colors)
 #define XBIOS_oldvbase		(this->hidden->old_video_base)
 #define XBIOS_oldvmode		(this->hidden->old_video_mode)
 #define XBIOS_screens		(this->hidden->screens)
 #define XBIOS_screensmem	(this->hidden->screensmem)
 #define XBIOS_shadowscreen	(this->hidden->shadowscreen)
-#define XBIOS_fbnum			(this->hidden->frame_number)
-#define XBIOS_pitch			(this->hidden->pitch)
+#define XBIOS_shadowscreenmem	(this->hidden->shadowscreenmem)
+#define XBIOS_fbnum		(this->hidden->frame_number)
+#define XBIOS_pitch		(this->hidden->pitch)
 #define XBIOS_current		(this->hidden->current)
-#define XBIOS_recoffset		(this->hidden->recalc_offset)
 
 #define TT_palette		(this->hidden->palette.pal16)
 #define F30_palette		(this->hidden->palette.pal32)
@@ -124,7 +151,7 @@ enum {
 #define XBIOS_saveMode		(this->hidden->saveMode)
 #define XBIOS_setMode		(this->hidden->setMode)
 #define XBIOS_restoreMode	(this->hidden->restoreMode)
-#define XBIOS_vsync			(this->hidden->vsync)
+#define XBIOS_vsync		(this->hidden->vsync)
 #define XBIOS_getScreenFormat	(this->hidden->getScreenFormat)
 #define XBIOS_getLineWidth	(this->hidden->getLineWidth)
 #define XBIOS_swapVbuffers	(this->hidden->swapVbuffers)
@@ -132,6 +159,7 @@ enum {
 #define XBIOS_freeVbuffers	(this->hidden->freeVbuffers)
 
 #define XBIOS_updRects		(this->hidden->updRects)
+#define XBIOS_ShutdownEvents	(this->hidden->ShutdownEvents)
 
 /*--- Functions prototypes ---*/
 
@@ -146,10 +174,16 @@ void SDL_XBIOS_VideoInit_TT(_THIS);
 /* SDL_xbios_f30.c */
 void SDL_XBIOS_VideoInit_F30(_THIS);
 
+/* SDL_xbios_v4.c */
+void SDL_XBIOS_VideoInit_V4(_THIS);
+
 /* SDL_xbios_milan.c */
 void SDL_XBIOS_VideoInit_Milan(_THIS);
 
 /* SDL_xbios_ctpci.c */
 void SDL_XBIOS_VideoInit_Ctpci(_THIS);
+
+/* SDL_xbios_nova.c */
+void SDL_XBIOS_VideoInit_Nova(_THIS, void *cookie_nova);
 
 #endif /* _SDL_xbios_h */

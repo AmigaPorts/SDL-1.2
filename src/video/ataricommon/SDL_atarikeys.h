@@ -94,6 +94,7 @@
 #define SCANCODE_LEFTALT	0x38
 #define SCANCODE_SPACE		0x39
 #define SCANCODE_CAPSLOCK	0x3a
+#define SCANCODE_ALTGR		0x4c	/* Milan's AltGr */
 
 /* Functions keys */
 #define SCANCODE_F1		0x3b
@@ -147,5 +148,11 @@
 #define SCANCODE_DOWN		0x50
 #define SCANCODE_RIGHT		0x4d
 #define SCANCODE_LEFT		0x4b
+
+/* some keys give different scancode with CTRL */
+#define SCANCODE_CNTL_HOME	0x77
+#define SCANCODE_SHFT_HOME	0x4f
+#define SCANCODE_CNTL_LEFT	0x73
+#define SCANCODE_CNTL_RIGHT	0x74
 
 #endif /* _SDL_ATARIKEYS_H_ */

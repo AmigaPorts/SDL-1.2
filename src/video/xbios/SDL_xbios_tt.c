@@ -36,31 +36,24 @@
 #include "SDL_xbios_nova.h"
 
 static const xbiosmode_t ttmodes[]={
-	{TT_LOW,320,480,8, XBIOSMODE_C2P},
-	{TT_LOW,320,240,8, XBIOSMODE_C2P|XBIOSMODE_DOUBLELINE}
+	{TT_LOW>>8,320,480,8,XBIOSMODE_C2P},
+	{TT_LOW>>8,320,240,8,XBIOSMODE_C2P|XBIOSMODE_DOUBLELINE}
 };
 
 static void listModes(_THIS, int actually_add);
 static void saveMode(_THIS, SDL_PixelFormat *vformat);
-static void setMode(_THIS, xbiosmode_t *new_video_mode);
+static void setMode(_THIS, const xbiosmode_t *new_video_mode);
 static void restoreMode(_THIS);
 static int setColors(_THIS, int firstcolor, int ncolors, SDL_Color *colors);
 
 void SDL_XBIOS_VideoInit_TT(_THIS)
 {
-	long cookie_nova;
-
 	XBIOS_listModes = listModes;
 	XBIOS_saveMode = saveMode;
 	XBIOS_setMode = setMode;
 	XBIOS_restoreMode = restoreMode;
 
 	this->SetColors = setColors;
-
-	/* NOVA card ? */
-	if (Getcookie(C_NOVA, &cookie_nova) == C_FOUND) {
-		SDL_XBIOS_VideoInit_Nova(this, (void *) cookie_nova);
-	}
 }
 
 static void listModes(_THIS, int actually_add)
@@ -75,45 +68,17 @@ static void listModes(_THIS, int actually_add)
 static void saveMode(_THIS, SDL_PixelFormat *vformat)
 {
 	XBIOS_oldvbase=Physbase();
-	XBIOS_oldvmode=EgetShift();
-
-	switch(XBIOS_oldvmode & ES_MODE) {
-		case TT_LOW:
-			XBIOS_oldnumcol=256;
-			break;
-		case ST_LOW:
-		case TT_MED:
-			XBIOS_oldnumcol=16;
-			break;
-		case ST_MED:
-			XBIOS_oldnumcol=4;
-			break;
-		case ST_HIGH:
-		case TT_HIGH:
-			XBIOS_oldnumcol=2;
-			break;
-	}
-
-	if (XBIOS_oldnumcol) {
-		EgetPalette(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
+	XBIOS_oldvmode=Getrez();
 }
 
-static void setMode(_THIS, xbiosmode_t *new_video_mode)
+static void setMode(_THIS, const xbiosmode_t *new_video_mode)
 {
-	Setscreen(-1,XBIOS_screens[0],-1);
-
-	EsetShift(new_video_mode->number);
+	Setscreen(-1,XBIOS_screens[0],new_video_mode->number);
 }
 
 static void restoreMode(_THIS)
 {
-	Setscreen(-1,XBIOS_oldvbase,-1);
-
-	EsetShift(XBIOS_oldvmode);
-	if (XBIOS_oldnumcol) {
-		EsetPalette(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
+	Setscreen(-1,XBIOS_oldvbase,XBIOS_oldvmode);
 }
 
 static int setColors(_THIS, int firstcolor, int ncolors, SDL_Color *colors)

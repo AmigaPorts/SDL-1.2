@@ -52,7 +52,7 @@ const int SDL_XBIOS_scpn_planes_device[]={
 /*--- Functions ---*/
 
 static void listModes(_THIS, int actually_add);
-static void setMode(_THIS, xbiosmode_t *new_video_mode);
+static void setMode(_THIS, const xbiosmode_t *new_video_mode);
 static void restoreMode(_THIS);
 
 int SDL_XBIOS_SB3Usable(scpn_cookie_t *cookie_scpn)
@@ -100,7 +100,7 @@ static void listModes(_THIS, int actually_add)
 	}
 }
 
-static void setMode(_THIS, xbiosmode_t *new_video_mode)
+static void setMode(_THIS, const xbiosmode_t *new_video_mode)
 {
 	/* SB3 do not allow changing video mode */
 	Setscreen(-1,XBIOS_screens[0],-1);
@@ -116,8 +116,4 @@ static void restoreMode(_THIS)
 {
 	/* SB3 do not allow changing video mode */
 	Setscreen(-1, XBIOS_oldvbase, -1);
-
-	if (XBIOS_oldnumcol) {
-		VsetRGB(0, XBIOS_oldnumcol, XBIOS_oldpalette);
-	}
 }

@@ -339,7 +339,7 @@ int SDL_SYS_JoystickInit(void)
 		}
 
 		if (!atarijoysticks[IKBD_JOY1].enabled) {
-			if (SDL_AtariXbios_enabled!=0) {
+			if (SDL_AtariXbios_enabled) {
 				TEST_JOY_ENABLED(envr, "xbios-joy1", XBIOS_JOY1);
 			}
 		}
@@ -505,9 +505,11 @@ void SDL_SYS_JoystickUpdate(SDL_Joystick *joystick)
 
 				if (numjoystick==IKBD_JOY1) {
 					curstate = SDL_AtariIkbd_joystick & 0xff;
+					curstate |= (SDL_AtariIkbd_mouseb & 0x01) << 7;
 				}
 				if (numjoystick==XBIOS_JOY1) {
 					curstate = SDL_AtariXbios_joystick & 0xff;
+					curstate |= (SDL_AtariXbios_mouseb & 0x01) << 7;
 				}
 
 				if (curstate != prevstate) {

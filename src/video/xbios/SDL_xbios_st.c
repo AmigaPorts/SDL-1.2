@@ -37,19 +37,19 @@
 #include "SDL_xbios.h"
 
 static const xbiosmode_t stmodes[]={
-	{ST_LOW>>8,320,200,4, XBIOSMODE_C2P}
+	{ST_LOW>>8,320,200,4,XBIOSMODE_C2P}
 };
 
 static void listModes(_THIS, int actually_add);
 static void saveMode(_THIS, SDL_PixelFormat *vformat);
-static void setMode_ST(_THIS, xbiosmode_t *new_video_mode);
-static void setMode_STE(_THIS, xbiosmode_t *new_video_mode);
+static void setMode_ST(_THIS, const xbiosmode_t *new_video_mode);
+static void setMode_STE(_THIS, const xbiosmode_t *new_video_mode);
 static void restoreMode(_THIS);
 static void vsync_ST(_THIS);
 static void getScreenFormat(_THIS, int bpp, Uint32 *rmask, Uint32 *gmask, Uint32 *bmask, Uint32 *amask);
-static int getLineWidth(_THIS, xbiosmode_t *new_video_mode, int width, int bpp);
+static int getLineWidth(_THIS, const xbiosmode_t *new_video_mode, int width, int bpp);
 static void swapVbuffers(_THIS);
-static int allocVbuffers(_THIS, int num_buffers, int bufsize);
+static int allocVbuffers(_THIS, const xbiosmode_t *new_video_mode, int num_buffers, int bufsize);
 static void freeVbuffers(_THIS);
 static int setColors(_THIS, int firstcolor, int ncolors, SDL_Color *colors);
 
@@ -80,31 +80,11 @@ static void listModes(_THIS, int actually_add)
 
 static void saveMode(_THIS, SDL_PixelFormat *vformat)
 {
-	short *oldpalette;
-	int i;
-
 	XBIOS_oldvbase=Physbase();
 	XBIOS_oldvmode=Getrez();
-
-	switch(XBIOS_oldvmode << 8) {
-		case ST_LOW:
-			XBIOS_oldnumcol=16;
-			break;
-		case ST_MED:
-			XBIOS_oldnumcol=4;
-			break;
-		case ST_HIGH:
-			XBIOS_oldnumcol=2;
-		break;
-	}
-
-	oldpalette= (short *) XBIOS_oldpalette;
-	for (i=0;i<XBIOS_oldnumcol;i++) {
-		*oldpalette++=Setcolor(i,-1);
-	}
 }
 
-static void setMode_ST(_THIS, xbiosmode_t *new_video_mode)
+static void setMode_ST(_THIS, const xbiosmode_t *new_video_mode)
 {
 	int i;
 
@@ -119,7 +99,7 @@ static void setMode_ST(_THIS, xbiosmode_t *new_video_mode)
 	Setpalette(TT_palette);
 }
 
-static void setMode_STE(_THIS, xbiosmode_t *new_video_mode)
+static void setMode_STE(_THIS, const xbiosmode_t *new_video_mode)
 {
 	int i;
 
@@ -140,10 +120,6 @@ static void setMode_STE(_THIS, xbiosmode_t *new_video_mode)
 static void restoreMode(_THIS)
 {
 	Setscreen(-1,XBIOS_oldvbase,XBIOS_oldvmode);
-
-	if (XBIOS_oldnumcol) {
-		Setpalette(XBIOS_oldpalette);
-	}
 }
 
 static void vsync_ST(_THIS)
@@ -156,7 +132,7 @@ static void getScreenFormat(_THIS, int bpp, Uint32 *rmask, Uint32 *gmask, Uint32
 	*rmask = *gmask = *bmask = *amask = 0;
 }
 
-static int getLineWidth(_THIS, xbiosmode_t *new_video_mode, int width, int bpp)
+static int getLineWidth(_THIS, const xbiosmode_t *new_video_mode, int width, int bpp)
 {
 	if (bpp==4) {
 		return (width >> 1);
@@ -170,7 +146,7 @@ static void swapVbuffers(_THIS)
 	Setscreen(-1,XBIOS_screens[XBIOS_fbnum],-1);
 }
 
-static int allocVbuffers(_THIS, int num_buffers, int bufsize)
+static int allocVbuffers(_THIS, const xbiosmode_t *new_video_mode, int num_buffers, int bufsize)
 {
 	int i;
 
@@ -183,7 +159,7 @@ static int allocVbuffers(_THIS, int num_buffers, int bufsize)
 		}
 		SDL_memset(XBIOS_screensmem[i], 0, bufsize);
 
-		XBIOS_screens[i]=(void *) (( (long) XBIOS_screensmem[i]+256) & 0xFFFFFF00UL);
+		XBIOS_screens[i]=(void *) (( (long) XBIOS_screensmem[i]+255) & 0xFFFFFF00UL);
 	}
 
 	return (1);
@@ -196,24 +172,25 @@ static void freeVbuffers(_THIS)
 	for (i=0;i<2;i++) {
 		if (XBIOS_screensmem[i]) {
 			Mfree(XBIOS_screensmem[i]);
+			XBIOS_screensmem[i]=NULL;
 		}
-		XBIOS_screensmem[i]=NULL;
+		XBIOS_screens[i]=NULL;
 	}
 }
 
 static int setColors(_THIS, int firstcolor, int ncolors, SDL_Color *colors)
 {
+	extern Uint8 SDL_Atari_C2pPalette4[256];
 	int	i, r,g,b;
 
- 	for (i=0;i<ncolors;i++) {
+	for (i = 0; i < ncolors; i++) {
 		r = colors[i].r;
 		g = colors[i].g;
 		b = colors[i].b;
 
-		TT_palette[firstcolor+i]=((r*30)+(g*59)+(b*11))/100;
+		/* This produces values from 0 to 15 */
+		SDL_Atari_C2pPalette4[firstcolor+i] = ((r * 30) + (g * 59) + (b * 11)) / (100 * 16);
 	}
-
-	SDL_Atari_C2pConvert4_pal(TT_palette); /* convert the lighting */
 
 	return(1);
 }
