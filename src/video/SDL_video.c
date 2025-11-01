@@ -531,9 +531,13 @@ static void SDL_ClearSurface(SDL_Surface *surface)
 		SDL_Flip(surface);
 		SDL_FillRect(surface, NULL, black);
 	}
+#if !defined(__amigaos3__) 
 	if (surface->flags&SDL_FULLSCREEN) {
+#endif
 		SDL_Flip(surface);
+#if !defined(__amigaos3__) 
 	}
+#endif
 }
 
 /*
@@ -616,6 +620,13 @@ SDL_Surface * SDL_SetVideoMode (int width, int height, int bpp, Uint32 flags)
 		sysevents_mouse_pressed = 0;
 	#endif
 
+#if defined(__amigaos3__) 
+#ifndef APOLLO_BLIT
+	flags &= ~SDL_DOUBLEBUF;
+#endif
+	if (getenv("SDL_HWSURFACE"))flags |= SDL_HWSURFACE ;
+	if (getenv("SDL_SWSURFACE"))flags &= ~SDL_HWSURFACE ;
+#endif
 	/* Start up the video driver, if necessary..
 	   WARNING: This is the only function protected this way!
 	 */
@@ -1127,6 +1138,18 @@ void SDL_UpdateRects (SDL_Surface *screen, int numrects, SDL_Rect *rects)
  */
 int SDL_Flip(SDL_Surface *screen)
 {
+#if defined(__amigaos3__) 
+	extern int skipframe,toggle;
+
+	if (skipframe) {
+		if (toggle < skipframe) {
+			toggle++;
+			return 0;
+		}
+		toggle = 0;
+	}
+#endif
+
 	SDL_VideoDevice *video = current_video;
 	/* Copy the shadow surface to the video surface */
 	if ( screen == SDL_ShadowSurface ) {
@@ -1165,7 +1188,9 @@ int SDL_Flip(SDL_Surface *screen)
 		}
 
 		/* Fall through to video surface update */
+#if !defined(__amigaos3__) 
 		screen = SDL_VideoSurface;
+#endif
 	}
 	if ( (screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF ) {
 		SDL_VideoDevice *this  = current_video;

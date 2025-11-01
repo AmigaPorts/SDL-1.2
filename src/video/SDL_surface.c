@@ -394,6 +394,19 @@ void SDL_GetClipRect(SDL_Surface *surface, SDL_Rect *rect)
 		*rect = surface->clip_rect;
 	}
 }
+
+/* see SDL_video.h */
+void SDLA_SetQuickLazyBlit(SDL_Surface *surface, Uint32 yesno )
+{
+	if( surface )
+	{
+		if( yesno )
+			surface->flags |= SDLA_QUICKLAZY;
+		else
+			surface->flags &= ~SDLA_QUICKLAZY;
+	}
+}
+
 /* 
  * Set up a blit between two surfaces -- split into three parts:
  * The upper part, SDL_UpperBlit(), performs clipping and rectangle 
@@ -411,14 +424,34 @@ int SDL_LowerBlit (SDL_Surface *src, SDL_Rect *srcrect,
 	SDL_blit do_blit;
 	SDL_Rect hw_srcrect;
 	SDL_Rect hw_dstrect;
+#if defined(__amigaos3__)
+	int skipflag = 0;
 
-	/* Check to make sure the blit mapping is valid */
-	if ( (src->map->dst != dst) ||
-             (src->map->dst->format_version != src->map->format_version) ) {
-		if ( SDL_MapSurface(src, dst) < 0 ) {
-			return(-1);
+	/* applies to software blitting only */
+	if( src->flags & SDLA_QUICKLAZY )
+	{
+		if( src->map->sw_blit )
+		{
+		 if( src->map->sw_data->blit )
+		 {
+			skipflag = 1;
+		 }
 		}
 	}
+
+	if( !skipflag )
+	{
+#endif
+		/* Check to make sure the blit mapping is valid */
+		if ( (src->map->dst != dst) ||
+                     (src->map->dst->format_version != src->map->format_version) ) {
+			if ( SDL_MapSurface(src, dst) < 0 ) {
+				return(-1);
+			}
+		}
+#if defined(__amigaos3__)
+	}
+#endif
 
 	/* Figure out which blitter to use */
 	if ( (src->flags & SDL_HWACCEL) == SDL_HWACCEL ) {
@@ -447,7 +480,9 @@ int SDL_UpperBlit (SDL_Surface *src, SDL_Rect *srcrect,
 {
         SDL_Rect fulldst;
 	int srcx, srcy, w, h;
-
+#if defined(__amigaos3__)
+	extern int toggle,skipframe;
+#endif
 	/* Make sure the surfaces aren't locked */
 	if ( ! src || ! dst ) {
 		SDL_SetError("SDL_UpperBlit: passed a NULL surface");
